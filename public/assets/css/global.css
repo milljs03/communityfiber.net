@@ -1,0 +1,150 @@
+/* global.css - Shared styles, branding, and layout */
+
+:root {
+    /* Brand Colors */
+    --cfn-green: #03A63C;
+    --cfn-dark-green: #0B8C38;
+    --cfn-mute-green: #46A66F;
+    --cfn-light-green: #8BD9AD;
+    
+    /* Neutrals */
+    --npt-black: #141414;
+    --npt-white: #F8FAFC; /* Slightly off-white for less glare */
+    --npt-grey: #e2e8f0;
+
+    /* Typography */
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+    
+    /* Spacing */
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--npt-white);
+    color: var(--npt-black);
+    line-height: 1.7; /* Increased for readability */
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased; /* Smoother fonts on Mac */
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em; /* Tighter headings look more modern */
+}
+
+/* --- Navigation --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background-color: rgba(255, 255, 255, 0.98); /* Switch to White for Black Logo */
+    backdrop-filter: blur(10px);
+    color: var(--npt-black); /* Dark text for links */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Softer shadow */
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 45px; /* Adjust based on logo aspect ratio */
+    width: auto;
+    display: block;
+}
+
+/* Fallback if image fails */
+.logo-text {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--cfn-green);
+    margin-left: 0.5rem;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--npt-black); /* Dark links against white header */
+    font-weight: 600; /* Slightly bolder for visibility */
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+    font-family: var(--font-heading);
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--cfn-green); /* Green accent on hover */
+}
+
+.mobile-menu-btn {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--npt-black); /* Dark icon */
+}
+
+/* --- Utility Classes --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-lg) 1.5rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.text-accent {
+    color: var(--cfn-green);
+}
+
+/* --- Footer --- */
+footer {
+    background-color: var(--npt-black);
+    color: #94a3b8; /* Muted text */
+    text-align: center;
+    padding: 3rem 1rem;
+    margin-top: auto;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* --- Animations --- */
+.fade-in-section, .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: opacity, transform;
+}
+
+.fade-in-section.is-visible, .fade-in.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+@media (max-width: 768px) {
+    .nav-links { display: none; } 
+    .mobile-menu-btn { display: block; }
+}

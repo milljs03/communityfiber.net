@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Fiber | Fast, Reliable Internet</title>
+    
+    <!-- CSP -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+                   font-src https://fonts.gstatic.com; 
+                   img-src 'self' data: https://maps.gstatic.com; 
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://maps.googleapis.com;">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="logo-container">
+            <!-- Updated Logo Path -->
+            <img src="assets/images/community-fiber-logo.png" alt="Community Fiber" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span class="logo-text" style="display:none;">Community Fiber</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="plans.html">Plans</a></li>
+            <li><a href="support.html">Support</a></li>
+        </ul>
+        <div class="mobile-menu-btn">☰</div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content fade-in-section">
+            <h1 class="hero-title">Investing in Local Communities <br><span class="highlight-text">We Call Home.</span></h1>
+            <p class="hero-subtitle">Enter your address to see if <span class="text-accent" style="color:var(--cfn-light-green)">fiber internet</span> is available at your home.</p>
+            
+            <!-- Address Autocomplete Search Widget -->
+            <div class="availability-search-container">
+                <div class="search-input-wrapper">
+                    <!-- Search Icon SVG -->
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                    
+                    <input type="text" id="cfn-address-input" placeholder="Start entering your address..." autocomplete="off">
+                </div>
+            </div>
+            
+            <p id="redirect-message" class="hidden">Redirecting to service check...</p>
+        </div>
+    </header>
+
+    <!-- Why Fiber Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title fade-in-section">Why Choose Fiber?</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in-section">
+                    <h3>Gigabit Speeds</h3>
+                    <p>Symmetrical upload and download speeds for lag-free gaming and 4K streaming.</p>
+                </div>
+                <div class="feature-card fade-in-section" style="transition-delay: 100ms;">
+                    <h3>Reliable Uptime</h3>
+                    <p>Weather-resistant infrastructure keeps you connected when it matters most.</p>
+                </div>
+                <div class="feature-card fade-in-section" style="transition-delay: 200ms;">
+                    <h3>No Data Caps</h3>
+                    <p>Stream, work, and play as much as you want without hidden fees or limits.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Neighborhood Highlights -->
+    <section class="neighborhoods">
+        <div class="container">
+            <h2 class="section-title fade-in-section">Neighborhood Highlights</h2>
+            <p class="section-desc fade-in-section" style="text-align:center;">We are currently expanding in the Elkhart County area.</p>
+            <div id="neighborhood-list" class="neighborhood-grid">
+                <!-- Populated by Main.js -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Community Fiber. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkgQq1AziwIGCiviYuuxEwAEKunYLweeA&libraries=places&callback=initAutocomplete" async defer></script>
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

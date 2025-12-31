@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiber Plans | Community Fiber</title>
+    
+    <!-- CSP: Added fontawesome cdn -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
+                   img-src 'self' data: https://maps.gstatic.com; 
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://maps.googleapis.com;">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/plans.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="logo-container">
+            <img src="assets/images/community-fiber-logo.png" alt="Community Fiber" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span class="logo-text" style="display:none;">Community Fiber</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="plans.html" class="active">Plans</a></li>
+            <li><a href="support.html">Support</a></li>
+        </ul>
+        <div class="mobile-menu-btn">☰</div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="plans-wrapper">
+        
+        <!-- Header Content (styled green box) -->
+        <div class="plans-header-content fade-in">
+            <h1>Simple Pricing. Gigabit Speeds.</h1>
+            <p>No contracts. No data caps. Just pure fiber internet.</p>
+        </div>
+
+        <!-- Pricing Grid Section -->
+        <section class="pricing-container">
+            <!-- Loading State -->
+            <div id="loading-indicator" class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading plans...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-message" class="hidden error-box" style="text-align:center; color:red;">
+                <p>Unable to load plans at the moment. Please call us for pricing.</p>
+            </div>
+
+            <!-- Dynamic Pricing Grid -->
+            <div id="plans-grid" class="pricing-container hidden">
+                <!-- Cards injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Community Fiber. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="assets/js/plans.js"></script>
+</body>
+</html>
