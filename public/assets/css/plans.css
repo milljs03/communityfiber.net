@@ -3,7 +3,7 @@
 /* --- Page Layout --- */
 .plans-wrapper {
     background-color: var(--npt-white);
-    /* Subtle dot pattern for texture, matching the brand guide's light feel */
+    /* Subtle dot pattern for texture */
     background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
     background-size: 24px 24px;
     min-height: 100vh;
@@ -12,14 +12,21 @@
 
 /* --- Hero Section (Matches Home Page) --- */
 .plans-header-content {
-    /* Exact gradient from Home Page Hero for consistency */
-    background: linear-gradient(135deg, var(--npt-black) 0%, #082e18 100%);
-    color: white;
-    padding: 100px 20px 140px; /* Deep padding to allow cards to overlap */
+    /* FIX: Added fallback background color and used Hex codes to guarantee visibility */
+    background-color: #141414;
+    background: linear-gradient(135deg, #141414 0%, #082e18 100%);
+    color: #ffffff;
+    padding: 100px 20px 140px; 
     text-align: center;
     position: relative;
-    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); /* Modern angled edge */
-    margin-bottom: -80px; /* Pulls grid up into the dark area */
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    margin-bottom: -90px;
+    
+    /* FIX: Force visibility to override the 'fade-in' class which lacks a JS trigger on this page */
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
 }
 
 .plans-header-content h1 {
@@ -29,12 +36,14 @@
     margin-bottom: 1rem;
     letter-spacing: -1px;
     line-height: 1.1;
+    /* FIX: Explicitly set color to ensure it pops against the dark background */
+    color: #ffffff !important;
 }
 
 .plans-header-content p {
     font-family: var(--font-body);
     font-size: 1.25rem;
-    color: #e2e8f0; /* Light grey for readability on dark bg */
+    color: #e2e8f0;
     max-width: 700px;
     margin: 0 auto;
     font-weight: 400;
@@ -45,29 +54,30 @@
 .pricing-container {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    /* FIX: 'stretch' ensures all cards are the same height */
+    align-items: stretch;
     gap: 30px;
     padding: 0 20px;
     max-width: 1200px;
     margin: 0 auto 60px;
     flex-wrap: wrap;
     position: relative;
-    z-index: 10; /* Sits on top of the hero */
+    z-index: 10;
 }
 
 /* --- Pricing Card Design --- */
 .pricing-box {
     background: #ffffff;
     border-radius: 16px;
-    padding: 0; /* Content padding handled by inner wrappers */
+    padding: 0;
     display: flex;
     flex-direction: column;
-    flex: 1 1 320px;
+    flex: 1 1 300px;
     max-width: 380px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); /* Soft, premium shadow */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
     border: 1px solid rgba(0,0,0,0.04);
-    overflow: hidden; /* Keeps the splash bar contained */
+    overflow: hidden;
     position: relative;
 }
 
@@ -83,8 +93,10 @@
 .pricing-box:hover {
     transform: translateY(-10px);
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+    z-index: 20;
 }
 
+/* FIX: Ensure inner content flexes to push button to bottom */
 .pricing-box-inner {
     padding: 40px 30px;
     display: flex;
@@ -98,22 +110,23 @@
     z-index: 15;
     border: none;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    /* Vertically center the larger card */
     margin-top: -15px;
+    margin-bottom: -15px; 
 }
 
 .pricing-box.popular:hover {
-    transform: scale(1.05) translateY(-10px);
+    transform: scale(1.08) translateY(-5px);
 }
 
 /* Gold Gradient Border for Premium */
 .pricing-box.popular::before {
-    height: 100%; /* Full border effect */
+    height: 100%;
     position: absolute;
     top: 0; left: 0;
     z-index: 0;
-    /* Sophisticated Gold Gradient */
     background: linear-gradient(135deg, #d4af37 0%, #faeab1 50%, #d4af37 100%);
-    padding: 3px; /* Border width */
+    padding: 3px;
     content: "";
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -121,58 +134,64 @@
     pointer-events: none;
 }
 
-/* Gold Badge */
+/* UPDATED: Better Positioned Gold Badge (Corner Tab Style) */
 .popular-badge {
     position: absolute;
-    top: 15px;
-    right: -32px;
+    top: 0;
+    right: 0;
     background: linear-gradient(135deg, #d4af37 0%, #eab308 100%);
     color: white;
-    padding: 5px 40px;
+    padding: 8px 24px;
     font-family: var(--font-heading);
     font-weight: 800;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    transform: rotate(45deg);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-bottom-left-radius: 16px;
+    box-shadow: -2px 2px 5px rgba(0,0,0,0.1);
     z-index: 20;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    transform: none; /* Removed rotation for cleaner look */
 }
 
 /* --- Card Typography --- */
 .panel-heading {
     font-family: var(--font-heading);
-    font-size: 1.8rem;
+    font-size: 1.75rem;
     font-weight: 800;
     color: var(--npt-black);
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     text-align: center;
 }
 
 .price-wrapper {
     text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
     border-bottom: 1px solid #f1f5f9;
 }
 
+/* UPDATED: Refreshed Price Styling */
 .price {
     font-family: var(--font-heading);
-    font-size: 4rem;
+    font-size: 4.5rem; /* Larger for impact */
     font-weight: 800;
     color: var(--npt-black);
-    line-height: 1;
-    letter-spacing: -2px;
+    line-height: 0.9;
+    letter-spacing: -3px; /* Tighter spacing */
     display: inline-flex;
-    align-items: baseline;
+    align-items: flex-start;
+    position: relative;
+    /* Optional: Add a shadow to make it pop */
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
 }
 
 .price small {
     font-family: var(--font-body);
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #94a3b8;
-    margin-left: 4px;
+    margin-left: 6px;
+    margin-top: 15px; /* Push the /mo down a bit */
     letter-spacing: normal;
 }
 
@@ -188,7 +207,7 @@
     color: var(--cfn-dark-green);
 }
 .speed-label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: #64748b;
     text-transform: uppercase;
@@ -202,7 +221,7 @@
     font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 25px;
-    min-height: 60px; /* Alignment */
+    min-height: 60px;
 }
 
 /* --- Features List --- */
@@ -225,13 +244,13 @@
 .highlight-text i {
     color: var(--cfn-green);
     background-color: #dcfce7;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     flex-shrink: 0;
 }
 
@@ -242,7 +261,7 @@
     border: none;
     padding: 1rem;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     font-family: var(--font-heading);
     cursor: pointer;
@@ -251,6 +270,8 @@
     margin-bottom: 25px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    /* FIX: Push button to bottom */
+    margin-top: auto; 
 }
 
 .sign-up-btn:hover {
@@ -272,7 +293,7 @@
 /* --- Broadband Facts (FCC Label) --- */
 .broadband-label-container {
     width: 100%;
-    margin-top: auto;
+    margin-top: 10px;
     border: 2px solid #000;
     background: #fff;
     color: #000;
@@ -282,7 +303,7 @@
 .broadband-facts-wrapper {
     overflow: hidden;
     transition: max-height 0.4s ease-out;
-    max-height: 45px; /* Tighter collapse */
+    max-height: 42px;
     position: relative;
     text-align: left;
 }
@@ -291,14 +312,13 @@
     max-height: 2000px;
 }
 
-/* Expand Trigger Area */
 .expand-trigger {
     background: #f1f5f9;
     padding: 10px;
     text-align: center;
     cursor: pointer;
     border-top: 1px solid #e2e8f0;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: var(--npt-black);
     text-transform: uppercase;
@@ -318,28 +338,122 @@
     pointer-events: none;
 }
 
-/* Internal Label Rows */
 .bbf-header { border-bottom: 3px solid black; padding: 15px; }
 .bbf-title { font-weight: 900; font-size: 24px; margin: 0; text-transform: uppercase; line-height: 1; }
 .bbf-row { display: flex; justify-content: space-between; padding: 8px 15px; border-bottom: 1px solid #e5e5e5; font-size: 13px; }
 .bbf-row.strong { border-bottom: 2px solid black; font-weight: bold; }
 .bbf-footer { padding: 15px; font-size: 11px; text-align: center; line-height: 1.4; background: #fff; }
 
-/* --- Phone Service Banner --- */
-.phone-service-banner {
+/* --- Add-ons Section (Phone + Eero) --- */
+.addons-section-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 40px auto 60px;
+    padding: 0 20px;
+    flex-wrap: wrap;
+}
+
+.addon-card {
     background: white;
     border-radius: 16px;
-    padding: 0;
-    margin-top: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    text-align: center;
     border: 1px solid rgba(0,0,0,0.03);
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    z-index: 5;
+    flex: 1 1 300px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.addon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.addon-top-bar {
+    height: 6px;
+    width: 100%;
+}
+
+.addon-content {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+.addon-icon-title {
+    margin-bottom: 15px;
+    color: var(--npt-black);
+}
+
+.addon-icon-title h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 10px 0 0;
+}
+
+.addon-icon-title i {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.addon-content p {
+    color: #64748b;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.addon-price-tag {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: var(--npt-black);
+}
+
+.addon-price-tag .symbol { font-size: 1.2rem; font-weight: 600; }
+.addon-price-tag .val { font-size: 2.5rem; font-weight: 800; font-family: var(--font-heading); line-height: 1; }
+.addon-price-tag .per { font-size: 0.9rem; color: #64748b; font-weight: 600; margin-left: 3px; }
+
+.addon-features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: auto; /* Push to bottom if needed, or just flow */
+}
+
+.addon-features-list span {
+    background-color: #f8fafc;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.addon-image-wrapper {
+    margin-bottom: 15px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.addon-image-wrapper img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 /* --- Save Quote Modal --- */
@@ -394,10 +508,10 @@
 
 /* --- Responsive --- */
 @media (max-width: 900px) {
-    .pricing-container { flex-direction: column; align-items: center; }
-    .pricing-box { width: 100%; max-width: 100%; }
-    .pricing-box.popular { transform: none; order: -1; margin-bottom: 30px; }
-    .plans-header-content { padding: 80px 20px 100px; clip-path: none; margin-bottom: 0; }
-    .pricing-container { margin-top: -50px; }
-    .popular-badge { top: 10px; right: 10px; transform: none; border-radius: 4px; }
+    .pricing-container { flex-direction: column; align-items: center; margin-top: -30px; }
+    .pricing-box { width: 100%; max-width: 100%; margin-bottom: 20px; }
+    .pricing-box.popular { transform: none; order: 0; margin-top: 0; margin-bottom: 20px; }
+    .pricing-box.popular:hover { transform: translateY(-5px); }
+    .plans-header-content { padding: 80px 20px 60px; clip-path: none; margin-bottom: 0; }
+    .popular-badge { top: 10px; right: 10px; transform: none; border-radius: 4px; padding: 5px 15px; }
 }

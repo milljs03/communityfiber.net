@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Render Plans using DRY functions
         plansGrid.innerHTML = plans.map((plan, index) => generatePlanCard(plan, index)).join('');
         
-        // --- 3. Inject Phone Section ---
-        injectPhoneSection(plansGrid);
+        // --- 3. Inject Add-ons Section (Phone + Eero) ---
+        injectAddonsSection(plansGrid);
         
         // Inject Modal HTML
         injectSaveModal();
@@ -85,43 +85,48 @@ function updatePageHeader() {
     }
 }
 
-function injectPhoneSection(targetElement) {
-    const phoneSectionHTML = `
-        <div class="phone-service-banner">
-            <!-- Top Gradient Bar matches cards -->
-            <div style="height: 6px; width: 100%; background: linear-gradient(90deg, var(--cfn-green) 0%, var(--cfn-light-green) 100%);"></div>
-
-            <div style="padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;">
-                <h3 style="font-family: var(--font-heading); font-size: 2rem; color: var(--npt-black); margin: 0; font-weight: 800; display: flex; align-items: center; gap: 10px;">
+function injectAddonsSection(targetElement) {
+    const addonsHTML = `
+    <div class="addons-section-container">
+        <!-- Phone Service -->
+        <div class="addon-card">
+            <div class="addon-top-bar" style="background: linear-gradient(90deg, var(--cfn-green) 0%, var(--cfn-light-green) 100%);"></div>
+            <div class="addon-content">
+                <div class="addon-icon-title">
                     <i class="fa-solid fa-phone-volume" style="color: var(--cfn-green);"></i>
-                    Home Phone Service
-                </h3>
-                
-                <p style="color: #64748b; font-size: 1.1rem; margin: 0; line-height: 1.6; max-width: 650px;">
-                    Complete your home connection. Keep your current number or start fresh with a new one.
-                </p>
-                
-                <div style="display: flex; align-items: baseline; gap: 4px; margin: 10px 0;">
-                    <span style="font-size: 1.5rem; font-weight: 600; color: var(--npt-black);">$</span>
-                    <span style="font-size: 3rem; font-weight: 800; color: var(--cfn-green); font-family: var(--font-heading); line-height: 1;">25</span>
-                    <span style="font-size: 1rem; color: #64748b; font-weight: 600;">/mo</span>
+                    <h3>Home Phone</h3>
                 </div>
-                
-                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; background-color: #f8fafc; padding: 15px 25px; border-radius: 50px; border: 1px solid #e2e8f0;">
-                    <span style="font-weight: 600; color: #334155; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Unlimited Long Distance
-                    </span>
-                    <span style="font-weight: 600; color: #334155; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Crystal Clear Voice
-                    </span>
-                    <span style="font-weight: 600; color: #334155; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Taxes Included
-                    </span>
+                <p>Complete your home connection. Keep your current number or start fresh.</p>
+                <div class="addon-price-tag">
+                    <span class="symbol">$</span><span class="val">25</span><span class="per">/mo</span>
+                </div>
+                <div class="addon-features-list">
+                    <span><i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Unlimited Long Distance</span>
+                    <span><i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Crystal Clear Voice</span>
                 </div>
             </div>
         </div>
+
+        <!-- Eero / WiFi -->
+        <div class="addon-card">
+            <div class="addon-top-bar" style="background: linear-gradient(90deg, #05a5df 0%, #6cdbf7 100%);"></div>
+            <div class="addon-content">
+                 <div class="addon-image-wrapper">
+                    <img src="assets/images/eero.webp" alt="eero Mesh WiFi" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fa-solid fa-wifi\' style=\'font-size:3rem; color:#05a5df; margin-bottom:15px;\'></i>'">
+                 </div>
+                <div class="addon-icon-title">
+                    <h3 style="margin-top:0;">Premium WiFi</h3>
+                </div>
+                <p>Powered by <strong>eero</strong>. Blanket your home in fast, reliable WiFi with advanced security and controls.</p>
+                <div class="addon-features-list">
+                    <span><i class="fa-solid fa-shield-halved" style="color: #05a5df;"></i> Advanced Security</span>
+                    <span><i class="fa-solid fa-house-signal" style="color: #05a5df;"></i> Guest Networks</span>
+                </div>
+            </div>
+        </div>
+    </div>
     `;
-    targetElement.insertAdjacentHTML('afterend', phoneSectionHTML);
+    targetElement.insertAdjacentHTML('afterend', addonsHTML);
 }
 
 function generatePlanCard(plan, index) {
