@@ -161,7 +161,6 @@ function generatePlanCard(plan, index) {
                     ${featuresHtml}
                 </div>
 
-                <button class="sign-up-btn" onclick="openSaveModal('${plan.name}')">Select Plan</button>
 
                 <div class="broadband-label-container">
                     ${generateBroadbandLabel(plan, labelId)}
