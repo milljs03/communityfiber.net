@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Fiber | Fast, Reliable Internet</title>
     
-    <!-- CSP -->
+    <!-- CSP: Added https://cdnjs.cloudflare.com to style-src and font-src -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self'; 
                    script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-                   font-src https://fonts.gstatic.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https://maps.gstatic.com; 
                    connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://maps.googleapis.com;">
 
@@ -81,6 +81,46 @@
         </div>
     </header>
 
+ 
+
+    <!-- Explore / Quick Links Hub -->
+    <section class="hub-section fade-in-section">
+        <div class="container">
+            <h2 class="section-title">Explore Our Services</h2>
+            <div class="hub-grid">
+                
+                <a href="plans.html" class="hub-card">
+                    <div class="hub-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                    <h3>Residential Plans</h3>
+                    <p>Gigabit speeds for streaming, gaming, and working from home. See our simple pricing.</p>
+                    <span class="hub-link-text">View Plans &rarr;</span>
+                </a>
+
+                <a href="business.html" class="hub-card">
+                    <div class="hub-icon"><i class="fa-solid fa-briefcase"></i></div>
+                    <h3>Business Internet</h3>
+                    <p>Enterprise-grade reliability and dedicated support to keep your business running smoothly.</p>
+                    <span class="hub-link-text">Get a Quote &rarr;</span>
+                </a>
+
+                <a href="builders.html" class="hub-card">
+                    <div class="hub-icon"><i class="fa-solid fa-hard-hat"></i></div>
+                    <h3>Builders & Developers</h3>
+                    <p>Partner with us to install utility-grade fiber infrastructure in your new developments.</p>
+                    <span class="hub-link-text">Partner Program &rarr;</span>
+                </a>
+
+                <a href="support.html" class="hub-card">
+                    <div class="hub-icon"><i class="fa-solid fa-headset"></i></div>
+                    <h3>Support Center</h3>
+                    <p>Have a question or issue? Visit our help center to submit a ticket or find answers.</p>
+                    <span class="hub-link-text">Get Help &rarr;</span>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
     <!-- Why Fiber Section -->
     <section class="features">
         <div class="container">
@@ -118,7 +158,10 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkgQq1AziwIGCiviYuuxEwAEKunYLweeA&libraries=places&callback=initAutocomplete" async defer></script>
+    <!-- Load Main JS first to define the callback function -->
     <script type="module" src="assets/js/main.js"></script>
+    
+    <!-- Load Maps API with loading=async and defer -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkgQq1AziwIGCiviYuuxEwAEKunYLweeA&libraries=places&callback=initAutocomplete&loading=async" async defer></script>
 </body>
 </html>
