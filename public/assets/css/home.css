@@ -11,6 +11,7 @@
     color: var(--npt-white);
     padding: 0 1rem;
     position: relative;
+    overflow: hidden; /* Important for meteors */
 }
 
 .hero-title {
@@ -31,6 +32,165 @@
 
 .highlight-text {
     color: var(--cfn-green);
+}
+
+/* --- Fiber Meteor Animation (Disney Arc Style) --- */
+.fiber-streaks {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* The meteor is the invisible rotating arm acting as the pivot */
+.meteor {
+    position: absolute;
+    left: 50%;
+    /* Pivot point raised from -100vh to -70vh to make the arc start/travel higher */
+    bottom: -70vh; 
+    /* Force 0 dimensions to override any inline styles */
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0;
+    /* TWEAK HERE: '28s' is the total loop time. Increase to make meteors less frequent overall. */
+    animation: meteor-arc 28s cubic-bezier(0.2, 0.6, 0.6, 1) infinite;
+    will-change: transform, opacity;
+}
+
+/* Override HTML inline delays to prevent overlapping and spread them out evenly */
+.meteor:nth-child(1) { animation-delay: 0s !important; }
+.meteor:nth-child(2) { animation-delay: 7s !important; }
+.meteor:nth-child(3) { animation-delay: 14s !important; }
+.meteor:nth-child(4) { animation-delay: 21s !important; }
+
+
+/* The Curved Tail - Made from a giant circle border */
+.meteor::before {
+    content: '';
+    position: absolute;
+    /* Center the ring on the pivot point */
+    left: 50%;
+    top: 50%;
+    /* Rotate -45deg so the top border segment sits between 9 o'clock and 12 o'clock */
+    transform: translate(-50%, -50%) rotate(-45deg); 
+    
+    /* Huge Diameter for flatter arc */
+    width: 300vh; 
+    height: 300vh;
+    
+    border-radius: 50%;
+    border: 4px solid transparent;
+    
+    /* The visible arc segment */
+    border-top-color: white; 
+    
+    /* Fade the tail out from left (tail tip) to right (head) */
+    -webkit-mask-image: linear-gradient(to right, transparent 20%, black 100%);
+    mask-image: linear-gradient(to right, transparent 20%, black 100%);
+    
+    /* Glow effect */
+    filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.9));
+    
+    transform-origin: center;
+}
+
+/* The Head - Glowing Particle */
+.meteor::after {
+    content: '';
+    position: absolute;
+    /* Radius matches half of width/height of ::before (150vh) */
+    top: -150vh; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    
+    /* Strong glow for the head */
+    box-shadow: 0 0 15px 4px white, 0 0 30px 8px rgba(74, 222, 128, 0.5);
+}
+
+/* --- Impact Home Icon --- */
+.impact-home {
+    position: absolute;
+    /* Position exactly where the meteor head lands (-150vh from pivot) */
+    top: -150vh; 
+    left: 50%;
+    /* Counter-rotate (-35deg) to make the house sit upright 
+       because the arm stops at +35deg rotation.
+    */
+    transform: translate(-50%, -50%) rotate(-35deg);
+    
+    font-size: 2rem;
+    color: transparent; /* Hollow outline style */
+    -webkit-text-stroke: 1.5px white; /* Create outline */
+    opacity: 0; /* Hidden by default */
+    
+    /* Match the glow of the meteor tail */
+    filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.9));
+    
+    animation: home-pulse 15s linear infinite;
+}
+
+@keyframes meteor-arc {
+    0% {
+        transform: rotate(-35deg) scale(0.9); 
+        opacity: 0;
+    }
+    5% {
+        opacity: 1; 
+    }
+    /* Motion completes by 15% */
+    15% {
+        transform: rotate(35deg) scale(1); 
+        opacity: 1;
+    }
+    /* Hold position while fading out */
+    20% {
+        transform: rotate(35deg) scale(1);
+        opacity: 0;
+    }
+    100% {
+        transform: rotate(35deg) scale(1); 
+        opacity: 0;
+    }
+}
+
+@keyframes home-pulse {
+    0%, 14% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(-35deg) scale(0.5);
+    }
+    /* Appear right when meteor arrives (15%) */
+    15% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(-35deg) scale(1.2);
+        color: white; /* Flash white */
+        text-shadow: 0 0 20px rgba(74, 222, 128, 1);
+    }
+    /* Fade out with the parent container (around 20%) */
+    18% {
+        transform: translate(-50%, -50%) rotate(-35deg) scale(1);
+        color: transparent;
+        text-shadow: none;
+    }
+    20% {
+        opacity: 0; /* Ensures it fades if parent doesn't catch it */
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 /* --- Search Bar --- */

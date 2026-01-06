@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
@@ -29,13 +30,14 @@
     <!-- Navigation -->
     <nav class="navbar">
         <a href="index.html" class="logo-container">
-            <!-- Updated Logo Path -->
             <img src="assets/images/community-fiber-logo.png" alt="Community Fiber" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <span class="logo-text" style="display:none;">Community Fiber</span>
         </a>
         <ul class="nav-links">
             <li><a href="index.html" class="active">Home</a></li>
             <li><a href="plans.html">Plans</a></li>
+            <li><a href="business.html">Business</a></li>
+            <li><a href="builders.html">Builders</a></li>
             <li><a href="support.html">Support</a></li>
         </ul>
         <div class="mobile-menu-btn">☰</div>
@@ -43,6 +45,23 @@
 
     <!-- Hero Section -->
     <header class="hero">
+        <!-- Fiber Meteor Animation Background -->
+        <div class="fiber-streaks" aria-hidden="true">
+            <!-- Meteors with Home Icon Inside -->
+            <div class="meteor">
+                <i class="fa-solid fa-house-signal impact-home"></i>
+            </div>
+            <div class="meteor">
+                <i class="fa-solid fa-house-signal impact-home"></i>
+            </div>
+            <div class="meteor">
+                <i class="fa-solid fa-house-signal impact-home"></i>
+            </div>
+            <div class="meteor">
+                <i class="fa-solid fa-house-signal impact-home"></i>
+            </div>
+        </div>
+
         <div class="hero-content fade-in-section">
             <h1 class="hero-title">Investing in Local Communities <br><span class="highlight-text">We Call Home.</span></h1>
             <p class="hero-subtitle">Enter your address to see if <span class="text-accent" style="color:var(--cfn-light-green)">fiber internet</span> is available at your home.</p>
@@ -50,7 +69,6 @@
             <!-- Address Autocomplete Search Widget -->
             <div class="availability-search-container">
                 <div class="search-input-wrapper">
-                    <!-- Search Icon SVG -->
                     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>

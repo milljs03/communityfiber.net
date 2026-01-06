@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Internet | Community Fiber</title>
+    
+    <!-- CSP -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
+                   img-src 'self' data: https://maps.gstatic.com; 
+                   frame-src https://www.google.com;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://maps.googleapis.com;">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/business.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+          <a href="index.html" class="logo-container">
+            <img src="assets/images/community-fiber-logo.png" alt="Community Fiber" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span class="logo-text" style="display:none;">Community Fiber</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="plans.html" class="active">Plans</a></li>
+            <li><a href="business.html">Business</a></li>
+            <li><a href="builders.html">Builders</a></li>
+            <li><a href="support.html">Support</a></li>
+        </ul>
+        <div class="mobile-menu-btn">☰</div>
+    </nav>
+    <!-- Hero Header -->
+    <header class="business-hero">
+        <div class="container hero-content">
+            <h1>Enterprise-Grade Fiber</h1>
+            <p>Custom builds and dedicated bandwidth for businesses that demand reliability.</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Trusted Partners Ribbon -->
+        <section class="trusted-partners fade-in-section">
+            <div class="container" style="text-align:center; margin-bottom: 2rem;">
+                <h2 class="section-title" style="margin-bottom:0.5rem; font-size: 1.8rem; color: var(--npt-black);">Trusted by Local Businesses</h2>
+                <p style="color:#64748b;">Powering the connectivity of our community's best enterprises.</p>
+            </div>
+            
+            <div class="logo-ribbon">
+                <div class="logo-track">
+                    <!-- Original Set of 10 -->
+                    <div class="logo-slide"><img src="assets/images/1.png" alt="Partner 1"></div>
+                    <div class="logo-slide"><img src="assets/images/2.png" alt="Partner 2"></div>
+                    <div class="logo-slide"><img src="assets/images/3.png" alt="Partner 3"></div>
+                    <div class="logo-slide"><img src="assets/images/4.png" alt="Partner 4"></div>
+                    <div class="logo-slide"><img src="assets/images/5.png" alt="Partner 5"></div>
+                    <div class="logo-slide"><img src="assets/images/6.png" alt="Partner 6"></div>
+                    <div class="logo-slide"><img src="assets/images/7.png" alt="Partner 7"></div>
+                    <div class="logo-slide"><img src="assets/images/8.png" alt="Partner 8"></div>
+                    <div class="logo-slide"><img src="assets/images/9.png" alt="Partner 9"></div>
+                    <div class="logo-slide"><img src="assets/images/10.png" alt="Partner 10"></div>
+                    
+                    <!-- Duplicate Set of 10 (For seamless loop) -->
+                    <div class="logo-slide"><img src="assets/images/1.png" alt="Partner 1"></div>
+                    <div class="logo-slide"><img src="assets/images/2.png" alt="Partner 2"></div>
+                    <div class="logo-slide"><img src="assets/images/3.png" alt="Partner 3"></div>
+                    <div class="logo-slide"><img src="assets/images/4.png" alt="Partner 4"></div>
+                    <div class="logo-slide"><img src="assets/images/5.png" alt="Partner 5"></div>
+                    <div class="logo-slide"><img src="assets/images/6.png" alt="Partner 6"></div>
+                    <div class="logo-slide"><img src="assets/images/7.png" alt="Partner 7"></div>
+                    <div class="logo-slide"><img src="assets/images/8.png" alt="Partner 8"></div>
+                    <div class="logo-slide"><img src="assets/images/9.png" alt="Partner 9"></div>
+                    <div class="logo-slide"><img src="assets/images/10.png" alt="Partner 10"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            
+            <!-- Map Section -->
+            <section class="map-section fade-in-section">
+                <div class="section-header">
+                    <h2>Service Territory Map</h2>
+                    <p>Use the map below to see if your business is located near our fiber infrastructure.</p>
+                </div>
+
+                <div class="map-wrapper-card">
+                    <!-- Responsive Iframe Container -->
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/d/embed?mid=16mma39raMyatbdMcF42v598h3FuWFg4&ehbc=2E312F" width="640" height="480"></iframe>
+                    </div>
+                    
+                    <!-- Custom Legend -->
+                    <div class="map-legend">
+                        <h3>Map Legend</h3>
+                        <div class="legend-grid">
+                            <div class="legend-item">
+                                <span class="color-box red"></span>
+                                <div class="legend-text">
+                                    <strong>Residential & Business</strong>
+                                    <span>Live Fiber Locations</span>
+                                </div>
+                            </div>
+                            <div class="legend-item">
+                                <span class="color-box orange"></span>
+                                <div class="legend-text">
+                                    <strong>Under Construction</strong>
+                                    <span>Residential & Business Build in Progress</span>
+                                </div>
+                            </div>
+                            <div class="legend-item">
+                                <span class="color-box green"></span>
+                                <div class="legend-text">
+                                    <strong>Business Only</strong>
+                                    <span>Dedicated Commercial Fiber</span>
+                                </div>
+                            </div>
+                            <div class="legend-item">
+                                <span class="color-box blue"></span>
+                                <div class="legend-text">
+                                    <strong>Planned / Future</strong>
+                                    <span>Future Residential Build Areas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Inquiry Form Section -->
+            <section class="inquiry-section fade-in-section">
+                <div class="form-wrapper">
+                    <div class="form-intro">
+                        <h2>Request a Custom Quote</h2>
+                        <p>Business connections are often unique. We assess costs and construction requirements on a case-by-case basis.</p>
+                        <ul class="benefit-list">
+                            <li><i class="fa-solid fa-check"></i> <strong>Symmetrical Speeds</strong> up to 10 Gbps</li>
+                            <li><i class="fa-solid fa-check"></i> <strong>SLA</strong> (Service Level Agreements) Available</li>
+                            <li><i class="fa-solid fa-check"></i> <strong>Local Support</strong> & Priority Repair</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-card">
+                        <form id="business-form">
+                            <div class="form-group">
+                                <label for="business-name">Business Name</label>
+                                <input type="text" id="business-name" class="form-input" required placeholder="Company Inc.">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="contact-name">Contact Name</label>
+                                    <input type="text" id="contact-name" class="form-input" required placeholder="John Doe">
+                                </div>
+                                <div class="form-group half">
+                                    <label for="contact-phone">Phone Number</label>
+                                    <input type="tel" id="contact-phone" class="form-input" required placeholder="(555) 123-4567">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contact-email">Email Address</label>
+                                <input type="email" id="contact-email" class="form-input" required placeholder="john@company.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="business-address">Business Address</label>
+                                <input type="text" id="business-address" class="form-input" required placeholder="123 Commerce Way, Suite 100">
+                                <p class="help-text">Please include suite number if applicable.</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="requirements">Needs / Comments</label>
+                                <textarea id="requirements" class="form-input" rows="4" placeholder="e.g. Need dedicated IP, 1Gbps symmetrical, estimated timeline..."></textarea>
+                            </div>
+
+                            <button type="submit" id="submit-btn" class="btn btn-primary btn-block">Get Business Quote</button>
+                        </form>
+
+                        <!-- Success Message -->
+                        <div id="success-message" class="hidden success-box">
+                            <div class="icon-check"><i class="fa-solid fa-circle-check"></i></div>
+                            <h3>Request Sent!</h3>
+                            <p>We've received your inquiry. Our commercial sales team will analyze your location and contact you shortly.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Community Fiber. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="assets/js/business.js"></script>
+</body>
+</html>

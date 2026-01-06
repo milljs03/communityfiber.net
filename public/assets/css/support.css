@@ -1,0 +1,287 @@
+/* support.css - Modern & Intuitive Styles */
+
+/* --- 1. Hero / Header --- */
+.support-hero {
+    /* Restored brand gradient: Dark Black to Deep Forest Green */
+    background: linear-gradient(135deg, var(--npt-black) 0%, #082e18 100%);
+    color: #ffffff;
+    padding: 6rem 1.5rem 4rem;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+    color: white; /* Force white */
+}
+
+.hero-content p {
+    font-size: 1.125rem;
+    color: #e2e8f0; /* Slightly lighter for better contrast on gradient */
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- 2. Layout & Spacing --- */
+.main-content {
+    background-color: #f8fafc; /* Very light gray background */
+    min-height: 60vh;
+    padding-bottom: 4rem;
+}
+
+.section-label {
+    text-align: center;
+    font-size: 1.25rem;
+    color: var(--npt-black);
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+/* --- 3. Topic Grid (Cards) --- */
+.topics-section {
+    margin-top: -3rem; /* Overlap the hero slightly */
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 10;
+}
+
+.topic-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.topic-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    /* Button Reset */
+    appearance: none;
+    font-family: inherit;
+    color: inherit;
+}
+
+.topic-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-color: var(--cfn-green);
+}
+
+.topic-card.selected {
+    border-color: var(--cfn-green);
+    background-color: #f0fdf4; /* Light green tint */
+    box-shadow: 0 0 0 2px var(--cfn-green);
+}
+
+.icon-wrapper {
+    width: 48px;
+    height: 48px;
+    background-color: #f1f5f9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: var(--cfn-dark-green);
+    transition: background-color 0.2s;
+}
+
+.topic-card:hover .icon-wrapper,
+.topic-card.selected .icon-wrapper {
+    background-color: var(--cfn-green);
+    color: white;
+}
+
+.topic-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--npt-black);
+    text-align: center;
+}
+
+/* --- 4. Form Styling --- */
+.form-section {
+    max-width: 700px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.form-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.form-container {
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.025);
+    border: 1px solid #e2e8f0;
+}
+
+.form-header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1rem;
+}
+
+.form-header h2 {
+    font-size: 1.5rem;
+    color: var(--npt-black);
+    margin-bottom: 0.5rem;
+}
+
+.form-header p {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* Inputs & Labels */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.5rem;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    color: #1e293b !important; /* Dark Slate for text */
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--cfn-green);
+    box-shadow: 0 0 0 3px rgba(3, 166, 60, 0.1);
+}
+
+/* Select Dropdown Arrow Customization */
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper::after {
+    content: '\f078'; /* FontAwesome Chevron Down */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Button */
+.submit-button {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--npt-black);
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-family: var(--font-heading);
+}
+
+.submit-button:hover {
+    background-color: #333;
+}
+
+.submit-button:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+}
+
+/* --- 5. Success Message --- */
+.success-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background-color: #dcfce7;
+    color: var(--cfn-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1.5rem;
+}
+
+.success-container h2 {
+    color: var(--npt-black);
+    margin-bottom: 0.5rem;
+}
+
+.success-container p {
+    color: #64748b;
+    margin-bottom: 2rem;
+}
+
+/* --- 6. Mobile Responsive --- */
+@media (max-width: 640px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    .topic-card {
+        width: 100%; /* Full width cards on mobile */
+        flex-direction: row;
+        padding: 1rem;
+        justify-content: flex-start;
+    }
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+}

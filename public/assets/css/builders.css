@@ -1,0 +1,256 @@
+/* builders.css - Styles for the Builders & Developers Page */
+
+/* --- Hero Section --- */
+.builders-hero {
+    /* Industrial/Architecture Theme - Dark Slate to Orange Accent */
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 6rem 1.5rem 5rem;
+    text-align: center;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    margin-bottom: 2rem;
+    border-bottom: 5px solid #f97316; /* Orange construction accent */
+}
+
+.builders-hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.builders-hero p {
+    font-size: 1.25rem;
+    color: #cbd5e1;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* --- Layout --- */
+.main-content {
+    background-color: #f8fafc;
+    padding-bottom: 6rem;
+}
+
+/* --- Builder Partners (Logo Carousel) --- */
+.builder-partners {
+    padding: 2rem 0 4rem;
+    background-color: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 4rem;
+}
+
+.logo-ribbon {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 1rem 0;
+    white-space: nowrap;
+}
+
+/* Gradient Fade */
+.logo-ribbon::before,
+.logo-ribbon::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 150px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+.logo-ribbon::before { left: 0; background: linear-gradient(to right, white, transparent); }
+.logo-ribbon::after { right: 0; background: linear-gradient(to left, white, transparent); }
+
+.logo-track {
+    display: flex;
+    /* Adjust width based on repeated sets */
+    width: calc(200px * 20); 
+    animation: scroll 30s linear infinite;
+}
+
+.logo-slide {
+    width: 200px;
+    height: 80px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+.logo-slide img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.logo-slide img:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-200px * 10)); } /* Adjust based on set size */
+}
+
+/* --- Benefits Grid --- */
+.benefits-section {
+    margin-bottom: 5rem;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+}
+
+.benefit-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+    text-align: center;
+}
+
+.benefit-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    border-color: #fdba74; /* Light orange */
+}
+
+.icon-box {
+    width: 70px;
+    height: 70px;
+    background: #fff7ed; /* Very light orange */
+    color: #ea580c; /* Dark orange */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 1.5rem;
+}
+
+.benefit-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--npt-black);
+}
+
+.benefit-card p {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+/* --- Form Section --- */
+.inquiry-section {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.form-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.form-intro h2 {
+    font-size: 2.2rem;
+    color: var(--npt-black);
+    margin-bottom: 1.5rem;
+}
+
+.form-intro p {
+    color: #475569;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+}
+
+.form-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
+}
+
+/* Form Styles */
+.form-group { margin-bottom: 1.25rem; }
+.form-row { display: flex; gap: 1rem; }
+.form-group.half { flex: 1; }
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #334155;
+    font-size: 0.9rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: #1e293b;
+    background: #fff;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #f97316; /* Orange focus */
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.select-wrapper { position: relative; }
+.select-wrapper::after {
+    content: '\f078';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+select { -webkit-appearance: none; appearance: none; }
+
+/* Success State */
+.success-box {
+    text-align: center;
+    padding: 2rem 0;
+    animation: fadeIn 0.5s ease;
+}
+
+.icon-check {
+    font-size: 3.5rem;
+    color: var(--cfn-green);
+    margin-bottom: 1rem;
+}
+
+.success-box h3 {
+    color: var(--npt-black);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 900px) {
+    .form-wrapper { grid-template-columns: 1fr; gap: 2rem; }
+    .form-row { flex-direction: column; gap: 0; }
+}
