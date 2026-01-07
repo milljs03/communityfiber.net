@@ -1,7 +1,8 @@
 import { db, app } from './config/firebase-config.js';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { collection, getDocs, doc, updateDoc, addDoc, deleteDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs, doc, updateDoc, addDoc, deleteDoc, query, orderBy, where, getDoc, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// ... [Existing Auth and Setup Code] ...
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const ADMIN_EMAIL = 'jmiller@nptel.com'; // The only user with edit/delete rights
@@ -106,6 +107,8 @@ document.querySelectorAll('.nav-item').forEach(btn => {
         if (tab === 'leads') loadLeads();
         if (tab === 'plans') loadPlans();
         if (tab === 'neighborhoods') loadNeighborhoods();
+        if (tab === 'announcements') loadAnnouncementSettings();
+        if (tab === 'testimonials') loadTestimonials();
     });
 });
 
@@ -113,25 +116,49 @@ document.querySelectorAll('.nav-item').forEach(btn => {
 
 async function loadDashboard() {
     try {
-        // Basic stats count
+        // 1. Leads Count
         const leadsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'leads');
         const leadsSnap = await getDocs(leadsRef);
         document.getElementById('stat-leads').textContent = leadsSnap.size;
 
+        // 2. Plans Count
         const plansRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'plans');
         const plansSnap = await getDocs(plansRef);
         document.getElementById('stat-plans').textContent = plansSnap.size;
 
+        // 3. Neighborhoods Count
         const hoodsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'neighborhoods');
         const hoodsSnap = await getDocs(hoodsRef);
         document.getElementById('stat-hoods').textContent = hoodsSnap.size;
+
+        // 4. Analytics (Page Views - Last 24h approximation based on limit for now)
+        // Ideally, use a proper query with composite index, but for prototype we'll fetch latest 50
+        const analyticsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'analytics_pageviews');
+        // We can't do complex queries without index, so just fetch a batch and count in memory for this demo
+        // In production, you'd use aggregation queries or strict date filtering with indexes
+        const analyticsSnap = await getDocs(query(analyticsRef, limit(100))); 
+        
+        let recentViews = analyticsSnap.size;
+        if (recentViews === 100) recentViews = "100+"; // Just a simple indicator
+        
+        // Add a new stat card dynamically if it doesn't exist
+        if (!document.getElementById('stat-views')) {
+            const statsGrid = document.querySelector('.stats-grid');
+            const viewCard = document.createElement('div');
+            viewCard.className = 'stat-card';
+            viewCard.innerHTML = `<h3>Recent Page Views</h3><p class="stat-value" id="stat-views">${recentViews}</p>`;
+            statsGrid.appendChild(viewCard);
+        } else {
+            document.getElementById('stat-views').textContent = recentViews;
+        }
+
     } catch (err) {
         console.error("Dashboard Load Error (likely permission issues):", err);
-        // Don't alert here, just log, as dashboard is the first thing to load
     }
 }
 
 async function loadLeads() {
+    // ... [Existing loadLeads function] ...
     const tbody = document.getElementById('leads-table-body');
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loading...</td></tr>';
     
@@ -147,7 +174,6 @@ async function loadLeads() {
         const leads = [];
         snapshot.forEach(doc => leads.push({ id: doc.id, ...doc.data() }));
 
-        // Memory Sort (Newest First)
         leads.sort((a, b) => {
             const dateA = a.submittedAt?.toDate ? a.submittedAt.toDate() : new Date(0);
             const dateB = b.submittedAt?.toDate ? b.submittedAt.toDate() : new Date(0);
@@ -168,7 +194,7 @@ async function loadLeads() {
                     <td><span class="badge">${lead.type || 'General'}</span></td>
                     <td>${lead.name || 'Unknown'}</td>
                     <td>${lead.email || '-'}</td>
-                    <td>New</td>
+                    <td>${lead.status || 'New'}</td>
                     <td><button class="btn-sm btn-edit" onclick="alert('${JSON.stringify(lead, null, 2).replace(/"/g, '&quot;')}')">View JSON</button></td>
                 </tr>
             `;
@@ -181,6 +207,7 @@ async function loadLeads() {
     }
 }
 
+// ... [Rest of the file remains similar, ensuring all imports and functions are preserved] ...
 // Add event listener for filter
 document.getElementById('lead-filter').addEventListener('change', loadLeads);
 
@@ -259,6 +286,86 @@ async function loadNeighborhoods() {
     }
 }
 
+// --- Announcement Logic ---
+const bannerForm = document.getElementById('announcement-form');
+
+async function loadAnnouncementSettings() {
+    try {
+        const docRef = doc(db, 'artifacts', '162296779236', 'public', 'data', 'settings', 'banner');
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            document.getElementById('banner-active').checked = data.active || false;
+            document.getElementById('banner-message').value = data.message || '';
+            document.getElementById('banner-type').value = data.type || 'info';
+        }
+    } catch (err) {
+        console.error("Error loading banner settings:", err);
+    }
+}
+
+if(bannerForm) {
+    bannerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!isAdmin) return;
+
+        const data = {
+            active: document.getElementById('banner-active').checked,
+            message: document.getElementById('banner-message').value,
+            type: document.getElementById('banner-type').value,
+            updatedAt: new Date()
+        };
+
+        try {
+            const docRef = doc(db, 'artifacts', '162296779236', 'public', 'data', 'settings', 'banner');
+            await setDoc(docRef, data);
+            alert("Banner updated successfully!");
+        } catch (err) {
+            console.error(err);
+            alert("Error updating banner.");
+        }
+    });
+}
+
+// --- Testimonials Logic ---
+async function loadTestimonials() {
+    const container = document.getElementById('testimonials-list');
+    container.innerHTML = '<p>Loading...</p>';
+    
+    try {
+        const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'testimonials');
+        const snapshot = await getDocs(ref);
+        
+        container.innerHTML = '';
+        snapshot.forEach(doc => {
+            const t = doc.data();
+            const card = document.createElement('div');
+            card.className = 'admin-card';
+            card.innerHTML = `
+                <h3>${t.author} <small style="font-weight:400; color:#64748b;">(${t.location})</small></h3>
+                <p><em>"${t.quote}"</em></p>
+                <div class="card-actions">
+                    ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="testimonial">Edit</button>` : ''}
+                    ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="testimonial">Delete</button>` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+             if(isAdmin) {
+                card.querySelector('.btn-edit').addEventListener('click', () => openEditModal('testimonial', doc.id, t));
+                card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('testimonials', doc.id));
+            }
+        });
+        
+         if (snapshot.empty) container.innerHTML = '<p>No testimonials found. Add one!</p>';
+
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = '<p style="color:red;">Error loading testimonials.</p>';
+    }
+}
+
 // --- Edit/Add Logic (Admin Only) ---
 
 const editModal = document.getElementById('edit-modal');
@@ -313,6 +420,21 @@ function openEditModal(type, id, data = null) {
                 </select>
             </div>
         `;
+    } else if (type === 'testimonial') {
+        modalFields.innerHTML = `
+            <div>
+                <label class="form-label">Author Name</label>
+                <input type="text" name="author" class="form-control" value="${data?.author || ''}" required>
+            </div>
+            <div>
+                <label class="form-label">Location / Neighborhood</label>
+                <input type="text" name="location" class="form-control" value="${data?.location || ''}" required placeholder="e.g. Maple Ridge">
+            </div>
+            <div>
+                <label class="form-label">Quote</label>
+                <textarea name="quote" class="form-control" rows="3" required>${data?.quote || ''}</textarea>
+            </div>
+        `;
     }
 
     editModal.style.display = 'flex';
@@ -341,7 +463,11 @@ editForm.addEventListener('submit', async (e) => {
         data.isPopular = !!editForm.querySelector('[name="isPopular"]').checked;
     }
 
-    const collectionName = type === 'plan' ? 'plans' : 'neighborhoods';
+    let collectionName;
+    if (type === 'plan') collectionName = 'plans';
+    else if (type === 'hood') collectionName = 'neighborhoods';
+    else if (type === 'testimonial') collectionName = 'testimonials';
+
     const collRef = collection(db, 'artifacts', '162296779236', 'public', 'data', collectionName);
 
     try {
@@ -358,6 +484,7 @@ editForm.addEventListener('submit', async (e) => {
         // Refresh View
         if (type === 'plan') loadPlans();
         if (type === 'hood') loadNeighborhoods();
+        if (type === 'testimonial') loadTestimonials();
         
     } catch (err) {
         console.error("Save failed", err);
@@ -369,14 +496,20 @@ async function deleteItem(type, id) {
     if (!isAdmin) return;
     if (!confirm("Are you sure you want to delete this item?")) return;
 
-    const collectionName = type === 'plan' ? 'plans' : 'neighborhoods';
+    let collectionName;
+    if (type === 'plan') collectionName = 'plans';
+    else if (type === 'neighborhoods') collectionName = 'neighborhoods'; 
+    else if (type === 'hood') collectionName = 'neighborhoods';
+    else if (type === 'testimonial') collectionName = 'testimonials';
+    else if (type === 'testimonials') collectionName = 'testimonials';
     
     try {
         await deleteDoc(doc(db, 'artifacts', '162296779236', 'public', 'data', collectionName, id));
         
         // Refresh View
         if (type === 'plan') loadPlans();
-        if (type === 'neighborhoods') loadNeighborhoods();
+        if (type === 'neighborhoods' || type === 'hood') loadNeighborhoods();
+        if (type === 'testimonial' || type === 'testimonials') loadTestimonials();
     } catch (err) {
         console.error("Delete failed", err);
         alert("Error deleting item.");
@@ -386,3 +519,6 @@ async function deleteItem(type, id) {
 // Wire up "Add" buttons
 document.getElementById('add-plan-btn').addEventListener('click', () => openEditModal('plan'));
 document.getElementById('add-hood-btn').addEventListener('click', () => openEditModal('hood'));
+if(document.getElementById('add-testimonial-btn')) {
+    document.getElementById('add-testimonial-btn').addEventListener('click', () => openEditModal('testimonial'));
+}
