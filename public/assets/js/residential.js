@@ -1,7 +1,6 @@
-import { getPlans } from './services/db.js';
 import { db, app } from './config/firebase-config.js';
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     // --- 0. Shared Animation Observer ---
@@ -21,57 +20,59 @@ document.addEventListener('DOMContentLoaded', async () => {
     const auth = getAuth(app);
     signInAnonymously(auth).catch(err => console.warn("Auth warning:", err));
 
-    // --- 2. Render Plans ---
+    // --- 2. Render Plans (Dynamic from DB) ---
     const plansGrid = document.getElementById('plans-grid');
     const loadingEl = document.getElementById('loading-indicator');
     const errorEl = document.getElementById('error-message');
-
-    // Default Data
-    const defaultPlans = [
-        { 
-            name: "Standard", 
-            speed: "200 Mbps", 
-            price: 65, 
-            description: "Great for small households. Stream HD video, browse the web, and check email on a few devices.",
-            features: ["Local Service", "No Contracts", "No Data Caps"],
-            isPopular: false
-        },
-        { 
-            name: "Advanced", 
-            speed: "500 Mbps", 
-            price: 80, 
-            description: "Ideal for families. Support multiple simultaneous streams, work-from-home video calls, and online learning.",
-            features: ["Local Service", "No Contracts", "No Data Caps"],
-            isPopular: false 
-        },
-        { 
-            name: "Premium", 
-            speed: "1 Gbps", 
-            price: 89, 
-            description: "The ultimate experience. Perfect for multiplayer gaming, 4K streaming, and smart homes devices.",
-            features: ["Local Service", "No Contracts", "No Data Caps"],
-            isPopular: true
-        }
-    ];
     
     updatePageHeader();
 
     try {
+        // Fetch from Firestore
+        const plansRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'plans');
+        const snapshot = await getDocs(plansRef);
+        
         let plans = [];
-        try {
-            plans = await getPlans();
-        } catch (dbError) {
-            console.warn("Using default plans config.");
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            // Ensure price is a number for sorting
+            data.price = Number(data.price); 
+            plans.push(data);
+        });
+
+        // Fallback if DB empty
+        if (plans.length === 0) {
+            console.warn("No plans in DB, using fallback defaults.");
+             plans = [
+                { 
+                    name: "Standard", speed: "200 Mbps", price: 65, 
+                    description: "Great for small households. Stream HD video, browse the web.",
+                    features: ["Local Service", "No Contracts"], isPopular: false
+                },
+                { 
+                    name: "Advanced", speed: "500 Mbps", price: 80, 
+                    description: "Ideal for families. Support multiple streams & video calls.",
+                    features: ["Local Service", "No Contracts"], isPopular: false 
+                },
+                { 
+                    name: "Premium", speed: "1 Gbps", price: 89, 
+                    description: "The ultimate experience. Perfect for 4K streaming & smart homes.",
+                    features: ["Local Service", "No Contracts"], isPopular: true
+                }
+            ];
         }
 
-        if (!plans || plans.length === 0) plans = defaultPlans;
+        // Sort by price (Lowest to Highest)
+        plans.sort((a, b) => a.price - b.price);
 
         loadingEl.classList.add('hidden');
         plansGrid.classList.remove('hidden');
 
+        // Generate HTML
         plansGrid.innerHTML = plans.map((plan, index) => generatePlanCard(plan, index)).join('');
+        
         injectAddonsSection(plansGrid);
-        injectSaveModal();
+        // injectSaveModal(); // No longer needed as button redirects
 
     } catch (error) {
         console.error("Error rendering plans:", error);
@@ -79,31 +80,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         errorEl.classList.remove('hidden');
     }
 
-    // --- 3. Render Neighborhoods (Moved from Main.js) ---
-    const neighborhoods = [
-        { name: "Maple Ridge", status: "Live Now" },
-        { name: "River Run", status: "Construction Phase" },
-        { name: "Oak Hills", status: "Pre-Order" }
-    ];
-
+    // --- 3. Render Neighborhoods (Dynamic from DB) ---
     const hoodList = document.getElementById('neighborhood-list');
     if(hoodList) {
-        neighborhoods.forEach(hood => {
-            const card = document.createElement('div');
-            card.className = 'hood-card fade-in-section';
-            card.innerHTML = `
-                <div class="hood-image">
-                    <span>${hood.name}</span>
-                </div>
-                <div class="hood-info">
-                    <h4>${hood.name}</h4>
-                    <p style="color: var(--cfn-mute-green); font-weight:600;">${hood.status}</p>
-                </div>
-            `;
-            hoodList.appendChild(card);
-            // Observe the newly created element
-            observer.observe(card);
-        });
+        try {
+            const hoodsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'neighborhoods');
+            const hoodSnap = await getDocs(hoodsRef);
+            
+            let neighborhoods = [];
+            hoodSnap.forEach(doc => neighborhoods.push(doc.data()));
+            
+            // Fallback
+            if (neighborhoods.length === 0) {
+                 neighborhoods = [
+                    { name: "Maple Ridge", status: "Live Now" },
+                    { name: "River Run", status: "Construction Phase" },
+                    { name: "Oak Hills", status: "Pre-Order" }
+                ];
+            }
+
+            hoodList.innerHTML = ''; // Clear existing
+            neighborhoods.forEach(hood => {
+                const card = document.createElement('div');
+                card.className = 'hood-card fade-in-section';
+                card.innerHTML = `
+                    <div class="hood-image">
+                        <span>${hood.name}</span>
+                    </div>
+                    <div class="hood-info">
+                        <h4>${hood.name}</h4>
+                        <p style="color: var(--cfn-mute-green); font-weight:600;">${hood.status}</p>
+                    </div>
+                `;
+                hoodList.appendChild(card);
+                observer.observe(card);
+            });
+        } catch(err) {
+            console.error("Error loading neighborhoods:", err);
+        }
     }
 });
 
@@ -123,6 +137,9 @@ function updatePageHeader() {
 }
 
 function injectAddonsSection(targetElement) {
+    // Only inject if it doesn't already exist
+    if (document.querySelector('.addons-section-container')) return;
+
     const addonsHTML = `
     <div class="addons-section-container">
         <div class="addon-card">
@@ -165,13 +182,18 @@ function injectAddonsSection(targetElement) {
 }
 
 function generatePlanCard(plan, index) {
-    const highlightClass = plan.isPopular ? 'popular' : '';
-    const badge = plan.isPopular ? '<div class="popular-badge">Best Value</div>' : '';
+    // Correctly handle boolean from Firestore
+    const isPopular = plan.isPopular === true || plan.isPopular === "true";
+    const highlightClass = isPopular ? 'popular' : '';
+    const badge = isPopular ? '<div class="popular-badge">Best Value</div>' : '';
     const labelId = `bbf-${index}`;
+    
+    // Ensure features is an array
+    const features = Array.isArray(plan.features) ? plan.features : ["Local Service", "No Contracts"];
 
-    const featuresHtml = plan.features ? plan.features.map(f => 
+    const featuresHtml = features.map(f => 
         `<div class="highlight-text"><i class="fa-solid fa-check"></i> ${f}</div>`
-    ).join('') : '';
+    ).join('');
 
     return `
         <div class="pricing-box ${highlightClass}">
@@ -190,6 +212,7 @@ function generatePlanCard(plan, index) {
                 <div class="broadband-label-container">
                     ${generateBroadbandLabel(plan, labelId)}
                 </div>
+                 <a href="https://fiber-service-query.web.app/query.html" class="sign-up-btn" style="text-align: center; text-decoration: none; display: block;">I'm Interested</a>
             </div>
         </div>
     `;
@@ -240,82 +263,4 @@ window.toggleLabel = function(id) {
     }
 };
 
-window.openSaveModal = function(planName) {
-    const modal = document.getElementById('save-modal');
-    if(modal) {
-        modal.style.display = 'flex';
-        modal.dataset.selectedPlan = planName;
-    }
-};
-
-function injectSaveModal() {
-    if(document.getElementById('save-modal')) return;
-
-    const modalHtml = `
-    <div id="save-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-modal-btn" onclick="document.getElementById('save-modal').style.display='none'">&times;</button>
-            <h2 style="margin-top:0; color:var(--npt-black); font-family:var(--font-heading); font-size:1.5rem;">
-                <i class="fa-solid fa-bookmark" style="color:var(--cfn-green); margin-right:10px;"></i> Save Quote
-            </h2>
-            <p style="color:#64748b; font-size:0.95rem; margin-bottom:25px;">
-                Not ready to commit? Enter your details and we'll save your quote for later.
-            </p>
-            <form id="save-quote-form">
-                <div style="margin-bottom:15px;">
-                    <label style="display:block; font-weight:700; margin-bottom:5px; color:#334155; font-size:0.85rem;">Name</label>
-                    <input type="text" id="save-name" required class="form-input" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px;" placeholder="Your Name">
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="display:block; font-weight:700; margin-bottom:5px; color:#334155; font-size:0.85rem;">Email</label>
-                    <input type="email" id="save-email" required class="form-input" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px;" placeholder="you@example.com">
-                </div>
-                <div style="margin-bottom:25px;">
-                    <label style="display:block; font-weight:700; margin-bottom:5px; color:#334155; font-size:0.85rem;">Phone (Optional)</label>
-                    <input type="tel" id="save-phone" class="form-input" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px;" placeholder="(555) 123-4567">
-                </div>
-                <button type="submit" class="sign-up-btn" style="margin:0;">Save & Notify Me</button>
-            </form>
-        </div>
-    </div>`;
-    
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-
-    const modal = document.getElementById('save-modal');
-    const form = document.getElementById('save-quote-form');
-    
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.style.display = 'none';
-    });
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = form.querySelector('button[type="submit"]');
-        const originalText = btn.textContent;
-        btn.disabled = true;
-        btn.textContent = "Saving...";
-
-        const name = document.getElementById('save-name').value;
-        const email = document.getElementById('save-email').value;
-        const phone = document.getElementById('save-phone').value;
-        const selectedPlan = modal.dataset.selectedPlan || "Unknown";
-
-        try {
-            await addDoc(collection(db, 'artifacts', '162296779236', 'public', 'data', 'leads'), {
-                name, email, phone,
-                plan: selectedPlan,
-                type: 'saved_quote',
-                submittedAt: new Date()
-            });
-            alert("Success! We've saved your quote.");
-            modal.style.display = 'none';
-            form.reset();
-        } catch (err) {
-            console.error("Save failed:", err);
-            alert("Could not save quote. Please try again.");
-        } finally {
-            btn.disabled = false;
-            btn.textContent = originalText;
-        }
-    });
-}
+// No longer need openSaveModal or injectSaveModal as we redirect directly.

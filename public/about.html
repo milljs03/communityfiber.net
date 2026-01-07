@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Community Fiber</title>
+    
+    <!-- UPDATED CSP -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
+                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/about.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="logo-container">
+            <img src="assets/images/community-fiber-logo.png" alt="Community Fiber" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span class="logo-text" style="display:none;">Community Fiber</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="residential.html">Residential</a></li>
+            <li><a href="business.html">Business</a></li>
+            <li><a href="builders.html">Builders</a></li>
+            <li><a href="about.html" class="active">About</a></li>
+            <li><a href="support.html">Support</a></li>
+        </ul>
+        <div class="mobile-menu-btn">☰</div>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="about-hero">
+        <div class="container hero-content">
+            <h1>Connecting Neighbors Since 1901</h1>
+            <p>From the first telephone lines to gigabit fiber, we've been Northern Indiana's local connection for 125 years.</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- Intro / Mission -->
+            <section class="mission-section fade-in-section">
+                <div class="mission-card">
+                    <h2>More Than Just Internet</h2>
+                    <p>In an age of faceless corporate giants, we remain proudly <strong>owned by local shareholders</strong>. We live in the communities we serve, which means your connection is our connection. We don't just build networks; we build relationships that stand the test of time.</p>
+                </div>
+            </section>
+
+            <!-- History Split Section -->
+            <section class="history-grid">
+                
+                <!-- Left: NPTech Heritage -->
+                <div class="history-col fade-in-section">
+                    <!-- CHANGED ICON HERE from fa-phone-intercom to fa-phone-volume (Free) -->
+                    <div class="col-icon"><i class="fa-solid fa-phone-volume"></i></div>
+                    <h3>Our Heritage: NPTech</h3>
+                    <div class="history-content">
+                        <p><strong>New Paris Telephone</strong> was formed in 1901 with a simple mission: to bring telephone service to our rural community. For over a century, we have adapted to the ever-changing landscape of technology.</p>
+                        <p>In 2022, we rebranded as <strong>NPTech</strong> to better reflect our evolution. While we honor our roots in traditional telephony, we are now a full-service technology provider offering:</p>
+                        <ul class="feature-list">
+                            <li><i class="fa-solid fa-check"></i> Computer Repair & IT Support</li>
+                            <li><i class="fa-solid fa-check"></i> IP Telephone Systems</li>
+                            <li><i class="fa-solid fa-check"></i> Enterprise Cabling (Cat6)</li>
+                            <li><i class="fa-solid fa-check"></i> Cable TV Services</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Divider Line (Visual) -->
+                <div class="divider-line"></div>
+
+                <!-- Right: Community Fiber Future -->
+                <div class="history-col fade-in-section" style="transition-delay: 200ms;">
+                    <div class="col-icon"><i class="fa-solid fa-network-wired"></i></div>
+                    <h3>Our Future: Community Fiber</h3>
+                    <div class="history-content">
+                        <p><strong>Community Fiber Network</strong> (formerly Goshen Fiber Network) represents our commitment to the future. As a division of New Paris Telephone, we combine 125 years of stability with cutting-edge fiber infrastructure.</p>
+                        <p>We changed our name to reflect our expansion beyond Goshen. We are actively building and connecting schools, businesses, and homes across Northern Indiana, including:</p>
+                        <div class="locations-tags">
+                            <span>Goshen</span>
+                            <span>New Paris</span>
+                            <span>Milford</span>
+                            <span>Middlebury</span>
+                            <span>Nappanee</span>
+                            <span>Wakarusa</span>
+                            <span>Elkhart</span>
+                        </div>
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: #64748b;"><em>And we're just getting started.</em></p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Call to Action -->
+            <section class="cta-section fade-in-section">
+                <h2>Join Our Network</h2>
+                <p>Experience the difference of a locally owned, century-old provider.</p>
+                <div class="cta-buttons">
+                    <a href="residential.html" class="btn btn-primary">View Plans</a>
+                    <a href="business.html" class="btn btn-outline">Business Solutions</a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Community Fiber. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

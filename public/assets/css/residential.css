@@ -3,7 +3,6 @@
 /* --- Page Layout --- */
 .plans-wrapper {
     background-color: var(--npt-white);
-    /* Subtle dot pattern for texture */
     background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
     background-size: 24px 24px;
     min-height: 100vh;
@@ -12,7 +11,6 @@
 
 /* --- Hero Section (Matches Home Page) --- */
 .plans-header-content {
-    /* FIX: Added fallback background color and used Hex codes to guarantee visibility */
     background-color: #141414;
     background: linear-gradient(135deg, #141414 0%, #082e18 100%);
     color: #ffffff;
@@ -21,8 +19,6 @@
     position: relative;
     clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
     margin-bottom: -90px;
-    
-    /* FIX: Force visibility to override the 'fade-in' class which lacks a JS trigger on this page */
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
@@ -36,7 +32,6 @@
     margin-bottom: 1rem;
     letter-spacing: -1px;
     line-height: 1.1;
-    /* FIX: Explicitly set color to ensure it pops against the dark background */
     color: #ffffff !important;
 }
 
@@ -54,13 +49,12 @@
 .pricing-container {
     display: flex;
     justify-content: center;
-    /* FIX: 'stretch' ensures all cards are the same height */
-    align-items: stretch;
+    align-items: stretch; /* Ensures cards are equal height */
     gap: 30px;
     padding: 0 20px;
     max-width: 1200px;
     margin: 0 auto 60px;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
     position: relative;
     z-index: 10;
 }
@@ -72,8 +66,10 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    flex: 1 1 300px;
+    /* Flex grow, shrink, and basis */
+    flex: 1 1 300px; 
     max-width: 380px;
+    min-width: 300px; /* Prevents squishing */
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
     border: 1px solid rgba(0,0,0,0.04);
@@ -96,7 +92,6 @@
     z-index: 20;
 }
 
-/* FIX: Ensure inner content flexes to push button to bottom */
 .pricing-box-inner {
     padding: 40px 30px;
     display: flex;
@@ -110,7 +105,6 @@
     z-index: 15;
     border: none;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-    /* Vertically center the larger card */
     margin-top: -15px;
     margin-bottom: -15px; 
 }
@@ -134,7 +128,7 @@
     pointer-events: none;
 }
 
-/* UPDATED: Better Positioned Gold Badge (Corner Tab Style) */
+/* Badge */
 .popular-badge {
     position: absolute;
     top: 0;
@@ -150,10 +144,9 @@
     box-shadow: -2px 2px 5px rgba(0,0,0,0.1);
     z-index: 20;
     letter-spacing: 0.5px;
-    transform: none; /* Removed rotation for cleaner look */
 }
 
-/* --- Card Typography --- */
+/* Typography */
 .panel-heading {
     font-family: var(--font-heading);
     font-size: 1.75rem;
@@ -170,18 +163,16 @@
     border-bottom: 1px solid #f1f5f9;
 }
 
-/* UPDATED: Refreshed Price Styling */
 .price {
     font-family: var(--font-heading);
-    font-size: 4.5rem; /* Larger for impact */
+    font-size: 4.5rem;
     font-weight: 800;
     color: var(--npt-black);
     line-height: 0.9;
-    letter-spacing: -3px; /* Tighter spacing */
+    letter-spacing: -3px;
     display: inline-flex;
     align-items: flex-start;
     position: relative;
-    /* Optional: Add a shadow to make it pop */
     text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
 }
 
@@ -191,11 +182,10 @@
     font-weight: 600;
     color: #94a3b8;
     margin-left: 6px;
-    margin-top: 15px; /* Push the /mo down a bit */
+    margin-top: 15px;
     letter-spacing: normal;
 }
 
-/* --- Speed Display --- */
 .speed-display {
     text-align: center;
     margin-bottom: 20px;
@@ -214,7 +204,6 @@
     letter-spacing: 0.5px;
 }
 
-/* --- Description --- */
 .plan-description {
     text-align: center;
     color: #475569;
@@ -224,7 +213,6 @@
     min-height: 60px;
 }
 
-/* --- Features List --- */
 .core-benefits {
     display: flex;
     flex-direction: column;
@@ -254,7 +242,7 @@
     flex-shrink: 0;
 }
 
-/* --- Buttons --- */
+/* Buttons */
 .sign-up-btn {
     background-color: var(--npt-black);
     color: white;
@@ -267,11 +255,11 @@
     cursor: pointer;
     width: 100%;
     transition: all 0.2s ease;
+    /* Updated margin-top to add space between button and label */
+    margin-top: 30px; 
     margin-bottom: 25px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    /* FIX: Push button to bottom */
-    margin-top: auto; 
 }
 
 .sign-up-btn:hover {
@@ -280,7 +268,6 @@
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-/* Premium Button Green */
 .pricing-box.popular .sign-up-btn {
     background: linear-gradient(135deg, var(--cfn-green) 0%, var(--cfn-dark-green) 100%);
     box-shadow: 0 4px 15px rgba(3, 166, 60, 0.3);
@@ -290,7 +277,7 @@
     box-shadow: 0 8px 20px rgba(3, 166, 60, 0.4);
 }
 
-/* --- Broadband Facts (FCC Label) --- */
+/* Broadband Facts */
 .broadband-label-container {
     width: 100%;
     margin-top: 10px;
@@ -298,6 +285,8 @@
     background: #fff;
     color: #000;
     font-family: Helvetica, Arial, sans-serif;
+    /* Added margin-bottom to ensure space below the label */
+    margin-bottom: 10px; 
 }
 
 .broadband-facts-wrapper {
@@ -325,18 +314,8 @@
     transition: background 0.2s;
 }
 
-.expand-trigger:hover {
-    background: #e2e8f0;
-}
-
-.expand-btn {
-    background: none;
-    border: none;
-    font-weight: inherit;
-    font-size: inherit;
-    text-transform: inherit;
-    pointer-events: none;
-}
+.expand-trigger:hover { background: #e2e8f0; }
+.expand-btn { background: none; border: none; font-weight: inherit; font-size: inherit; text-transform: inherit; pointer-events: none; }
 
 .bbf-header { border-bottom: 3px solid black; padding: 15px; }
 .bbf-title { font-weight: 900; font-size: 24px; margin: 0; text-transform: uppercase; line-height: 1; }
@@ -344,7 +323,7 @@
 .bbf-row.strong { border-bottom: 2px solid black; font-weight: bold; }
 .bbf-footer { padding: 15px; font-size: 11px; text-align: center; line-height: 1.4; background: #fff; }
 
-/* --- Add-ons Section (Phone + Eero) --- */
+/* Addons */
 .addons-section-container {
     display: flex;
     justify-content: center;
@@ -368,198 +347,48 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.addon-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-}
-
-.addon-top-bar {
-    height: 6px;
-    width: 100%;
-}
-
-.addon-content {
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    height: 100%;
-}
-
-.addon-icon-title {
-    margin-bottom: 15px;
-    color: var(--npt-black);
-}
-
-.addon-icon-title h3 {
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin: 10px 0 0;
-}
-
-.addon-icon-title i {
-    font-size: 2rem;
-    margin-bottom: 5px;
-}
-
-.addon-content p {
-    color: #64748b;
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-.addon-price-tag {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    margin-bottom: 20px;
-    color: var(--npt-black);
-}
-
+.addon-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+.addon-top-bar { height: 6px; width: 100%; }
+.addon-content { padding: 30px; display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; }
+.addon-icon-title { margin-bottom: 15px; color: var(--npt-black); }
+.addon-icon-title h3 { font-size: 1.5rem; font-weight: 800; margin: 10px 0 0; }
+.addon-icon-title i { font-size: 2rem; margin-bottom: 5px; }
+.addon-content p { color: #64748b; margin-bottom: 20px; line-height: 1.5; }
+.addon-price-tag { display: flex; align-items: baseline; justify-content: center; margin-bottom: 20px; color: var(--npt-black); }
 .addon-price-tag .symbol { font-size: 1.2rem; font-weight: 600; }
 .addon-price-tag .val { font-size: 2.5rem; font-weight: 800; font-family: var(--font-heading); line-height: 1; }
 .addon-price-tag .per { font-size: 0.9rem; color: #64748b; font-weight: 600; margin-left: 3px; }
+.addon-features-list { display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: auto; }
+.addon-features-list span { background-color: #f8fafc; padding: 10px 15px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; color: #334155; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.addon-image-wrapper { margin-bottom: 15px; height: 120px; display: flex; align-items: center; justify-content: center; }
+.addon-image-wrapper img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-.addon-features-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-    margin-top: auto; /* Push to bottom if needed, or just flow */
-}
-
-.addon-features-list span {
-    background-color: #f8fafc;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #334155;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.addon-image-wrapper {
-    margin-bottom: 15px;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.addon-image-wrapper img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain;
-}
-
-/* --- Save Quote Modal --- */
-.modal-overlay {
-    display: none;
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 9999;
-    backdrop-filter: blur(4px);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: white;
-    padding: 40px;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 450px;
-    position: relative;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-    border-top: 6px solid var(--cfn-green);
-    animation: modalSlideIn 0.3s ease-out;
-}
-
-@keyframes modalSlideIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.close-modal-btn {
-    position: absolute; top: 15px; right: 20px;
-    border: none; background: none;
-    font-size: 2rem; cursor: pointer;
-    color: #cbd5e1;
-    line-height: 1;
-}
+/* Modal */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 9999; backdrop-filter: blur(4px); justify-content: center; align-items: center; }
+.modal-content { background: white; padding: 40px; border-radius: 16px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border-top: 6px solid var(--cfn-green); animation: modalSlideIn 0.3s ease-out; }
+@keyframes modalSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.close-modal-btn { position: absolute; top: 15px; right: 20px; border: none; background: none; font-size: 2rem; cursor: pointer; color: #cbd5e1; line-height: 1; }
 .close-modal-btn:hover { color: var(--npt-black); }
 
-/* --- Loading --- */
+/* Loading */
 .loading-spinner { padding: 80px; text-align: center; }
-.spinner {
-    border: 3px solid #f1f5f9;
-    border-top: 3px solid var(--cfn-green);
-    border-radius: 50%;
-    width: 40px; height: 40px;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 15px;
-}
+.spinner { border: 3px solid #f1f5f9; border-top: 3px solid var(--cfn-green); border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 0 auto 15px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* --- Responsive --- */
+/* Neighborhoods */
+.section-title { text-align: center; font-size: 2.5rem; margin-bottom: var(--spacing-lg); color: var(--npt-black); }
+.neighborhood-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
+.hood-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+.hood-card:hover { transform: translateY(-5px); }
+.hood-image { height: 150px; background-color: var(--cfn-light-green); display: flex; align-items: center; justify-content: center; color: var(--cfn-dark-green); font-weight: 700; font-size: 1.1rem; }
+.hood-info { padding: 1.25rem; text-align: center; }
+.hood-info h4 { margin-bottom: 0.5rem; color: var(--npt-black); font-size: 1.1rem; }
+
+/* Responsive */
 @media (max-width: 900px) {
     .pricing-container { flex-direction: column; align-items: center; margin-top: -30px; }
     .pricing-box { width: 100%; max-width: 100%; margin-bottom: 20px; }
     .pricing-box.popular { transform: none; order: 0; margin-top: 0; margin-bottom: 20px; }
-    .pricing-box.popular:hover { transform: translateY(-5px); }
     .plans-header-content { padding: 80px 20px 60px; clip-path: none; margin-bottom: 0; }
     .popular-badge { top: 10px; right: 10px; transform: none; border-radius: 4px; padding: 5px 15px; }
-}
-
-/* --- Neighborhoods Section (Migrated from Home) --- */
-.section-title {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: var(--spacing-lg);
-    color: var(--npt-black);
-}
-
-.neighborhood-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-}
-
-.hood-card {
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-}
-
-.hood-card:hover {
-    transform: translateY(-5px);
-}
-
-.hood-image {
-    height: 150px;
-    background-color: var(--cfn-light-green);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--cfn-dark-green);
-    font-weight: 700;
-    font-size: 1.1rem;
-}
-
-.hood-info {
-    padding: 1.25rem;
-    text-align: center;
-}
-
-.hood-info h4 {
-    margin-bottom: 0.5rem;
-    color: var(--npt-black);
-    font-size: 1.1rem;
 }

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Community Fiber</title>
+    
+    <!-- UPDATED CSP: Added missing google domains for Auth and Analytics -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
+                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://communityfiber-net.firebaseapp.com;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="login-overlay">
+        <div class="login-card">
+            <img src="assets/images/community-fiber-logo.png" alt="Community Fiber" class="login-logo">
+            <h2>Admin Portal</h2>
+            <p>Please sign in with your corporate Google account (@nptel.com) to continue.</p>
+            <div id="login-error" class="error-msg hidden"></div>
+            <button id="google-login-btn" class="google-btn">
+                <i class="fa-brands fa-google"></i> Sign in with Google
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin App (Hidden until logged in) -->
+    <div id="admin-app" class="admin-layout hidden">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Admin</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard
+                </button>
+                <button class="nav-item" data-tab="leads">
+                    <i class="fa-solid fa-inbox"></i> Leads & Forms
+                </button>
+                <button class="nav-item" data-tab="plans">
+                    <i class="fa-solid fa-tags"></i> Pricing Plans
+                </button>
+                <button class="nav-item" data-tab="neighborhoods">
+                    <i class="fa-solid fa-map-location-dot"></i> Neighborhoods
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <img id="user-avatar" src="" alt="User">
+                    <div class="user-details">
+                        <span id="user-name">Loading...</span>
+                        <span id="user-role" class="badge">Viewer</span>
+                    </div>
+                </div>
+                <button id="logout-btn" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content-area">
+            
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section active">
+                <div class="page-header">
+                    <h1>Dashboard Overview</h1>
+                    <p>Welcome back, <span class="user-name-display">Admin</span>.</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Leads</h3>
+                        <p class="stat-value" id="stat-leads">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Plans</h3>
+                        <p class="stat-value" id="stat-plans">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Neighborhoods</h3>
+                        <p class="stat-value" id="stat-hoods">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Leads View -->
+            <section id="view-leads" class="view-section">
+                <div class="page-header">
+                    <h1>Form Submissions</h1>
+                    <div class="filter-controls">
+                        <select id="lead-filter" class="form-select">
+                            <option value="all">All Forms</option>
+                            <option value="quote">Business Quotes</option>
+                            <option value="builder">Builder Inquiries</option>
+                            <option value="support">Support Tickets</option>
+                            <option value="saved_quote">Saved Residential Quotes</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leads-table-body">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Plans View -->
+            <section id="view-plans" class="view-section">
+                <div class="page-header">
+                    <h1>Pricing Plans</h1>
+                    <button id="add-plan-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Plan</button>
+                </div>
+                <div id="plans-list" class="cards-grid">
+                    <!-- Populated via JS -->
+                </div>
+            </section>
+
+            <!-- Neighborhoods View -->
+            <section id="view-neighborhoods" class="view-section">
+                <div class="page-header">
+                    <h1>Neighborhood Status</h1>
+                    <button id="add-hood-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Neighborhood</button>
+                </div>
+                <div id="hoods-list" class="cards-grid">
+                    <!-- Populated via JS -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Edit/Add Modal -->
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-btn">&times;</button>
+            <h2 id="modal-title">Edit Item</h2>
+            <form id="edit-form">
+                <input type="hidden" id="edit-id">
+                <input type="hidden" id="edit-type"> <!-- 'plan' or 'hood' -->
+                <div id="modal-fields"></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline close-modal-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="assets/js/admin.js"></script>
+</body>
+</html>

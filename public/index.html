@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Fiber | Fast, Reliable Internet</title>
     
-    <!-- CSP: Added https://cdnjs.cloudflare.com to style-src and font-src -->
+    <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com; 
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
                    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                   img-src 'self' data: https://maps.gstatic.com; 
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://maps.googleapis.com;">
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
+                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,6 +39,7 @@
             <li><a href="residential.html">Residential</a></li>
             <li><a href="business.html">Business</a></li>
             <li><a href="builders.html">Builders</a></li>
+            <li><a href="about.html">About</a></li>
             <li><a href="support.html">Support</a></li>
         </ul>
         <div class="mobile-menu-btn">☰</div>
@@ -45,22 +47,7 @@
 
     <!-- Hero Section -->
     <header class="hero">
-        <!-- Fiber Meteor Animation Background -->
-        <div class="fiber-streaks" aria-hidden="true">
-            <!-- Meteors with Home Icon Inside -->
-            <div class="meteor">
-                <i class="fa-solid fa-house-signal impact-home"></i>
-            </div>
-            <div class="meteor">
-                <i class="fa-solid fa-house-signal impact-home"></i>
-            </div>
-            <div class="meteor">
-                <i class="fa-solid fa-house-signal impact-home"></i>
-            </div>
-            <div class="meteor">
-                <i class="fa-solid fa-house-signal impact-home"></i>
-            </div>
-        </div>
+        <!-- Animation Elements Removed -->
 
         <div class="hero-content fade-in-section">
             <h1 class="hero-title">Investing in Local Communities <br><span class="highlight-text">We Call Home.</span></h1>
