@@ -79,30 +79,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.fade-in-section').forEach(section => {
         observer.observe(section);
     });
-
-    // Dynamic Neighborhood Loader (Mock Data)
-    const neighborhoods = [
-        { name: "Maple Ridge", status: "Live Now" },
-        { name: "River Run", status: "Construction Phase" },
-        { name: "Oak Hills", status: "Pre-Order" }
-    ];
-
-    const hoodList = document.getElementById('neighborhood-list');
-    if(hoodList) {
-        neighborhoods.forEach(hood => {
-            const card = document.createElement('div');
-            card.className = 'hood-card fade-in-section';
-            card.innerHTML = `
-                <div class="hood-image">
-                    <span>${hood.name}</span>
-                </div>
-                <div class="hood-info">
-                    <h4>${hood.name}</h4>
-                    <p style="color: var(--cfn-mute-green); font-weight:600;">${hood.status}</p>
-                </div>
-            `;
-            hoodList.appendChild(card);
-            observer.observe(card);
-        });
-    }
 });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiber Plans | Community Fiber</title>
+    <title>Residential Internet | Community Fiber</title>
     
     <!-- CSP -->
     <meta http-equiv="Content-Security-Policy" 
@@ -23,7 +23,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/plans.css">
+    <link rel="stylesheet" href="assets/css/residential.css"> 
 </head>
 <body>
 
@@ -35,17 +35,18 @@
         </a>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
-            <li><a href="plans.html" class="active">Plans</a></li>
+            <li><a href="residential.html" class="active">Residential</a></li>
             <li><a href="business.html">Business</a></li>
             <li><a href="builders.html">Builders</a></li>
             <li><a href="support.html">Support</a></li>
         </ul>
         <div class="mobile-menu-btn">☰</div>
     </nav>
+    
     <!-- Main Content Wrapper -->
     <main class="plans-wrapper">
         
-        <!-- Header Content (styled green box) -->
+        <!-- Header Content -->
         <div class="plans-header-content fade-in">
             <h1>Simple Pricing. Gigabit Speeds.</h1>
             <p>No contracts. No data caps. Just pure fiber internet.</p>
@@ -70,6 +71,20 @@
             </div>
         </section>
 
+        <!-- Neighborhood Highlights (Moved from Index) -->
+        <section class="neighborhoods-section" style="padding-top: 4rem;">
+            <div class="container">
+                <h2 class="section-title fade-in-section">Neighborhood Highlights</h2>
+                <p class="section-desc fade-in-section" style="text-align:center; max-width: 600px; margin: 0 auto 3rem; color: #64748b;">
+                    We are currently expanding in the Elkhart County area. Check below to see if we are building in your community.
+                </p>
+                <div id="neighborhood-list" class="neighborhood-grid">
+                    <!-- Populated by residential.js -->
+                </div>
+            </div>
+        </section>
+
+
     </main>
 
     <footer>
@@ -77,6 +92,6 @@
     </footer>
 
     <!-- Scripts -->
-    <script type="module" src="assets/js/plans.js"></script>
+    <script type="module" src="assets/js/residential.js"></script>
 </body>
 </html>

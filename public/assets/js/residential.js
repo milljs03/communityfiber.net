@@ -4,10 +4,24 @@ import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/1
 import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Initialize Auth for Lead Capture
+    // --- 0. Shared Animation Observer ---
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in, .fade-in-section').forEach(el => observer.observe(el));
+
+    // --- 1. Initialize Auth for Lead Capture ---
     const auth = getAuth(app);
     signInAnonymously(auth).catch(err => console.warn("Auth warning:", err));
 
+    // --- 2. Render Plans ---
     const plansGrid = document.getElementById('plans-grid');
     const loadingEl = document.getElementById('loading-indicator');
     const errorEl = document.getElementById('error-message');
@@ -36,11 +50,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             price: 89, 
             description: "The ultimate experience. Perfect for multiplayer gaming, 4K streaming, and smart homes devices.",
             features: ["Local Service", "No Contracts", "No Data Caps"],
-            isPopular: true // Highlighted as BEST VALUE
+            isPopular: true
         }
     ];
     
-    // --- 2. Update Header Content ---
     updatePageHeader();
 
     try {
@@ -56,13 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadingEl.classList.add('hidden');
         plansGrid.classList.remove('hidden');
 
-        // Render Plans using DRY functions
         plansGrid.innerHTML = plans.map((plan, index) => generatePlanCard(plan, index)).join('');
-        
-        // --- 3. Inject Add-ons Section (Phone + Eero) ---
         injectAddonsSection(plansGrid);
-        
-        // Inject Modal HTML
         injectSaveModal();
 
     } catch (error) {
@@ -70,7 +78,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadingEl.classList.add('hidden');
         errorEl.classList.remove('hidden');
     }
+
+    // --- 3. Render Neighborhoods (Moved from Main.js) ---
+    const neighborhoods = [
+        { name: "Maple Ridge", status: "Live Now" },
+        { name: "River Run", status: "Construction Phase" },
+        { name: "Oak Hills", status: "Pre-Order" }
+    ];
+
+    const hoodList = document.getElementById('neighborhood-list');
+    if(hoodList) {
+        neighborhoods.forEach(hood => {
+            const card = document.createElement('div');
+            card.className = 'hood-card fade-in-section';
+            card.innerHTML = `
+                <div class="hood-image">
+                    <span>${hood.name}</span>
+                </div>
+                <div class="hood-info">
+                    <h4>${hood.name}</h4>
+                    <p style="color: var(--cfn-mute-green); font-weight:600;">${hood.status}</p>
+                </div>
+            `;
+            hoodList.appendChild(card);
+            // Observe the newly created element
+            observer.observe(card);
+        });
+    }
 });
+
+// --- Helper Functions ---
 
 function updatePageHeader() {
     const headerContent = document.querySelector('.plans-header-content');
@@ -88,7 +125,6 @@ function updatePageHeader() {
 function injectAddonsSection(targetElement) {
     const addonsHTML = `
     <div class="addons-section-container">
-        <!-- Phone Service -->
         <div class="addon-card">
             <div class="addon-top-bar" style="background: linear-gradient(90deg, var(--cfn-green) 0%, var(--cfn-light-green) 100%);"></div>
             <div class="addon-content">
@@ -107,7 +143,6 @@ function injectAddonsSection(targetElement) {
             </div>
         </div>
 
-        <!-- Eero / WiFi -->
         <div class="addon-card">
             <div class="addon-top-bar" style="background: linear-gradient(90deg, #05a5df 0%, #6cdbf7 100%);"></div>
             <div class="addon-content">
@@ -143,25 +178,15 @@ function generatePlanCard(plan, index) {
             ${badge}
             <div class="pricing-box-inner">
                 <h3 class="panel-heading">${plan.name}</h3>
-                
                 <div class="price-wrapper">
                     <span class="price">$${plan.price}<small>/mo</small></span>
                 </div>
-
                 <div class="speed-display">
                     <div class="speed-val">${plan.speed}</div>
                     <div class="speed-label">Download & Upload</div>
                 </div>
-
-                <div class="plan-description">
-                    ${plan.description || "Reliable fiber internet."}
-                </div>
-
-                <div class="core-benefits">
-                    ${featuresHtml}
-                </div>
-
-
+                <div class="plan-description">${plan.description || "Reliable fiber internet."}</div>
+                <div class="core-benefits">${featuresHtml}</div>
                 <div class="broadband-label-container">
                     ${generateBroadbandLabel(plan, labelId)}
                 </div>
@@ -173,65 +198,27 @@ function generatePlanCard(plan, index) {
 function generateBroadbandLabel(plan, labelId) {
     return `
         <div class="broadband-facts-wrapper" id="${labelId}">
-            <!-- Toggle Trigger sits on top when collapsed -->
             <div class="expand-trigger" onclick="toggleLabel('${labelId}')">
                 <button class="expand-btn">Broadband Facts <i class="fa-solid fa-chevron-down" style="margin-left:5px"></i></button>
             </div>
-
             <div class="bbf-header">
                 <h4 class="bbf-title">Broadband Facts</h4>
                 <div style="font-size:12px; margin-top:5px; font-weight:bold;">Community Fiber Network</div>
                 <div style="font-weight:bold;">${plan.name} Plan</div>
                 <div style="font-size:14px; margin-top:5px;">Fixed Broadband Consumer Disclosure</div>
             </div>
-            
-            <div class="bbf-row strong">
-                <span>Monthly Price</span>
-                <strong>$${plan.price}</strong>
-            </div>
-            <div class="bbf-row">
-                <span>Introductory Rate</span>
-                <strong>No</strong>
-            </div>
-            <div class="bbf-row strong">
-                <span>Contract</span>
-                <strong>None</strong>
-            </div>
-
+            <div class="bbf-row strong"><span>Monthly Price</span><strong>$${plan.price}</strong></div>
+            <div class="bbf-row"><span>Introductory Rate</span><strong>No</strong></div>
+            <div class="bbf-row strong"><span>Contract</span><strong>None</strong></div>
             <div style="background-color: #f1f5f9; font-weight: bold; padding: 8px 15px; border-bottom: 1px solid #ccc; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">Additional Charges & Terms</div>
-            
-            <div class="bbf-row">
-                <span style="font-weight:bold">Install Fee</span>
-                <strong>$50 - $150*</strong>
-            </div>
-            <div class="bbf-row">
-                <span>Equipment Fee</span>
-                <strong>$99.00</strong>
-            </div>
-            <div class="bbf-row">
-                <span>Taxes</span>
-                <strong>Varies</strong>
-            </div>
-
+            <div class="bbf-row"><span style="font-weight:bold">Install Fee</span><strong>$50 - $150*</strong></div>
+            <div class="bbf-row"><span>Equipment Fee</span><strong>$99.00</strong></div>
+            <div class="bbf-row"><span>Taxes</span><strong>Varies</strong></div>
             <div style="background-color: #f1f5f9; font-weight: bold; padding: 8px 15px; border-bottom: 1px solid #ccc; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">Performance</div>
-
-            <div class="bbf-row">
-                <span>Download Speed</span>
-                <strong>${plan.speed}</strong>
-            </div>
-            <div class="bbf-row">
-                <span>Upload Speed</span>
-                <strong>${plan.speed}</strong>
-            </div>
-            <div class="bbf-row strong">
-                <span>Latency</span>
-                <strong>17 ms</strong>
-            </div>
-             <div class="bbf-row strong">
-                <span>Data Cap</span>
-                <strong>Unlimited</strong>
-            </div>
-
+            <div class="bbf-row"><span>Download Speed</span><strong>${plan.speed}</strong></div>
+            <div class="bbf-row"><span>Upload Speed</span><strong>${plan.speed}</strong></div>
+            <div class="bbf-row strong"><span>Latency</span><strong>17 ms</strong></div>
+             <div class="bbf-row strong"><span>Data Cap</span><strong>Unlimited</strong></div>
             <div class="bbf-footer">
                 <p><strong>Support:</strong> (574) 533-4237</p>
                 <a href="https://fcc.gov/consumer" target="_blank" style="color:var(--npt-black)">fcc.gov/consumer</a>
@@ -294,7 +281,6 @@ function injectSaveModal() {
     
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-    // Modal Events
     const modal = document.getElementById('save-modal');
     const form = document.getElementById('save-quote-form');
     
@@ -321,7 +307,6 @@ function injectSaveModal() {
                 type: 'saved_quote',
                 submittedAt: new Date()
             });
-            
             alert("Success! We've saved your quote.");
             modal.style.display = 'none';
             form.reset();
