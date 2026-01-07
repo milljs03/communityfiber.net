@@ -1,5 +1,5 @@
 import { db, app } from './config/firebase-config.js';
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { collection, getDocs, doc, updateDoc, addDoc, deleteDoc, query, orderBy, where, getDoc, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const auth = getAuth(app);
@@ -18,6 +18,16 @@ const logoutBtn = document.getElementById('logout-btn');
 const loginError = document.getElementById('login-error');
 
 // --- Auth Handling ---
+
+// Enable Persistence
+setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+        // Persistence is set. Auth state will be checked by onAuthStateChanged
+    })
+    .catch((error) => {
+        console.error("Auth Persistence Error:", error);
+    });
+
 loginBtn.addEventListener('click', () => {
     signInWithPopup(auth, provider).catch((error) => {
         console.error("Auth Error:", error);
@@ -91,6 +101,7 @@ document.querySelectorAll('.nav-item').forEach(btn => {
         if (tab === 'leads') loadLeads();
         if (tab === 'plans') loadPlans();
         if (tab === 'neighborhoods') loadNeighborhoods();
+        if (tab === 'employees') loadEmployees();
         if (tab === 'announcements') loadAnnouncementSettings();
         if (tab === 'testimonials') loadTestimonials();
     });
@@ -114,50 +125,40 @@ async function loadDashboard() {
 
         // Enhanced Analytics Visualization
         const analyticsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'analytics_pageviews');
-        // Fetch last 200 views for stats
         const analyticsSnap = await getDocs(query(analyticsRef, limit(200)));
         
-        // Process Data
         let totalViews = analyticsSnap.size;
         let deviceStats = { mobile: 0, desktop: 0, tablet: 0 };
         let pageStats = {};
 
         analyticsSnap.forEach(doc => {
             const data = doc.data();
-            // Device
             if (data.deviceType) {
                 deviceStats[data.deviceType] = (deviceStats[data.deviceType] || 0) + 1;
             } else {
-                // Fallback inference if old data
                 deviceStats.desktop++; 
             }
-            
-            // Page
             const p = data.page || 'unknown';
             pageStats[p] = (pageStats[p] || 0) + 1;
         });
 
-        // 1. Update/Create Total Views Card
         let viewsCard = document.getElementById('stat-views-card');
         if (!viewsCard) {
             const statsGrid = document.querySelector('.stats-grid');
             viewsCard = document.createElement('div');
             viewsCard.id = 'stat-views-card';
             viewsCard.className = 'stat-card';
-            // Simple logic to determine trending arrow
             viewsCard.innerHTML = `<h3>Page Views (Last 200)</h3><p class="stat-value">${totalViews}</p><p style="font-size:0.8rem; color:#64748b;">${deviceStats.mobile} Mobile / ${deviceStats.desktop} Desktop</p>`;
             statsGrid.appendChild(viewsCard);
         } else {
             viewsCard.innerHTML = `<h3>Page Views (Last 200)</h3><p class="stat-value">${totalViews}</p><p style="font-size:0.8rem; color:#64748b;">${deviceStats.mobile} Mobile / ${deviceStats.desktop} Desktop</p>`;
         }
 
-        // 2. Create "Top Pages" Mini-Table
-        // We'll append this below the stats grid if it doesn't exist
         let topPagesContainer = document.getElementById('top-pages-container');
         if (!topPagesContainer) {
             topPagesContainer = document.createElement('div');
             topPagesContainer.id = 'top-pages-container';
-            topPagesContainer.className = 'admin-card'; // Reuse admin card style
+            topPagesContainer.className = 'admin-card';
             topPagesContainer.style.marginTop = '30px';
             topPagesContainer.innerHTML = `<h3>Top Pages Visited</h3><div id="top-pages-list"></div>`;
             document.querySelector('#view-dashboard').appendChild(topPagesContainer);
@@ -178,7 +179,6 @@ async function loadDashboard() {
     }
 }
 
-// ... [Rest of the file logic: loadLeads, loadPlans, etc. remains unchanged] ...
 async function loadLeads() {
     const tbody = document.getElementById('leads-table-body');
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loading...</td></tr>';
@@ -301,6 +301,54 @@ async function loadNeighborhoods() {
     } catch (err) {
         console.error(err);
         container.innerHTML = '<p style="color:red;">Error loading neighborhoods.</p>';
+    }
+}
+
+async function loadEmployees() {
+    const container = document.getElementById('employees-list');
+    container.innerHTML = '<p>Loading...</p>';
+    
+    try {
+        const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'employees');
+        const snapshot = await getDocs(ref);
+        
+        container.innerHTML = '';
+        snapshot.forEach(doc => {
+            const emp = doc.data();
+            const card = document.createElement('div');
+            card.className = 'admin-card';
+            card.innerHTML = `
+                <div style="display:flex; gap:15px; align-items:center;">
+                    <div style="width:50px; height:50px; border-radius:50%; background:#eee; overflow:hidden; flex-shrink:0;">
+                        ${emp.photoUrl ? `<img src="${emp.photoUrl}" style="width:100%; height:100%; object-fit:cover;">` : '<i class="fa-solid fa-user" style="line-height:50px; text-align:center; display:block; color:#ccc;"></i>'}
+                    </div>
+                    <div>
+                        <h3 style="margin:0; font-size:1.1rem;">${emp.name}</h3>
+                        <p style="margin:0; font-size:0.9rem; color:#64748b;">${emp.title}</p>
+                    </div>
+                </div>
+                <div style="margin-top:15px; font-size:0.9rem; color:#475569;">
+                    <p style="margin-bottom:5px;"><strong>${emp.years}</strong> years at CFN/NPT</p>
+                    <p style="font-style:italic;">"${emp.fact}"</p>
+                </div>
+                <div class="card-actions">
+                    ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="employee">Edit</button>` : ''}
+                    ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="employee">Delete</button>` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+             if(isAdmin) {
+                card.querySelector('.btn-edit').addEventListener('click', () => openEditModal('employee', doc.id, emp));
+                card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('employees', doc.id));
+            }
+        });
+        
+         if (snapshot.empty) container.innerHTML = '<p>No employees found. Add one!</p>';
+
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = '<p style="color:red;">Error loading employees.</p>';
     }
 }
 
@@ -449,6 +497,50 @@ function openEditModal(type, id, data = null) {
                 <textarea name="quote" class="form-control" rows="3" required>${data?.quote || ''}</textarea>
             </div>
         `;
+    } else if (type === 'employee') {
+        modalFields.innerHTML = `
+            <div>
+                <label class="form-label">Name</label>
+                <input type="text" name="name" class="form-control" value="${data?.name || ''}" required>
+            </div>
+            <div>
+                <label class="form-label">Title</label>
+                <input type="text" name="title" class="form-control" value="${data?.title || ''}" required>
+            </div>
+            <div>
+                <label class="form-label">Years at Company</label>
+                <input type="number" name="years" class="form-control" value="${data?.years || ''}" required>
+            </div>
+            <div>
+                <label class="form-label">Fun Fact</label>
+                <textarea name="fact" class="form-control" rows="2" required>${data?.fact || ''}</textarea>
+            </div>
+            <div>
+                <label class="form-label">Photo Upload</label>
+                <input type="file" id="photo-upload" class="form-control" accept="image/*">
+                <input type="hidden" name="photoUrl" id="photo-url-input" value="${data?.photoUrl || ''}">
+                <p id="upload-status" style="font-size:0.8rem; color:#64748b;">${data?.photoUrl ? 'Current photo loaded' : 'No photo selected'}</p>
+            </div>
+        `;
+        
+        // Add listener for file upload
+        setTimeout(() => {
+            const fileInput = document.getElementById('photo-upload');
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = function() {
+                            document.getElementById('photo-url-input').value = reader.result;
+                            document.getElementById('upload-status').textContent = "Photo ready to save!";
+                            document.getElementById('upload-status').style.color = "green";
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        }, 100);
     }
 
     editModal.style.display = 'flex';
@@ -477,6 +569,7 @@ editForm.addEventListener('submit', async (e) => {
     if (type === 'plan') collectionName = 'plans';
     else if (type === 'hood') collectionName = 'neighborhoods';
     else if (type === 'testimonial') collectionName = 'testimonials';
+    else if (type === 'employee') collectionName = 'employees';
 
     const collRef = collection(db, 'artifacts', '162296779236', 'public', 'data', collectionName);
 
@@ -492,6 +585,7 @@ editForm.addEventListener('submit', async (e) => {
         if (type === 'plan') loadPlans();
         if (type === 'hood') loadNeighborhoods();
         if (type === 'testimonial') loadTestimonials();
+        if (type === 'employee') loadEmployees();
         
     } catch (err) {
         console.error("Save failed", err);
@@ -509,6 +603,7 @@ async function deleteItem(type, id) {
     else if (type === 'hood') collectionName = 'neighborhoods';
     else if (type === 'testimonial') collectionName = 'testimonials';
     else if (type === 'testimonials') collectionName = 'testimonials';
+    else if (type === 'employee' || type === 'employees') collectionName = 'employees';
     
     try {
         await deleteDoc(doc(db, 'artifacts', '162296779236', 'public', 'data', collectionName, id));
@@ -516,6 +611,7 @@ async function deleteItem(type, id) {
         if (type === 'plan') loadPlans();
         if (type === 'neighborhoods' || type === 'hood') loadNeighborhoods();
         if (type === 'testimonial' || type === 'testimonials') loadTestimonials();
+        if (type === 'employee' || type === 'employees') loadEmployees();
     } catch (err) {
         console.error("Delete failed", err);
         alert("Error deleting item.");
@@ -526,4 +622,7 @@ document.getElementById('add-plan-btn').addEventListener('click', () => openEdit
 document.getElementById('add-hood-btn').addEventListener('click', () => openEditModal('hood'));
 if(document.getElementById('add-testimonial-btn')) {
     document.getElementById('add-testimonial-btn').addEventListener('click', () => openEditModal('testimonial'));
+}
+if(document.getElementById('add-employee-btn')) {
+    document.getElementById('add-employee-btn').addEventListener('click', () => openEditModal('employee'));
 }

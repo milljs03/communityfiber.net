@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Community Fiber</title>
     
-    <!-- UPDATED CSP: Added missing google domains for Auth and Analytics -->
+    <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self'; 
                    script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
@@ -61,6 +61,9 @@
                 </button>
                 <button class="nav-item" data-tab="neighborhoods">
                     <i class="fa-solid fa-map-location-dot"></i> Neighborhoods
+                </button>
+                <button class="nav-item" data-tab="employees">
+                    <i class="fa-solid fa-users"></i> Employees
                 </button>
                 <button class="nav-item" data-tab="announcements">
                     <i class="fa-solid fa-bullhorn"></i> Announcements
@@ -161,6 +164,17 @@
                 </div>
             </section>
 
+            <!-- Employees View -->
+            <section id="view-employees" class="view-section">
+                <div class="page-header">
+                    <h1>Our Team</h1>
+                    <button id="add-employee-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Employee</button>
+                </div>
+                <div id="employees-list" class="cards-grid">
+                    <!-- Populated via JS -->
+                </div>
+            </section>
+
             <!-- Announcements View -->
             <section id="view-announcements" class="view-section">
                 <div class="page-header">
@@ -214,7 +228,7 @@
             <h2 id="modal-title">Edit Item</h2>
             <form id="edit-form">
                 <input type="hidden" id="edit-id">
-                <input type="hidden" id="edit-type"> <!-- 'plan', 'hood', 'testimonial' -->
+                <input type="hidden" id="edit-type"> <!-- 'plan', 'hood', 'testimonial', 'employee' -->
                 <div id="modal-fields"></div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-outline close-modal-btn">Cancel</button>

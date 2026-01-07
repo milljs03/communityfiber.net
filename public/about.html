@@ -109,6 +109,31 @@
 
             </section>
 
+            <!-- Employees Section -->
+            <section class="team-section fade-in-section">
+                <div class="team-grid">
+                    
+                    <!-- 'You' Mirror Card -->
+                    <div class="employee-card mirror-card">
+                        <div class="employee-photo mirror-effect">
+                            <span class="mirror-text">You</span>
+                        </div>
+                        <div class="employee-info">
+                            <h3>You</h3>
+                            <p class="employee-title">Owner / Shareholder</p>
+                            <p class="employee-fact">
+                                We are locally owned to better serve the community. Interested in investing? 
+                                <br><a href="tel:5748317114" style="color:var(--cfn-green); font-weight:700;">(574) 831-7114</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Employees injected here -->
+                    <div id="employees-container" style="display: contents;"></div>
+
+                </div>
+            </section>
+
             <!-- Call to Action -->
             <section class="cta-section fade-in-section">
                 <h2>Join Our Network</h2>
@@ -128,7 +153,8 @@
 
     <!-- Scripts -->
     <script type="module" src="assets/js/main.js"></script>
-        <script type="module" src="assets/js/traffic-logger.js"></script> <!-- ADDED TRAFFIC LOGGER -->
-
+    <script type="module" src="assets/js/announcement.js"></script>
+    <script type="module" src="assets/js/traffic-logger.js"></script>
+    <script type="module" src="assets/js/about.js"></script> <!-- New Script -->
 </body>
 </html>
