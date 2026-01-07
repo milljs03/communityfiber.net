@@ -2,11 +2,10 @@ import { db, app } from './config/firebase-config.js';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { collection, getDocs, doc, updateDoc, addDoc, deleteDoc, query, orderBy, where, getDoc, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// ... [Existing Auth and Setup Code] ...
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-const ADMIN_EMAIL = 'jmiller@nptel.com'; // The only user with edit/delete rights
-const ALLOWED_DOMAIN = 'nptel.com'; // Only emails from this domain can login
+const ADMIN_EMAIL = 'jmiller@nptel.com';
+const ALLOWED_DOMAIN = 'nptel.com';
 
 let currentUser = null;
 let isAdmin = false;
@@ -19,14 +18,9 @@ const logoutBtn = document.getElementById('logout-btn');
 const loginError = document.getElementById('login-error');
 
 // --- Auth Handling ---
-
-// 2. Login Button Trigger
 loginBtn.addEventListener('click', () => {
-    // Use Popup. In some iframe environments this triggers COOP warnings, 
-    // but onAuthStateChanged usually catches the success.
     signInWithPopup(auth, provider).catch((error) => {
         console.error("Auth Error:", error);
-        // Handle popup closed by user or blocked
         if (error.code === 'auth/popup-closed-by-user') {
             showLoginError("Login cancelled.");
         } else {
@@ -41,10 +35,8 @@ logoutBtn.addEventListener('click', () => {
     });
 });
 
-// This is the source of truth. If the popup succeeds (even with console errors), this fires.
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        // Fix: safe check for email existence
         if (user.email && user.email.endsWith(`@${ALLOWED_DOMAIN}`)) {
             checkAccess(user);
         } else {
@@ -55,7 +47,6 @@ onAuthStateChanged(auth, (user) => {
             });
         }
     } else {
-        // No user logged in, show login overlay
         loginOverlay.classList.remove('hidden');
         adminApp.classList.add('hidden');
     }
@@ -63,18 +54,15 @@ onAuthStateChanged(auth, (user) => {
 
 function checkAccess(user) {
     currentUser = user;
-    // Fix: Safe check for email existence for admin check
     isAdmin = (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
     
-    // UI Updates
     document.getElementById('user-name').textContent = user.displayName || user.email || 'User';
-    document.getElementById('user-avatar').src = user.photoURL || 'assets/images/community-fiber-logo.png'; // Fallback image
+    document.getElementById('user-avatar').src = user.photoURL || 'assets/images/community-fiber-logo.png';
     document.getElementById('user-role').textContent = isAdmin ? 'Admin' : 'Viewer';
     document.getElementById('user-role').className = `badge ${isAdmin ? 'bg-green' : 'bg-gray'}`;
     
     document.querySelectorAll('.user-name-display').forEach(el => el.textContent = user.displayName ? user.displayName.split(' ')[0] : 'User');
 
-    // Show/Hide Admin Buttons
     if (isAdmin) {
         document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
     }
@@ -82,7 +70,6 @@ function checkAccess(user) {
     loginOverlay.classList.add('hidden');
     adminApp.classList.remove('hidden');
 
-    // Load Initial Data
     loadDashboard();
 }
 
@@ -94,16 +81,13 @@ function showLoginError(msg) {
 // --- Navigation ---
 document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', () => {
-        // Active State
         document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
-        // View Switching
         document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
         const tab = btn.dataset.tab;
         document.getElementById(`view-${tab}`).classList.add('active');
 
-        // Load Data on switch
         if (tab === 'leads') loadLeads();
         if (tab === 'plans') loadPlans();
         if (tab === 'neighborhoods') loadNeighborhoods();
@@ -116,49 +100,86 @@ document.querySelectorAll('.nav-item').forEach(btn => {
 
 async function loadDashboard() {
     try {
-        // 1. Leads Count
         const leadsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'leads');
         const leadsSnap = await getDocs(leadsRef);
         document.getElementById('stat-leads').textContent = leadsSnap.size;
 
-        // 2. Plans Count
         const plansRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'plans');
         const plansSnap = await getDocs(plansRef);
         document.getElementById('stat-plans').textContent = plansSnap.size;
 
-        // 3. Neighborhoods Count
         const hoodsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'neighborhoods');
         const hoodsSnap = await getDocs(hoodsRef);
         document.getElementById('stat-hoods').textContent = hoodsSnap.size;
 
-        // 4. Analytics (Page Views - Last 24h approximation based on limit for now)
-        // Ideally, use a proper query with composite index, but for prototype we'll fetch latest 50
+        // Enhanced Analytics Visualization
         const analyticsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'analytics_pageviews');
-        // We can't do complex queries without index, so just fetch a batch and count in memory for this demo
-        // In production, you'd use aggregation queries or strict date filtering with indexes
-        const analyticsSnap = await getDocs(query(analyticsRef, limit(100))); 
+        // Fetch last 200 views for stats
+        const analyticsSnap = await getDocs(query(analyticsRef, limit(200)));
         
-        let recentViews = analyticsSnap.size;
-        if (recentViews === 100) recentViews = "100+"; // Just a simple indicator
-        
-        // Add a new stat card dynamically if it doesn't exist
-        if (!document.getElementById('stat-views')) {
+        // Process Data
+        let totalViews = analyticsSnap.size;
+        let deviceStats = { mobile: 0, desktop: 0, tablet: 0 };
+        let pageStats = {};
+
+        analyticsSnap.forEach(doc => {
+            const data = doc.data();
+            // Device
+            if (data.deviceType) {
+                deviceStats[data.deviceType] = (deviceStats[data.deviceType] || 0) + 1;
+            } else {
+                // Fallback inference if old data
+                deviceStats.desktop++; 
+            }
+            
+            // Page
+            const p = data.page || 'unknown';
+            pageStats[p] = (pageStats[p] || 0) + 1;
+        });
+
+        // 1. Update/Create Total Views Card
+        let viewsCard = document.getElementById('stat-views-card');
+        if (!viewsCard) {
             const statsGrid = document.querySelector('.stats-grid');
-            const viewCard = document.createElement('div');
-            viewCard.className = 'stat-card';
-            viewCard.innerHTML = `<h3>Recent Page Views</h3><p class="stat-value" id="stat-views">${recentViews}</p>`;
-            statsGrid.appendChild(viewCard);
+            viewsCard = document.createElement('div');
+            viewsCard.id = 'stat-views-card';
+            viewsCard.className = 'stat-card';
+            // Simple logic to determine trending arrow
+            viewsCard.innerHTML = `<h3>Page Views (Last 200)</h3><p class="stat-value">${totalViews}</p><p style="font-size:0.8rem; color:#64748b;">${deviceStats.mobile} Mobile / ${deviceStats.desktop} Desktop</p>`;
+            statsGrid.appendChild(viewsCard);
         } else {
-            document.getElementById('stat-views').textContent = recentViews;
+            viewsCard.innerHTML = `<h3>Page Views (Last 200)</h3><p class="stat-value">${totalViews}</p><p style="font-size:0.8rem; color:#64748b;">${deviceStats.mobile} Mobile / ${deviceStats.desktop} Desktop</p>`;
         }
 
+        // 2. Create "Top Pages" Mini-Table
+        // We'll append this below the stats grid if it doesn't exist
+        let topPagesContainer = document.getElementById('top-pages-container');
+        if (!topPagesContainer) {
+            topPagesContainer = document.createElement('div');
+            topPagesContainer.id = 'top-pages-container';
+            topPagesContainer.className = 'admin-card'; // Reuse admin card style
+            topPagesContainer.style.marginTop = '30px';
+            topPagesContainer.innerHTML = `<h3>Top Pages Visited</h3><div id="top-pages-list"></div>`;
+            document.querySelector('#view-dashboard').appendChild(topPagesContainer);
+        }
+
+        const sortedPages = Object.entries(pageStats).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        const listHtml = sortedPages.map(([page, count]) => `
+            <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9;">
+                <span style="font-weight:600; color:#334155;">${page}</span>
+                <span style="background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:10px; font-size:0.85rem; font-weight:700;">${count}</span>
+            </div>
+        `).join('');
+        
+        document.getElementById('top-pages-list').innerHTML = listHtml || '<p>No data yet.</p>';
+
     } catch (err) {
-        console.error("Dashboard Load Error (likely permission issues):", err);
+        console.error("Dashboard Load Error:", err);
     }
 }
 
+// ... [Rest of the file logic: loadLeads, loadPlans, etc. remains unchanged] ...
 async function loadLeads() {
-    // ... [Existing loadLeads function] ...
     const tbody = document.getElementById('leads-table-body');
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loading...</td></tr>';
     
@@ -207,8 +228,6 @@ async function loadLeads() {
     }
 }
 
-// ... [Rest of the file remains similar, ensuring all imports and functions are preserved] ...
-// Add event listener for filter
 document.getElementById('lead-filter').addEventListener('change', loadLeads);
 
 async function loadPlans() {
@@ -234,7 +253,6 @@ async function loadPlans() {
             `;
             container.appendChild(card);
             
-            // Attach Events
             if(isAdmin) {
                 card.querySelector('.btn-edit').addEventListener('click', () => openEditModal('plan', doc.id, plan));
                 card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('plan', doc.id));
@@ -286,7 +304,6 @@ async function loadNeighborhoods() {
     }
 }
 
-// --- Announcement Logic ---
 const bannerForm = document.getElementById('announcement-form');
 
 async function loadAnnouncementSettings() {
@@ -328,7 +345,6 @@ if(bannerForm) {
     });
 }
 
-// --- Testimonials Logic ---
 async function loadTestimonials() {
     const container = document.getElementById('testimonials-list');
     container.innerHTML = '<p>Loading...</p>';
@@ -366,8 +382,6 @@ async function loadTestimonials() {
     }
 }
 
-// --- Edit/Add Logic (Admin Only) ---
-
 const editModal = document.getElementById('edit-modal');
 const editForm = document.getElementById('edit-form');
 const modalFields = document.getElementById('modal-fields');
@@ -379,7 +393,7 @@ function openEditModal(type, id, data = null) {
     document.getElementById('edit-type').value = type;
     document.getElementById('modal-title').textContent = id ? `Edit ${type}` : `Add ${type}`;
     
-    modalFields.innerHTML = ''; // Clear prev fields
+    modalFields.innerHTML = ''; 
 
     if (type === 'plan') {
         modalFields.innerHTML = `
@@ -440,12 +454,10 @@ function openEditModal(type, id, data = null) {
     editModal.style.display = 'flex';
 }
 
-// Close Modal logic
 document.querySelectorAll('.close-modal-btn').forEach(btn => {
     btn.addEventListener('click', () => editModal.style.display = 'none');
 });
 
-// Handle Form Submit
 editForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!isAdmin) return;
@@ -455,10 +467,8 @@ editForm.addEventListener('submit', async (e) => {
     const formData = new FormData(editForm);
     const data = Object.fromEntries(formData.entries());
     
-    // Convert price to number if plan
     if (data.price) data.price = Number(data.price);
 
-    // Handle Checkbox for isPopular
     if (type === 'plan') {
         data.isPopular = !!editForm.querySelector('[name="isPopular"]').checked;
     }
@@ -472,16 +482,13 @@ editForm.addEventListener('submit', async (e) => {
 
     try {
         if (id) {
-            // Update
             await updateDoc(doc(collRef, id), data);
         } else {
-            // Create
             await addDoc(collRef, data);
         }
         
         editModal.style.display = 'none';
         
-        // Refresh View
         if (type === 'plan') loadPlans();
         if (type === 'hood') loadNeighborhoods();
         if (type === 'testimonial') loadTestimonials();
@@ -506,7 +513,6 @@ async function deleteItem(type, id) {
     try {
         await deleteDoc(doc(db, 'artifacts', '162296779236', 'public', 'data', collectionName, id));
         
-        // Refresh View
         if (type === 'plan') loadPlans();
         if (type === 'neighborhoods' || type === 'hood') loadNeighborhoods();
         if (type === 'testimonial' || type === 'testimonials') loadTestimonials();
@@ -516,7 +522,6 @@ async function deleteItem(type, id) {
     }
 }
 
-// Wire up "Add" buttons
 document.getElementById('add-plan-btn').addEventListener('click', () => openEditModal('plan'));
 document.getElementById('add-hood-btn').addEventListener('click', () => openEditModal('hood'));
 if(document.getElementById('add-testimonial-btn')) {
