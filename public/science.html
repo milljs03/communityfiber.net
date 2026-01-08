@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiber Physics Lab | Community Fiber</title>
+    <title>Fiber Physics Museum | Community Fiber</title>
     
-    <!-- CSP: Broadened to prevent blocking -->
+    <!-- CSP -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://unpkg.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; 
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com https://*.tile.openstreetmap.org https://unpkg.com https://*.basemaps.cartocdn.com; 
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com https://unpkg.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,16 +21,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/science.css">
-    
-    <!-- Inline Visibility Fix: Ensure content is visible even if JS fails -->
-    <style>
-        .fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
-        @keyframes fadeIn { to { opacity: 1; } }
-    </style>
 </head>
 <body class="science-body">
 
@@ -54,134 +51,358 @@
 
     <main class="science-main">
         
-        <header class="mission-header fade-in">
-            <h1>Fiber Optic Mission Control 🚀</h1>
-            <p>Simulate data transmission speeds across the universe.</p>
+        <header class="museum-header">
+            <h1>Fiber Physics Museum <i class="fa-solid fa-atom fa-spin" style="font-size: 0.6em; --fa-animation-duration: 3s; color:var(--cfn-green);"></i></h1>
+            <p>Interactive Exhibits on Light, Speed, and Data</p>
         </header>
 
-        <div class="dashboard-wrapper fade-in" style="animation-delay: 0.2s;">
-            
-            <!-- Configuration Panel -->
-            <aside class="config-panel">
-                <div class="panel-header">
-                    <h3><i class="fa-solid fa-gears"></i> Setup</h3>
-                </div>
-                
-                <div class="control-group">
-                    <label>Technology (Opponent)</label>
-                    <div class="select-wrapper">
-                        <select id="opponent-select">
-                            <option value="dialup">Dial-Up (56k)</option>
-                            <option value="dsl">DSL (Phone Line)</option>
-                            <option value="cable">Coax Cable</option>
-                            <option value="satellite">Satellite (High Latency)</option>
-                        </select>
-                    </div>
-                </div>
+        <!-- Museum Navigation Tabs -->
+        <nav class="museum-nav">
+            <button class="museum-tab active" data-target="exhibit-speed">
+                <i class="fa-solid fa-earth-americas"></i> A: Global Ping
+            </button>
+            <button class="museum-tab" data-target="exhibit-reflection">
+                <i class="fa-solid fa-arrows-split-up-and-left"></i> B: Light Trap
+            </button>
+            <button class="museum-tab" data-target="exhibit-capacity">
+                <i class="fa-solid fa-faucet-drip"></i> C: Data Flow
+            </button>
+            <button class="museum-tab" data-target="exhibit-rainbow">
+                <i class="fa-solid fa-rainbow"></i> D: Rainbow Highway
+            </button>
+            <button class="museum-tab" data-target="exhibit-satellite">
+                <i class="fa-solid fa-satellite-dish"></i> E: Sat vs Fiber
+            </button>
+        </nav>
 
-                <div class="control-group">
-                    <label>Signal Origin</label>
-                    <div class="select-wrapper">
-                        <select id="origin-select">
-                            <option value="home">Your Home</option>
-                            <option value="nyc">New York Data Center</option>
-                            <option value="london">London, UK</option>
-                        </select>
-                    </div>
-                </div>
+        <div class="museum-content">
 
-                <div class="control-group">
-                    <label>Signal Destination</label>
-                    <div class="select-wrapper">
-                        <select id="dest-select">
-                            <option value="indiana">Neighbor (10 km)</option>
-                            <option value="la">Los Angeles (4,000 km)</option>
-                            <option value="tokyo">Tokyo (10,000 km)</option>
-                            <option value="moon">The Moon (384,400 km)</option>
-                            <option value="mars">Mars (225 Million km)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button id="start-race-btn" class="launch-btn">
-                    INITIATE TRANSMISSION
-                </button>
-            </aside>
-
-            <!-- Visualizer -->
-            <section class="visualizer-panel">
-                <div class="visualizer-header">
-                    <div class="path-display">
-                        <span id="origin-label">Home</span>
-                        <i class="fa-solid fa-arrow-right-long"></i>
-                        <span id="dest-label">Indiana</span>
-                    </div>
-                    <div class="distance-badge" id="distance-display">10 km</div>
-                </div>
-
-                <div class="race-track-container">
-                    
-                    <!-- Copper Track -->
-                    <div class="track-lane">
-                        <div class="lane-info">
-                            <span class="tech-name" id="opponent-label">Dial-Up</span>
-                            <span class="tech-speed" id="copper-speed-display">0.05 Mbps</span>
+            <!-- EXHIBIT A: GLOBAL PING MAP -->
+            <section id="exhibit-speed" class="exhibit-section active">
+                <div class="dashboard-wrapper">
+                    <!-- Config Panel -->
+                    <aside class="config-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-location-crosshairs"></i> Mission Control</h3>
                         </div>
-                        <div class="pipe copper-pipe">
-                            <div class="packet copper-packet" id="copper"></div>
-                        </div>
-                        <div class="lane-status" id="copper-status">Ready</div>
-                    </div>
-
-                    <!-- Fiber Track -->
-                    <div class="track-lane">
-                        <div class="lane-info">
-                            <span class="tech-name fiber-text">Fiber Optic</span>
-                            <span class="tech-speed fiber-text">1,000 Mbps</span>
-                        </div>
-                        <div class="pipe fiber-pipe">
-                            <div class="packet fiber-packet" id="fiber"></div>
-                        </div>
-                        <div class="lane-status" id="fiber-status">Ready</div>
-                    </div>
-
-                </div>
-
-                <!-- Results Overlay -->
-                <div id="results-overlay" class="results-overlay hidden">
-                    <div class="results-card">
-                        <h2>Simulation Results</h2>
                         
-                        <div class="comparison-grid">
-                            <div class="result-box fiber-box">
-                                <div class="icon"><i class="fa-solid fa-bolt"></i></div>
-                                <h3>Fiber Optic</h3>
-                                <p id="fiber-result-time">0.00s</p>
-                                <span class="sub-text">Light Speed</span>
-                            </div>
-                            <div class="result-box copper-box">
-                                <div class="icon"><i class="fa-solid fa-hourglass-half"></i></div>
-                                <h3 id="opp-result-name">Dial-Up</h3>
-                                <p id="opp-result-time">--</p>
-                                <span class="sub-text">Electrical Signal</span>
+                        <div class="control-group">
+                            <label>Origin</label>
+                            <p class="data-text">Community Fiber HQ (IN)</p>
+                        </div>
+
+                        <div class="control-group">
+                             <label>Target</label>
+                             <p class="data-text" id="target-coords">Select on Map...</p>
+                        </div>
+
+                        <div class="control-group">
+                            <label>Payload / Data Type</label>
+                            <div class="select-wrapper">
+                                <select id="payload-select">
+                                    <option value="ping">Standard Ping (Empty Packet)</option>
+                                    <option value="apollo">Apollo 11 Source Code (2 MB)</option>
+                                    <option value="shrek">4K Movie (e.g. Shrek) (50 GB)</option>
+                                    <option value="game">Modern Video Game (150 GB)</option>
+                                    <option value="library">Library of Congress (20 TB)</option>
+                                </select>
                             </div>
                         </div>
 
-                        <div class="analysis-box">
-                            <p id="analysis-text">Analysis loading...</p>
+                        <div class="info-readout">
+                            <div class="readout-item">
+                                <span>Medium</span>
+                                <strong>Glass Core (SiO₂)</strong>
+                            </div>
+                            <div class="readout-item">
+                                <span>Physics Mode</span>
+                                <strong style="color:#ef4444;">REAL-TIME (1:1)</strong>
+                            </div>
                         </div>
 
-                        <button id="reset-btn" class="reset-btn">Reset Simulation</button>
-                    </div>
+                        <button id="fire-signal-btn" class="launch-btn" disabled style="margin-top:20px;">
+                            Select Target on Map
+                        </button>
+
+                        <!-- RESULTS SECTION (Now Inline) -->
+                        <div id="inline-results" class="comparison-box hidden" style="margin-top: 20px; border-color: #22c55e;">
+                            <h3 id="payload-title" style="color:#22d3ee; font-size: 0.9rem;"><i class="fa-solid fa-check"></i> Analysis</h3>
+                            <div class="primary-stat" style="margin-bottom: 15px;">
+                                <span class="label" style="font-size: 0.7rem;">Light Latency</span>
+                                <div class="stat-value" id="map-time" style="font-size: 1.8rem;">0.00 ms</div>
+                            </div>
+                            <p id="map-analysis" style="font-size: 0.85rem;">Waiting for data...</p>
+                        </div>
+                        
+                        <div class="simulation-status" id="sim-status" style="margin-top: 10px; font-size: 0.8rem; min-height: 20px;">
+                            <!-- Status text -->
+                        </div>
+                    </aside>
+
+                    <!-- Map Visualizer -->
+                    <section class="visualizer-panel map-panel">
+                        <div id="fiber-map"></div>
+                    </section>
                 </div>
-
             </section>
-        </div>
 
+            <!-- EXHIBIT B: TOTAL INTERNAL REFLECTION -->
+            <section id="exhibit-reflection" class="exhibit-section">
+                <div class="dashboard-wrapper">
+                    <aside class="config-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-microscope"></i> The Physics</h3>
+                        </div>
+                        <p class="exhibit-desc">
+                            Fiber cables can bend around corners because of <strong>Total Internal Reflection</strong>. 
+                            If light hits the glass boundary at a shallow angle, it bounces back in like a mirror.
+                        </p>
+                        <div class="control-group">
+                            <label>Laser Angle: <span id="angle-val">45</span>°</label>
+                            <input type="range" id="angle-slider" min="0" max="80" value="30" class="tech-slider">
+                        </div>
+                        <div class="info-readout">
+                            <div class="readout-item">
+                                <span>Status</span>
+                                <strong id="reflection-status">--</strong>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <section class="visualizer-panel" id="tir-container">
+                        <canvas id="tir-canvas"></canvas>
+                        <div class="canvas-overlay"><span>FIBER CORE</span></div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- EXHIBIT C: DATA CAPACITY -->
+            <section id="exhibit-capacity" class="exhibit-section">
+                <div class="dashboard-wrapper">
+                    <aside class="config-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-database"></i> Bandwidth Density</h3>
+                        </div>
+                        <p class="exhibit-desc">
+                            Compare the data throughput of traditional copper versus modern fiber optics. Select a file to download.
+                        </p>
+                        
+                        <div class="control-group">
+                            <label>Data Payload</label>
+                            <div class="select-wrapper">
+                                <select id="capacity-payload-select">
+                                    <option value="apollo">Apollo 11 Code (2 MB)</option>
+                                    <option value="music">High-Res Album (1 GB)</option>
+                                    <option value="shrek">4K Movie (50 GB)</option>
+                                    <option value="game">Modern Video Game (150 GB)</option>
+                                    <option value="backup">Cloud Backup (1 TB)</option>
+                                    <option value="library">Library of Congress (20 TB)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="info-readout">
+                            <div class="readout-item">
+                                <span>File Size</span>
+                                <strong id="cap-file-size">2 MB</strong>
+                            </div>
+                            <div class="readout-item">
+                                <span>Fiber Est.</span>
+                                <strong id="cap-est-time" style="color:#22d3ee;">Instant</strong>
+                            </div>
+                            <div class="readout-item">
+                                <span>Copper Est.</span>
+                                <strong id="cap-est-copper" style="color:#d97706;">Instant</strong>
+                            </div>
+                        </div>
+
+                        <button id="start-capacity-btn" class="launch-btn" style="margin-top:20px;">
+                            Start Transfer
+                        </button>
+                    </aside>
+
+                    <section class="visualizer-panel" style="justify-content: center; padding: 40px;">
+                        <div class="capacity-track">
+                            <div class="track-label">
+                                <i class="fa-solid fa-plug"></i> Traditional Copper
+                                <span class="speed-tag">50 Mbps</span>
+                            </div>
+                            <div class="pipe-container copper-pipe">
+                                <div class="data-particles" id="copper-particles"></div>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-fill" id="copper-progress"></div>
+                                <span class="progress-text" id="copper-text">0%</span>
+                            </div>
+                        </div>
+                        <div class="capacity-track">
+                            <div class="track-label">
+                                <i class="fa-solid fa-bolt"></i> Community Fiber
+                                <span class="speed-tag">1000 Mbps</span>
+                            </div>
+                            <div class="pipe-container fiber-pipe">
+                                <div class="data-particles" id="fiber-particles"></div>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-fill" id="fiber-progress"></div>
+                                <span class="progress-text" id="fiber-text">0%</span>
+                            </div>
+                        </div>
+                        <div style="margin-top:20px; text-align:center; color:#64748b; font-size:0.8rem;">
+                            *Animation speed is relative. Real-time durations displayed in panel.
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- EXHIBIT D: RAINBOW HIGHWAY -->
+            <section id="exhibit-rainbow" class="exhibit-section">
+                <div class="dashboard-wrapper">
+                    <aside class="config-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-prism"></i> Wavelength Multiplexing</h3>
+                        </div>
+                        <p class="exhibit-desc">
+                            How do we increase speed without laying new cables? We use different colors of light! This is called <strong>WDM</strong> (Wavelength Division Multiplexing). Activate channels to see how they merge.
+                        </p>
+                        
+                        <div class="control-group">
+                            <label>Active Data Channels</label>
+                            <div class="toggle-group">
+                                <button class="channel-btn active" id="btn-ch-red" style="--glow-color: #ef4444;">
+                                    <i class="fa-solid fa-power-off"></i> Red
+                                </button>
+                                <button class="channel-btn" id="btn-ch-green" style="--glow-color: #22c55e;">
+                                    <i class="fa-solid fa-power-off"></i> Green
+                                </button>
+                                <button class="channel-btn" id="btn-ch-blue" style="--glow-color: #3b82f6;">
+                                    <i class="fa-solid fa-power-off"></i> Blue
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="info-readout" style="margin-top:20px;">
+                            <div class="readout-item">
+                                <span>Active Colors</span>
+                                <strong id="wdm-active-count">1</strong>
+                            </div>
+                            <div class="readout-item">
+                                <span>Total Speed</span>
+                                <strong id="wdm-total-speed" style="font-size:1.2rem; color:#22d3ee;">10 Gbps</strong>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <section class="visualizer-panel" id="wdm-container">
+                        <div class="wdm-visualizer">
+                            <div class="wdm-stage input-stage">
+                                <div class="laser-emitter red active" id="laser-red"></div>
+                                <div class="laser-emitter green" id="laser-green"></div>
+                                <div class="laser-emitter blue" id="laser-blue"></div>
+                            </div>
+                            
+                            <div class="wdm-stage mux-stage">
+                                <div class="prism-box">MUX</div>
+                            </div>
+                            
+                            <div class="wdm-stage fiber-stage">
+                                <div class="fiber-core-wdm">
+                                    <div class="light-stream" id="main-beam"></div>
+                                </div>
+                            </div>
+
+                            <div class="wdm-stage demux-stage">
+                                <div class="prism-box">DEMUX</div>
+                            </div>
+                            
+                            <div class="wdm-stage output-stage">
+                                <div class="sensor red active" id="sensor-red"></div>
+                                <div class="sensor green" id="sensor-green"></div>
+                                <div class="sensor blue" id="sensor-blue"></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- EXHIBIT E: SATELLITE VS FIBER -->
+            <section id="exhibit-satellite" class="exhibit-section">
+                <div class="dashboard-wrapper">
+                    <aside class="config-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-globe"></i> Latency Face-off</h3>
+                        </div>
+                        <p class="exhibit-desc">
+                            Light is fast, but distance matters. Satellite signals must travel ~72,000 km to space and back. Fiber takes the direct route on the ground.
+                        </p>
+                        
+                        <div class="info-readout">
+                            <div class="readout-item">
+                                <span>Route</span>
+                                <strong>New York ↔ London</strong>
+                            </div>
+                            <div class="readout-item">
+                                <span>Distance</span>
+                                <strong>~5,500 km</strong>
+                            </div>
+                        </div>
+
+                        <button id="start-sat-race" class="launch-btn" style="margin-top:20px;">
+                            Ping Server
+                        </button>
+                        
+                        <div class="comparison-box hidden" id="sat-results" style="margin-top:20px;">
+                            <div class="readout-item">
+                                <span style="color:#22d3ee;"><i class="fa-solid fa-bolt"></i> Fiber Latency</span>
+                                <strong id="sat-fiber-time">-- ms</strong>
+                            </div>
+                            <div class="readout-item">
+                                <span style="color:#f59e0b;"><i class="fa-solid fa-satellite"></i> Sat Latency</span>
+                                <strong id="sat-space-time">-- ms</strong>
+                            </div>
+                            <p style="margin-top:10px; font-size:0.8rem; color:#94a3b8;">
+                                *Satellite requires round-trip to Geostationary Orbit (36,000 km altitude).
+                            </p>
+                        </div>
+                    </aside>
+
+                    <section class="visualizer-panel" id="sat-container">
+                        <div class="space-bg">
+                            <div class="satellite-orbit">
+                                <i class="fa-solid fa-satellite" id="sat-icon"></i>
+                            </div>
+                            
+                            <div class="earth-surface">
+                                <div class="location-point origin">
+                                    <i class="fa-solid fa-house"></i>
+                                    <span>Home</span>
+                                </div>
+                                <div class="location-point dest">
+                                    <i class="fa-solid fa-server"></i>
+                                    <span>Server</span>
+                                </div>
+                                
+                                <!-- Fiber Path -->
+                                <div class="path-line fiber-path">
+                                    <div class="travel-dot" id="dot-fiber"></div>
+                                </div>
+                            </div>
+
+                            <!-- Satellite Path (Fixed viewBox for valid d coords) -->
+                            <svg class="sat-path-svg" width="100%" height="100%" viewBox="0 0 800 400" preserveAspectRatio="none">
+                                <path id="sat-trajectory" d="M 120,350 Q 400,20 680,350" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" stroke-dasharray="5,5" />
+                                <circle id="dot-sat" r="6" fill="#f59e0b" style="opacity:0;" />
+                            </svg>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+        </div>
     </main>
 
     <!-- Scripts -->
-    <!-- Load Science JS First to ensure it runs even if main.js fails -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script type="module" src="assets/js/science.js"></script>
     <script type="module" src="assets/js/main.js"></script>
 </body>
