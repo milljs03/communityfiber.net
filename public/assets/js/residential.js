@@ -1,6 +1,6 @@
 import { db, app } from './config/firebase-config.js';
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     // --- 0. Shared Animation Observer ---
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch(err) { console.error("Error loading neighborhoods:", err); }
     }
 
-    // --- 4. Render Testimonials (New) ---
+    // --- 4. Render Testimonials ---
     const testimonialContainer = document.getElementById('testimonials-grid');
     if (testimonialContainer) {
         try {
@@ -127,7 +127,106 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (err) { console.error("Error loading testimonials:", err); }
     }
+
+    // --- 5. Install Process Timeline (New) ---
+    loadTimeline();
 });
+
+let installSteps = [];
+let currentStepIndex = 0;
+
+async function loadTimeline() {
+    const bubblesContainer = document.getElementById('timeline-bubbles');
+    const contentArea = document.getElementById('timeline-content-area');
+
+    try {
+        const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'install_steps');
+        const q = query(ref, orderBy('stepNumber', 'asc'));
+        const snapshot = await getDocs(q);
+
+        installSteps = [];
+        snapshot.forEach(doc => installSteps.push(doc.data()));
+
+        if (installSteps.length === 0) {
+            // Default placeholder if no data
+            installSteps = [
+                { stepNumber: 1, title: 'Sign Up', description: 'Choose your plan online.', imageUrl: ''},
+                { stepNumber: 2, title: 'Scheduling', description: 'We contact you to schedule install.', imageUrl: ''},
+                { stepNumber: 3, title: 'Installation', description: 'Our techs bring fiber into your home.', imageUrl: ''}
+            ];
+        }
+
+        // Render Bubbles
+        bubblesContainer.innerHTML = installSteps.map((step, idx) => `
+            <div class="timeline-step-bubble ${idx === 0 ? 'active' : ''}" data-index="${idx}">
+                ${step.stepNumber}
+            </div>
+        `).join('');
+
+        // Attach Click Events to Bubbles
+        document.querySelectorAll('.timeline-step-bubble').forEach(b => {
+            b.addEventListener('click', () => {
+                updateTimelineView(parseInt(b.dataset.index));
+            });
+        });
+
+        // Attach Arrow Events
+        document.getElementById('timeline-next').addEventListener('click', () => {
+            if (currentStepIndex < installSteps.length - 1) updateTimelineView(currentStepIndex + 1);
+        });
+        
+        document.getElementById('timeline-prev').addEventListener('click', () => {
+            if (currentStepIndex > 0) updateTimelineView(currentStepIndex - 1);
+        });
+
+        // Initialize First View
+        updateTimelineView(0);
+
+    } catch (err) {
+        console.error("Timeline Error:", err);
+        contentArea.innerHTML = '<p style="text-align:center; padding:20px;">Could not load installation process.</p>';
+    }
+}
+
+function updateTimelineView(index) {
+    currentStepIndex = index;
+    const step = installSteps[index];
+
+    // Update Bubbles
+    document.querySelectorAll('.timeline-step-bubble').forEach((b, idx) => {
+        if (idx === index) b.classList.add('active');
+        else b.classList.remove('active');
+    });
+
+    // Update Buttons State
+    document.getElementById('timeline-prev').disabled = (index === 0);
+    document.getElementById('timeline-next').disabled = (index === installSteps.length - 1);
+
+    // Fade Out Content
+    const innerContent = document.querySelector('.step-content-inner');
+    innerContent.style.opacity = '0';
+    innerContent.style.transform = 'translateY(10px)';
+
+    setTimeout(() => {
+        // Update Content
+        document.getElementById('step-badge').textContent = `Step ${step.stepNumber}`;
+        document.getElementById('step-title').textContent = step.title;
+        document.getElementById('step-desc').textContent = step.description;
+        
+        const imgEl = document.getElementById('step-image');
+        if (step.imageUrl) {
+            imgEl.src = step.imageUrl;
+            imgEl.parentElement.style.display = 'flex';
+        } else {
+            // Fallback icon if no image
+            imgEl.parentElement.innerHTML = '<i class="fa-solid fa-wrench" style="font-size: 4rem; color: #cbd5e1;"></i>';
+        }
+
+        // Fade In
+        innerContent.style.opacity = '1';
+        innerContent.style.transform = 'translateY(0)';
+    }, 200);
+}
 
 // --- Helper Functions --- (generatePlanCard etc. remain same as previous, including the redirect link)
 

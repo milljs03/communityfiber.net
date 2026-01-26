@@ -443,4 +443,199 @@
     color: #64748b;
 }
 
-/* ... existing responsive code ... */
+/* --- Timeline Section --- */
+.timeline-section {
+    padding: 40px 20px 80px;
+    background: white;
+    border-top: 1px solid #f1f5f9;
+}
+
+.timeline-container {
+    max-width: 1000px;
+    margin: 40px auto 0;
+}
+
+/* Progress Bubbles */
+.timeline-nav-wrapper {
+    position: relative;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.timeline-progress-line {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #e2e8f0;
+    z-index: 1;
+    border-radius: 2px;
+}
+
+/* Using a simple width change JS might be complicated for varying steps, 
+   so we rely on the bubbles to hide the line underneath */
+
+.timeline-bubbles {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-step-bubble {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #f8fafc;
+    border: 3px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #64748b;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.timeline-step-bubble.active {
+    background: var(--cfn-green);
+    border-color: var(--cfn-green);
+    color: white;
+    transform: scale(1.15);
+    box-shadow: 0 10px 20px rgba(3, 166, 60, 0.3);
+}
+
+/* Content Area */
+.timeline-content-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    min-height: 400px;
+}
+
+.nav-arrow {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #94a3b8;
+    padding: 0 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 5;
+}
+
+.nav-arrow:hover {
+    color: var(--npt-black);
+    background: rgba(0,0,0,0.02);
+}
+
+.nav-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.step-content-inner {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 40px 20px;
+    animation: fadeIn 0.4s ease;
+}
+
+.step-image-wrapper {
+    height: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f1f5f9;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.step-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.step-badge {
+    background: #dcfce7;
+    color: var(--cfn-dark-green);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: 4px;
+    display: inline-block;
+    width: fit-content;
+    margin-bottom: 15px;
+}
+
+.step-text-wrapper h3 {
+    font-size: 2rem;
+    color: var(--npt-black);
+    margin-bottom: 20px;
+}
+
+.step-text-wrapper p {
+    font-size: 1.1rem;
+    color: #475569;
+    line-height: 1.7;
+}
+
+/* Mobile Responsive */
+@media (max-width: 800px) {
+    .step-content-inner {
+        grid-template-columns: 1fr;
+        padding: 30px 10px;
+        gap: 20px;
+    }
+    
+    .timeline-content-card {
+        flex-direction: column;
+        padding-bottom: 60px; /* Space for arrows */
+    }
+
+    .nav-arrow {
+        position: absolute;
+        bottom: 10px;
+        width: 50px;
+        height: 50px;
+        background: #f8fafc;
+        border-radius: 50%;
+        justify-content: center;
+    }
+    
+    .prev-arrow { left: 20px; }
+    .next-arrow { right: 20px; }
+    
+    .step-image-wrapper {
+        height: 200px;
+    }
+    
+    .timeline-bubbles {
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+}

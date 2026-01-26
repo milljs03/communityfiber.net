@@ -73,6 +73,40 @@
             </div>
         </section>
 
+        <!-- Install Process Timeline (New Section) -->
+        <section class="timeline-section fade-in-section">
+            <div class="container">
+                <h2 class="section-title">The Installation Process</h2>
+                <div class="timeline-container">
+                    <!-- Progress Bubbles -->
+                    <div class="timeline-nav-wrapper">
+                         <div id="timeline-progress-bar" class="timeline-progress-line"></div>
+                         <div id="timeline-bubbles" class="timeline-bubbles">
+                             <!-- Bubbles injected here -->
+                         </div>
+                    </div>
+
+                    <!-- Step Content -->
+                    <div id="timeline-content-area" class="timeline-content-card">
+                        <button class="nav-arrow prev-arrow" id="timeline-prev"><i class="fa-solid fa-chevron-left"></i></button>
+                        
+                        <div class="step-content-inner">
+                            <div class="step-image-wrapper">
+                                <img id="step-image" src="" alt="Step Image">
+                            </div>
+                            <div class="step-text-wrapper">
+                                <span class="step-badge" id="step-badge">Step 1</span>
+                                <h3 id="step-title">Loading Process...</h3>
+                                <p id="step-desc">Please wait while we load the installation steps.</p>
+                            </div>
+                        </div>
+
+                        <button class="nav-arrow next-arrow" id="timeline-next"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Testimonials Section -->
         <section class="testimonials-section fade-in-section" style="padding: 60px 20px; background-color: #f8fafc;">
             <div class="container">
@@ -105,6 +139,6 @@
     <!-- Scripts -->
     <script type="module" src="assets/js/residential.js"></script>
     <script type="module" src="assets/js/announcement.js"></script>
-    <script type="module" src="assets/js/traffic-logger.js"></script> <!-- ADDED TRAFFIC LOGGER -->
+    <script type="module" src="assets/js/traffic-logger.js"></script>
 </body>
 </html>

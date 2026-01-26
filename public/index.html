@@ -47,8 +47,6 @@
 
     <!-- Hero Section -->
     <header class="hero">
-        <!-- Animation Elements Removed -->
-
         <div class="hero-content fade-in-section">
             <h1 class="hero-title">Investing in Local Communities <br><span class="highlight-text">We Call Home.</span></h1>
             <p class="hero-subtitle">Enter your address to see if <span class="text-accent" style="color:var(--cfn-light-green)">fiber internet</span> is available at your home.</p>
@@ -68,7 +66,22 @@
         </div>
     </header>
 
- 
+    <!-- New Residential Fiber Promo Section -->
+    <section class="res-promo-section fade-in-section">
+        <div class="container">
+            <div class="res-promo-content">
+                <div class="res-promo-text">
+                    <span class="section-tag">Residential Fiber</span>
+                    <h2>Experience Internet Without Limits</h2>
+                    <p>Stop buffering and start living. Our 100% fiber-optic network delivers symmetrical gigabit speeds directly to your home. No contracts, no data caps, and local support you can trust.</p>
+                    <a href="residential.html" class="btn-primary-action">See Our Pricing <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div class="res-promo-image">
+                    <img src="assets/images/eero.webp" alt="Premium WiFi Equipment" onerror="this.style.display='none';">
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Explore / Quick Links Hub -->
     <section class="hub-section fade-in-section">
@@ -108,38 +121,14 @@
         </div>
     </section>
 
-    <!-- Why Fiber Section -->
-    <section class="features">
-        <div class="container">
-            <h2 class="section-title fade-in-section">Why Choose Fiber?</h2>
-            <div class="features-grid">
-                <div class="feature-card fade-in-section">
-                    <h3>Gigabit Speeds</h3>
-                    <p>Symmetrical upload and download speeds for lag-free gaming and 4K streaming.</p>
-                </div>
-                <div class="feature-card fade-in-section" style="transition-delay: 100ms;">
-                    <h3>Reliable Uptime</h3>
-                    <p>Weather-resistant infrastructure keeps you connected when it matters most.</p>
-                </div>
-                <div class="feature-card fade-in-section" style="transition-delay: 200ms;">
-                    <h3>No Data Caps</h3>
-                    <p>Stream, work, and play as much as you want without hidden fees or limits.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <footer>
         <p>&copy; 2025 Community Fiber. All rights reserved.</p>
     </footer>
 
     <!-- Scripts -->
-    <!-- Load Main JS first to define the callback function -->
     <script type="module" src="assets/js/main.js"></script>
     <script type="module" src="assets/js/announcement.js"></script>
     <script type="module" src="assets/js/traffic-logger.js"></script> 
-    
-    <!-- Load Maps API with loading=async and defer -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkgQq1AziwIGCiviYuuxEwAEKunYLweeA&libraries=places&callback=initAutocomplete&loading=async" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBw8z2IL4dN5oldPzRW3a581mkXC7VuXe4&libraries=places&callback=initAutocomplete&loading=async" async defer></script>
 </body>
 </html>

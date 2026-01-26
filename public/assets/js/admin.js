@@ -100,6 +100,7 @@ document.querySelectorAll('.nav-item').forEach(btn => {
 
         if (tab === 'leads') loadLeads();
         if (tab === 'plans') loadPlans();
+        if (tab === 'install') loadInstallSteps(); // New Listener
         if (tab === 'neighborhoods') loadNeighborhoods();
         if (tab === 'employees') loadEmployees();
         if (tab === 'announcements') loadAnnouncementSettings();
@@ -264,6 +265,55 @@ async function loadPlans() {
     } catch (err) {
         console.error(err);
         container.innerHTML = '<p style="color:red;">Error loading plans.</p>';
+    }
+}
+
+async function loadInstallSteps() {
+    const container = document.getElementById('install-steps-list');
+    container.innerHTML = '<p>Loading...</p>';
+
+    try {
+        const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'install_steps');
+        // Sort by stepNumber
+        const q = query(ref, orderBy('stepNumber', 'asc'));
+        const snapshot = await getDocs(q);
+
+        container.innerHTML = '';
+        snapshot.forEach(doc => {
+            const step = doc.data();
+            const card = document.createElement('div');
+            card.className = 'admin-card';
+            card.innerHTML = `
+                <div style="display:flex; gap:15px; align-items:center;">
+                    <div style="background:var(--cfn-green); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">
+                        ${step.stepNumber}
+                    </div>
+                    <div>
+                        <h3 style="margin:0;">${step.title}</h3>
+                    </div>
+                </div>
+                <div style="margin-top:10px; color:#64748b; font-size:0.9rem;">
+                    <p>${step.description}</p>
+                </div>
+                ${step.imageUrl ? `<img src="${step.imageUrl}" style="width:100%; height:120px; object-fit:cover; border-radius:8px; margin-top:10px;">` : ''}
+                <div class="card-actions">
+                    ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="install_step">Edit</button>` : ''}
+                    ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="install_step">Delete</button>` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+            if(isAdmin) {
+                card.querySelector('.btn-edit').addEventListener('click', () => openEditModal('install_step', doc.id, step));
+                card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('install_step', doc.id));
+            }
+        });
+
+        if (snapshot.empty) container.innerHTML = '<p>No steps found. Add your first installation step!</p>';
+
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = '<p style="color:red;">Error loading steps.</p>';
     }
 }
 
@@ -497,6 +547,28 @@ function openEditModal(type, id, data = null) {
                 <textarea name="quote" class="form-control" rows="3" required>${data?.quote || ''}</textarea>
             </div>
         `;
+    } else if (type === 'install_step') {
+        modalFields.innerHTML = `
+            <div>
+                <label class="form-label">Step Number (Order)</label>
+                <input type="number" name="stepNumber" class="form-control" value="${data?.stepNumber || ''}" required placeholder="e.g. 1">
+            </div>
+            <div>
+                <label class="form-label">Title</label>
+                <input type="text" name="title" class="form-control" value="${data?.title || ''}" required placeholder="e.g. Site Survey">
+            </div>
+            <div>
+                <label class="form-label">Description</label>
+                <textarea name="description" class="form-control" rows="3" required>${data?.description || ''}</textarea>
+            </div>
+             <div>
+                <label class="form-label">Step Photo Upload</label>
+                <input type="file" id="photo-upload" class="form-control" accept="image/*">
+                <input type="hidden" name="imageUrl" id="photo-url-input" value="${data?.imageUrl || ''}">
+                <p id="upload-status" style="font-size:0.8rem; color:#64748b;">${data?.imageUrl ? 'Current photo loaded' : 'No photo selected'}</p>
+            </div>
+        `;
+        setupFileUploadListener();
     } else if (type === 'employee') {
         modalFields.innerHTML = `
             <div>
@@ -522,28 +594,30 @@ function openEditModal(type, id, data = null) {
                 <p id="upload-status" style="font-size:0.8rem; color:#64748b;">${data?.photoUrl ? 'Current photo loaded' : 'No photo selected'}</p>
             </div>
         `;
-        
-        // Add listener for file upload
-        setTimeout(() => {
-            const fileInput = document.getElementById('photo-upload');
-            if (fileInput) {
-                fileInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = function() {
-                            document.getElementById('photo-url-input').value = reader.result;
-                            document.getElementById('upload-status').textContent = "Photo ready to save!";
-                            document.getElementById('upload-status').style.color = "green";
-                        }
-                        reader.readAsDataURL(file);
-                    }
-                });
-            }
-        }, 100);
+        setupFileUploadListener();
     }
 
     editModal.style.display = 'flex';
+}
+
+function setupFileUploadListener() {
+    setTimeout(() => {
+        const fileInput = document.getElementById('photo-upload');
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = function() {
+                        document.getElementById('photo-url-input').value = reader.result;
+                        document.getElementById('upload-status').textContent = "Photo ready to save!";
+                        document.getElementById('upload-status').style.color = "green";
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    }, 100);
 }
 
 document.querySelectorAll('.close-modal-btn').forEach(btn => {
@@ -560,6 +634,7 @@ editForm.addEventListener('submit', async (e) => {
     const data = Object.fromEntries(formData.entries());
     
     if (data.price) data.price = Number(data.price);
+    if (data.stepNumber) data.stepNumber = Number(data.stepNumber);
 
     if (type === 'plan') {
         data.isPopular = !!editForm.querySelector('[name="isPopular"]').checked;
@@ -570,6 +645,7 @@ editForm.addEventListener('submit', async (e) => {
     else if (type === 'hood') collectionName = 'neighborhoods';
     else if (type === 'testimonial') collectionName = 'testimonials';
     else if (type === 'employee') collectionName = 'employees';
+    else if (type === 'install_step') collectionName = 'install_steps';
 
     const collRef = collection(db, 'artifacts', '162296779236', 'public', 'data', collectionName);
 
@@ -586,6 +662,7 @@ editForm.addEventListener('submit', async (e) => {
         if (type === 'hood') loadNeighborhoods();
         if (type === 'testimonial') loadTestimonials();
         if (type === 'employee') loadEmployees();
+        if (type === 'install_step') loadInstallSteps();
         
     } catch (err) {
         console.error("Save failed", err);
@@ -604,6 +681,7 @@ async function deleteItem(type, id) {
     else if (type === 'testimonial') collectionName = 'testimonials';
     else if (type === 'testimonials') collectionName = 'testimonials';
     else if (type === 'employee' || type === 'employees') collectionName = 'employees';
+    else if (type === 'install_step') collectionName = 'install_steps';
     
     try {
         await deleteDoc(doc(db, 'artifacts', '162296779236', 'public', 'data', collectionName, id));
@@ -612,6 +690,7 @@ async function deleteItem(type, id) {
         if (type === 'neighborhoods' || type === 'hood') loadNeighborhoods();
         if (type === 'testimonial' || type === 'testimonials') loadTestimonials();
         if (type === 'employee' || type === 'employees') loadEmployees();
+        if (type === 'install_step') loadInstallSteps();
     } catch (err) {
         console.error("Delete failed", err);
         alert("Error deleting item.");
@@ -620,6 +699,8 @@ async function deleteItem(type, id) {
 
 document.getElementById('add-plan-btn').addEventListener('click', () => openEditModal('plan'));
 document.getElementById('add-hood-btn').addEventListener('click', () => openEditModal('hood'));
+document.getElementById('add-step-btn').addEventListener('click', () => openEditModal('install_step'));
+
 if(document.getElementById('add-testimonial-btn')) {
     document.getElementById('add-testimonial-btn').addEventListener('click', () => openEditModal('testimonial'));
 }

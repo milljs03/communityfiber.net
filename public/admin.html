@@ -59,6 +59,9 @@
                 <button class="nav-item" data-tab="plans">
                     <i class="fa-solid fa-tags"></i> Pricing Plans
                 </button>
+                <button class="nav-item" data-tab="install">
+                    <i class="fa-solid fa-clipboard-list"></i> Install Process
+                </button>
                 <button class="nav-item" data-tab="neighborhoods">
                     <i class="fa-solid fa-map-location-dot"></i> Neighborhoods
                 </button>
@@ -153,6 +156,18 @@
                 </div>
             </section>
 
+            <!-- Install Process View -->
+            <section id="view-install" class="view-section">
+                <div class="page-header">
+                    <h1>Fiber Installation Process</h1>
+                    <button id="add-step-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Step</button>
+                </div>
+                <p style="margin-bottom: 20px; color: #64748b;">Manage the steps shown on the residential timeline. Lower step numbers appear first.</p>
+                <div id="install-steps-list" class="cards-grid">
+                    <!-- Populated via JS -->
+                </div>
+            </section>
+
             <!-- Neighborhoods View -->
             <section id="view-neighborhoods" class="view-section">
                 <div class="page-header">
@@ -228,7 +243,7 @@
             <h2 id="modal-title">Edit Item</h2>
             <form id="edit-form">
                 <input type="hidden" id="edit-id">
-                <input type="hidden" id="edit-type"> <!-- 'plan', 'hood', 'testimonial', 'employee' -->
+                <input type="hidden" id="edit-type"> <!-- 'plan', 'hood', 'testimonial', 'employee', 'install_step' -->
                 <div id="modal-fields"></div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-outline close-modal-btn">Cancel</button>
