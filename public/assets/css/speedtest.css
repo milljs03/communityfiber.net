@@ -1,0 +1,77 @@
+/* speedtest.css */
+
+.speedtest-wrapper {
+    background-color: #f8fafc;
+    min-height: 80vh;
+    padding-bottom: 60px;
+}
+
+.speedtest-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-top: 40px;
+}
+
+.speedtest-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.speedtest-header h1 {
+    font-size: 2.5rem;
+    color: var(--npt-black);
+    margin-bottom: 10px;
+}
+
+.speedtest-header p {
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+.speedtest-iframe-wrapper {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-bottom: 40px;
+    border: 1px solid #e2e8f0;
+}
+
+.speed-tips {
+    background: #f0fdf4; /* Light green bg */
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.speed-tips h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: #166534; /* Darker green text */
+}
+
+.speed-tips ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.speed-tips li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+    color: #334155;
+}
+
+.speed-tips li::before {
+    content: "•";
+    color: var(--cfn-green);
+    font-weight: bold;
+    font-size: 1.2rem;
+    position: absolute;
+    left: 5px;
+    top: -2px;
+}

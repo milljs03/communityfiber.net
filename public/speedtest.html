@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Test | Community Fiber</title>
+    
+    <!-- UPDATED CSP: Added wildcards for googleapis and firebase to resolve connection blocks -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self' https://openspeedtest.com https://*.openspeedtest.com; 
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://openspeedtest.com https://*.openspeedtest.com; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
+                   frame-src 'self' https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://openspeedtest.com https://*.openspeedtest.com;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://*.googleapis.com https://*.firebase.com https://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com https://openspeedtest.com https://*.openspeedtest.com;">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/speedtest.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="logo-container">
+            <img src="assets/images/community-fiber-logo.png" alt="Community Fiber" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span class="logo-text" style="display:none;">Community Fiber</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="residential.html">Residential</a></li>
+            <li><a href="business.html">Business</a></li>
+            <li><a href="builders.html">Builders</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="speedtest.html" class="active">Speed Test</a></li>
+        </ul>
+        <div class="mobile-menu-btn">☰</div>
+    </nav>
+    
+    <main class="speedtest-wrapper">
+        <div class="container speedtest-container fade-in">
+            <div class="speedtest-header">
+                <h1>Test Your Internet Speed</h1>
+                <p>Verify your connection performance. For the most accurate results, please close other tabs.</p>
+            </div>
+
+            <div class="speedtest-iframe-wrapper">
+                <!-- OpenSpeedTest Embed -->
+                 <iframe src="https://openspeedtest.com/Get-widget.php" width="100%" height="600px" frameborder="0" allow="fullscreen"></iframe>
+            </div>
+            
+            <div class="speed-tips">
+                <h3><i class="fa-solid fa-lightbulb" style="color:var(--cfn-green);"></i> Tips for Accurate Results</h3>
+                <ul>
+                    <li>Use a wired Ethernet connection if possible for Gigabit testing.</li>
+                    <li>Close other apps (Steam, Zoom, etc.) that might be using bandwidth.</li>
+                    <li>Ensure no other devices are streaming 4K video or downloading large files.</li>
+                    <li>If testing on WiFi, stand close to your router (5GHz band recommended).</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="footer/privacy-policy.html">Privacy Policy</a>
+                <a href="footer/terms-of-service.html">Terms of Service</a>
+                <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
+            </div>
+            <p>&copy; 2026 Community Fiber. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/announcement.js"></script>
+</body>
+</html>
