@@ -266,6 +266,53 @@ footer {
 }
 
 @media (max-width: 900px) {
-    .nav-links { display: none; } 
-    .mobile-menu-btn { display: block; }
+    .nav-links { 
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        padding: 1.5rem 5%;
+        gap: 1.5rem;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        border-bottom: 1px solid var(--npt-grey);
+    } 
+
+    .nav-links.active {
+        display: flex;
+        animation: slideDown 0.3s ease-out forwards;
+    }
+
+    .nav-links li {
+        width: 100%;
+        padding: 0;
+    }
+
+    /* Hide standard dropdown behavior on mobile for simplicity, or stack them */
+    .dropdown-menu {
+        position: static;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        padding-left: 1.5rem;
+        display: block; /* Show nested items on mobile */
+        opacity: 1;
+        background: #f8fafc;
+        margin-top: 0.5rem;
+    }
+
+    .dropdown-toggle::after {
+        display: none; /* Hide arrow on mobile */
+    }
+
+    .mobile-menu-btn { 
+        display: block; 
+    }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

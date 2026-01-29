@@ -65,7 +65,45 @@ function redirectToApp(address) {
 // --- Standard Site Logic ---
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Scroll Animations
+    // --- Mobile Menu Toggle Logic ---
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent immediate closing if listener is on document
+            navLinks.classList.toggle('active');
+            
+            // Sync the icon text
+            const isOpen = navLinks.classList.contains('active');
+            mobileMenuBtn.textContent = isOpen ? '✕' : '☰';
+            
+            // Accessibility: toggling expanded state
+            mobileMenuBtn.setAttribute('aria-expanded', isOpen);
+            
+            console.log('Mobile menu toggled. Active class present:', isOpen);
+        });
+
+        // Close menu when clicking any link inside
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            });
+        });
+
+        // Optional: Close menu if clicking outside of the navbar
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.textContent = '☰';
+                }
+            }
+        });
+    }
+    
+    // --- Scroll Animations ---
     const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
