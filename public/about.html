@@ -77,8 +77,11 @@
                 
                 <!-- Left: NPTech Heritage -->
                 <div class="history-col fade-in-section">
-                    <!-- CHANGED ICON HERE from fa-phone-intercom to fa-phone-volume (Free) -->
-                    <div class="col-icon"><i class="fa-solid fa-phone-volume"></i></div>
+                    <div class="col-icon">
+                        <a href="https://www.np-tech.com" target="_blank" title="Visit NPTech Website">
+                            <img src="assets/images/NPtech_logo.png" alt="NPTech Logo">
+                        </a>
+                    </div>
                     <h3>Our Heritage: NPTech</h3>
                     <div class="history-content">
                         <p><strong>New Paris Telephone</strong> was formed in 1901 with a simple mission: to bring telephone service to our rural community. For over a century, we have adapted to the ever-changing landscape of technology.</p>
@@ -97,7 +100,9 @@
 
                 <!-- Right: Community Fiber Future -->
                 <div class="history-col fade-in-section" style="transition-delay: 200ms;">
-                    <div class="col-icon"><i class="fa-solid fa-network-wired"></i></div>
+                    <div class="col-icon">
+                        <img src="assets/images/community-fiber-logo.png" alt="Community Fiber Logo">
+                    </div>
                     <h3>Our Future: Community Fiber</h3>
                     <div class="history-content">
                         <p><strong>Community Fiber Network</strong> (formerly Goshen Fiber Network) represents our commitment to the future. As a division of New Paris Telephone, we combine 125 years of stability with cutting-edge fiber infrastructure.</p>
@@ -115,6 +120,82 @@
                     </div>
                 </div>
 
+            </section>
+
+            <!-- NEW: Heritage Gallery Slideshow -->
+            <section class="heritage-gallery-section fade-in-section" style="margin-top: 60px; margin-bottom: 60px;">
+                <div class="gallery-intro" style="text-align: center; margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    <h2 style="color: var(--primary-color); margin-bottom: 15px;">A Glimpse into Our Past</h2>
+                    <p style="color: #555; line-height: 1.6;">Travel back to the WWI era in downtown New Paris. In every photo below, you can spot the original telephone lines in the background—infrastructure installed by New Paris Telephone over a century ago.</p>
+                </div>
+
+                <div class="slideshow-container">
+                    
+                    <!-- Slide 1 -->
+                    <div class="mySlides fade">
+                        <div class="numbertext">1 / 7</div>
+                        <img src="assets/images/NPTWW1.JPG" alt="New Paris Telephone WWI Era">
+                        <div class="caption-text">New Paris WWI Deployment</div>
+                    </div>
+
+                    <!-- Slide 2 -->
+                    <div class="mySlides fade">
+                        <div class="numbertext">2 / 7</div>
+                        <img src="assets/images/NP2.JPG" alt="Downtown New Paris Historical View">
+                        <div class="caption-text">W. Market St.</div>
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="mySlides fade">
+                        <div class="numbertext">3 / 7</div>
+                        <img src="assets/images/NP3.JPG" alt="New Paris Street View 1900s">
+                        <div class="caption-text">US Mail Carrier Preparing His Route</div>
+                    </div>
+                    
+                    <!-- Slide 4 -->
+                    <div class="mySlides fade">
+                        <div class="numbertext">4 / 7</div>
+                        <img src="assets/images/NP4.JPG" alt="Historical Town Center">
+                        <div class="caption-text">New Paris' 4 way stop</div>
+                    </div>
+
+                    <!-- Slide 5 -->
+                    <div class="mySlides fade">
+                        <div class="numbertext">5 / 7</div>
+                        <img src="assets/images/NP5.JPG" alt="New Paris Main Street">
+                        <div class="caption-text">Downtown New Paris</div>
+                    </div>q
+
+                    <!-- Slide 6 -->
+                    <div class="mySlides fade">
+                        <div class="numbertext">6 / 7</div>
+                        <img src="assets/images/NP6.JPG" alt="Early 20th Century Infrastructure">
+                        <div class="caption-text">Wabash Train Depot</div>
+                    </div>
+
+                    <!-- Slide 7 -->
+                    <div class="mySlides fade">
+                        <div class="numbertext">7 / 7</div>
+                        <img src="assets/images/NPCream.JPG" alt="New Paris Creamery & Telephone Lines">
+                        <div class="caption-text">New Paris Creamery</div>
+                    </div>
+
+                    <!-- Next/Prev buttons -->
+                    <a class="prev" id="prevSlide">&#10094;</a>
+                    <a class="next" id="nextSlide">&#10095;</a>
+                </div>
+                <br>
+                
+                <!-- Dots -->
+                <div style="text-align:center">
+                    <span class="dot" data-slide="1"></span> 
+                    <span class="dot" data-slide="2"></span> 
+                    <span class="dot" data-slide="3"></span> 
+                    <span class="dot" data-slide="4"></span> 
+                    <span class="dot" data-slide="5"></span> 
+                    <span class="dot" data-slide="6"></span> 
+                    <span class="dot" data-slide="7"></span> 
+                </div>
             </section>
 
             <!-- Employees Section -->
@@ -163,6 +244,6 @@
     <script type="module" src="assets/js/main.js"></script>
     <script type="module" src="assets/js/announcement.js"></script>
     <script type="module" src="assets/js/traffic-logger.js"></script>
-    <script type="module" src="assets/js/about.js"></script> <!-- New Script -->
+    <script type="module" src="assets/js/about.js"></script>
 </body>
 </html>

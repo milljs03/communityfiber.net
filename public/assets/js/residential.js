@@ -228,7 +228,7 @@ function updateTimelineView(index) {
     }, 200);
 }
 
-// --- Helper Functions --- (generatePlanCard etc. remain same as previous, including the redirect link)
+// --- Helper Functions ---
 
 function updatePageHeader() {
     const headerContent = document.querySelector('.plans-header-content');
@@ -247,15 +247,18 @@ function injectAddonsSection(targetElement) {
     if (document.querySelector('.addons-section-container')) return;
     const addonsHTML = `
     <div class="addons-section-container">
+        <!-- Home Phone -->
         <div class="addon-card">
             <div class="addon-top-bar" style="background: linear-gradient(90deg, var(--cfn-green) 0%, var(--cfn-light-green) 100%);"></div>
             <div class="addon-content">
                 <div class="addon-icon-title"><i class="fa-solid fa-phone-volume" style="color: var(--cfn-green);"></i><h3>Home Phone</h3></div>
                 <p>Complete your home connection. Keep your current number or start fresh.</p>
                 <div class="addon-price-tag"><span class="symbol">$</span><span class="val">25</span><span class="per">/mo</span></div>
-                <div class="addon-features-list"><span><i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Unlimited Long Distance</span><span><i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Crystal Clear Voice</span></div>
+                <div class="addon-features-list"><span><i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Phone Porting</span><span><i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Crystal Clear Voice</span></div>
             </div>
         </div>
+
+        <!-- Premium WiFi -->
         <div class="addon-card">
             <div class="addon-top-bar" style="background: linear-gradient(90deg, #05a5df 0%, #6cdbf7 100%);"></div>
             <div class="addon-content">
@@ -263,6 +266,20 @@ function injectAddonsSection(targetElement) {
                 <div class="addon-icon-title"><h3 style="margin-top:0;">Premium WiFi</h3></div>
                 <p>Powered by <strong>eero</strong>. Blanket your home in fast, reliable WiFi with advanced security and controls.</p>
                 <div class="addon-features-list"><span><i class="fa-solid fa-shield-halved" style="color: #05a5df;"></i> Advanced Security</span><span><i class="fa-solid fa-house-signal" style="color: #05a5df;"></i> Guest Networks</span></div>
+            </div>
+        </div>
+
+        <!-- Money Saving Programs (New Section) -->
+        <div class="addon-card">
+            <div class="addon-top-bar" style="background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);"></div>
+            <div class="addon-content">
+                <div class="addon-icon-title"><i class="fa-solid fa-hand-holding-dollar" style="color: #f59e0b;"></i><h3>Save More</h3></div>
+                <p>We're committed to our community. Take advantage of our monthly savings programs.</p>
+                <div class="addon-features-list">
+                    <span><i class="fa-solid fa-calendar-check" style="color: #f59e0b;"></i> $5/mo if you sign up for autopay</span>
+                    <span><i class="fa-solid fa-graduation-cap" style="color: #f59e0b;"></i> $5/mo discount for teachers*</span>
+                </div>
+                <p style="font-size: 0.75rem; margin-top: 15px; color: #94a3b8; font-style: italic;">*Teacher discount requires valid school ID.</p>
             </div>
         </div>
     </div>`;

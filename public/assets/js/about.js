@@ -2,6 +2,77 @@ import { db, app } from './config/firebase-config.js';
 import { collection, getDocs, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
+    
+    // --- Slideshow Logic ---
+    const slideshowContainer = document.querySelector('.slideshow-container');
+    if (slideshowContainer) {
+        let slideIndex = 1;
+        let slideInterval;
+        
+        const showSlides = (n) => {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            let dots = document.getElementsByClassName("dot");
+            
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            
+            if (slides[slideIndex-1]) {
+                slides[slideIndex-1].style.display = "block";
+            }
+            if (dots[slideIndex-1]) {
+                dots[slideIndex-1].classList.add("active");
+            }
+        };
+
+        const plusSlides = (n) => {
+            clearInterval(slideInterval);
+            showSlides(slideIndex += n);
+            startAutoSlide();
+        };
+
+        const currentSlide = (n) => {
+            clearInterval(slideInterval);
+            showSlides(slideIndex = n);
+            startAutoSlide();
+        };
+
+        const startAutoSlide = () => {
+            clearInterval(slideInterval); // Clear existing to avoid multiples
+            slideInterval = setInterval(() => {
+                slideIndex++;
+                showSlides(slideIndex);
+            }, 5000); // 5 seconds
+        };
+
+        // Event Listeners for controls
+        const prevBtn = document.getElementById('prevSlide');
+        const nextBtn = document.getElementById('nextSlide');
+        
+        if(prevBtn) prevBtn.addEventListener('click', (e) => { e.preventDefault(); plusSlides(-1); });
+        if(nextBtn) nextBtn.addEventListener('click', (e) => { e.preventDefault(); plusSlides(1); });
+
+        // Event Listeners for dots
+        document.querySelectorAll('.dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                const n = parseInt(dot.getAttribute('data-slide'));
+                currentSlide(n);
+            });
+        });
+
+        // Init
+        showSlides(slideIndex);
+        startAutoSlide();
+    }
+
+
     // --- Collapsible Team Section Logic ---
     const teamSection = document.querySelector('.team-section');
     if (teamSection) {
@@ -9,9 +80,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const toggleBtn = document.createElement('button');
         toggleBtn.className = 'team-toggle-btn';
         toggleBtn.innerHTML = 'Meet Our Team <i class="fa-solid fa-chevron-down" style="margin-left:8px;"></i>';
-        
-        // Remove inline styles to allow CSS to control appearance
-        // toggleBtn.style.cssText = `...`; 
         
         // Insert button before the grid
         const teamGrid = teamSection.querySelector('.team-grid');
@@ -46,20 +114,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const rect = mirrorEffect.getBoundingClientRect();
         const windowHeight = window.innerHeight;
 
-        // Calculate progress: 0 when entering bottom, 1 when leaving top
-        // We want the shine to move as it traverses the middle of the screen
-        
         // Check if element is in view
         if (rect.top < windowHeight && rect.bottom > 0) {
-            // Normalize position: 0 (bottom of screen) to 1 (top of screen)
-            // Or better: 0 (start of shine) to 1 (end of shine)
-            // Let's make it shine from -100% to 200% as it scrolls from bottom 10% to top 10%
-            
+            // Position normalized
             const position = 1 - (rect.top / windowHeight);
-            
-            // Clamp roughly between 0 and 1 for the relevant scroll area
-            // We map the viewport position to a percentage for the shine
-            // position 0 = bottom of screen, position 1 = top of screen
             
             // Move shine from -100% to 200%
             const shinePos = (position * 300) - 100; 
@@ -102,7 +160,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h3>${emp.name}</h3>
                     <p class="employee-title">${emp.title}</p>
                     <div class="employee-stats">
-                        <span class="years-badge">${emp.years} Years</span>
+                        <span class="years-badge">Team member for ${emp.years} Years</span>
                     </div>
                     <p class="employee-fact">Fun fact about me: "${emp.fact}"</p>
                 </div>
@@ -118,7 +176,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, { threshold: 0.1 });
 
         // Observe elements but only if container is visible (handled by toggle above implicitly when shown)
-        // We attach observer anyway so when they become visible via display:grid, animation can trigger
         document.querySelectorAll('.employee-card.fade-in-section').forEach(el => observer.observe(el));
 
     } catch (err) {
