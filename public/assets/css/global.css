@@ -84,6 +84,13 @@ h1, h2, h3, h4 {
     list-style: none;
     display: flex;
     gap: 2.5rem;
+    align-items: center; /* Vertically align items */
+}
+
+/* Container for nav items, specifically helpful for dropdowns */
+.nav-links li {
+    position: relative; 
+    padding: 10px 0; /* Increase hit area vertically */
 }
 
 .nav-links a {
@@ -93,10 +100,124 @@ h1, h2, h3, h4 {
     font-size: 0.95rem;
     transition: color 0.3s ease;
     font-family: var(--font-heading);
+    display: block; 
 }
 
 .nav-links a:hover, .nav-links a.active {
     color: var(--cfn-green); /* Green accent on hover */
+}
+
+/* --- Dropdown Menu Styles --- */
+.dropdown-menu {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 100%; /* Position directly below the parent li */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    min-width: 180px; /* Slightly wider */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15); /* Stronger shadow */
+    border-radius: 8px;
+    padding: 10px 0;
+    z-index: 1001;
+    border: 1px solid rgba(0,0,0,0.05);
+    margin-top: 0; /* Remove top margin gap */
+    
+    /* Invisible bridge to prevent mouse-leave when moving from button to menu */
+    padding-top: 15px; 
+    clip-path: inset(0 -20px -20px -20px); /* Expand interactive area */
+}
+
+/* Inner wrapper to handle padding/clip-path offset */
+.dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 15px; /* Height of the bridge */
+    background: transparent;
+}
+
+/* Arrow indicator for dropdown parent */
+.dropdown-toggle::after {
+    content: '\f078'; /* FontAwesome chevron-down */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.7em;
+    margin-left: 6px;
+    vertical-align: middle;
+    transition: transform 0.2s;
+    display: inline-block;
+}
+
+/* Hover State - Show Menu */
+.nav-links li:hover .dropdown-toggle::after {
+    transform: rotate(180deg);
+}
+
+.nav-links li:hover .dropdown-menu {
+    display: block;
+    animation: fadeInDropdown 0.2s ease-out forwards;
+}
+
+@keyframes fadeInDropdown {
+    from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Dropdown items */
+.dropdown-menu li {
+    width: 100%;
+    padding: 0; /* Reset parent padding for list items */
+}
+
+.dropdown-menu a {
+    padding: 12px 20px;
+    white-space: nowrap;
+    color: var(--npt-black);
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0fdf4; /* Very light green bg */
+    color: var(--cfn-green);
+    padding-left: 25px; /* Slight slide effect */
+}
+
+.dropdown-menu i {
+    width: 20px;
+    text-align: center;
+    color: #94a3b8;
+    transition: color 0.2s;
+}
+
+.dropdown-menu a:hover i {
+    color: var(--cfn-green);
+}
+
+/* Special styling for bill pay button in nav */
+.btn-nav-highlight {
+    background-color: var(--cfn-green);
+    color: white !important;
+    padding: 8px 22px;
+    border-radius: 50px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(3, 166, 60, 0.2);
+}
+
+.btn-nav-highlight:hover {
+    background-color: var(--cfn-dark-green);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(3, 166, 60, 0.3);
+}
+
+.btn-nav-highlight::after {
+    color: white; /* Make arrow white for highlighted button */
 }
 
 .mobile-menu-btn {
@@ -144,7 +265,7 @@ footer {
     transform: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .nav-links { display: none; } 
     .mobile-menu-btn { display: block; }
 }

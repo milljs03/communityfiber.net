@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Community Fiber</title>
-    
+    <!-- ... same head content ... -->
     <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self'; 
@@ -28,7 +28,7 @@
 </head>
 <body>
 
-    <!-- Login Overlay -->
+    <!-- Login Overlay ... same ... -->
     <div id="login-overlay" class="login-overlay">
         <div class="login-card">
             <img src="assets/images/community-fiber-logo.png" alt="Community Fiber" class="login-logo">
@@ -55,6 +55,9 @@
                 </button>
                 <button class="nav-item" data-tab="leads">
                     <i class="fa-solid fa-inbox"></i> Leads & Forms
+                </button>
+                <button class="nav-item" data-tab="news">
+                    <i class="fa-solid fa-newspaper"></i> News & Updates
                 </button>
                 <button class="nav-item" data-tab="plans">
                     <i class="fa-solid fa-tags"></i> Pricing Plans
@@ -90,7 +93,7 @@
         <!-- Main Content -->
         <main class="content-area">
             
-            <!-- Dashboard View -->
+            <!-- Dashboard View ... same ... -->
             <section id="view-dashboard" class="view-section active">
                 <div class="page-header">
                     <h1>Dashboard Overview</h1>
@@ -112,7 +115,7 @@
                 </div>
             </section>
 
-            <!-- Leads View -->
+            <!-- Leads View ... same ... -->
             <section id="view-leads" class="view-section">
                 <div class="page-header">
                     <h1>Form Submissions</h1>
@@ -145,52 +148,55 @@
                 </div>
             </section>
 
-            <!-- Plans View -->
+            <!-- News View (NEW) -->
+            <section id="view-news" class="view-section">
+                <div class="page-header">
+                    <h1>News & Blog Posts</h1>
+                    <button id="add-news-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add News Post</button>
+                </div>
+                <div id="news-list" class="cards-grid">
+                    <!-- Populated via JS -->
+                </div>
+            </section>
+
+            <!-- Plans View ... same ... -->
             <section id="view-plans" class="view-section">
                 <div class="page-header">
                     <h1>Pricing Plans</h1>
                     <button id="add-plan-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Plan</button>
                 </div>
-                <div id="plans-list" class="cards-grid">
-                    <!-- Populated via JS -->
-                </div>
+                <div id="plans-list" class="cards-grid"></div>
             </section>
 
-            <!-- Install Process View -->
+            <!-- Install Process View ... same ... -->
             <section id="view-install" class="view-section">
                 <div class="page-header">
                     <h1>Fiber Installation Process</h1>
                     <button id="add-step-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Step</button>
                 </div>
                 <p style="margin-bottom: 20px; color: #64748b;">Manage the steps shown on the residential timeline. Lower step numbers appear first.</p>
-                <div id="install-steps-list" class="cards-grid">
-                    <!-- Populated via JS -->
-                </div>
+                <div id="install-steps-list" class="cards-grid"></div>
             </section>
 
-            <!-- Neighborhoods View -->
+            <!-- Neighborhoods View ... same ... -->
             <section id="view-neighborhoods" class="view-section">
                 <div class="page-header">
                     <h1>Neighborhood Status</h1>
                     <button id="add-hood-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Neighborhood</button>
                 </div>
-                <div id="hoods-list" class="cards-grid">
-                    <!-- Populated via JS -->
-                </div>
+                <div id="hoods-list" class="cards-grid"></div>
             </section>
 
-            <!-- Employees View -->
+            <!-- Employees View ... same ... -->
             <section id="view-employees" class="view-section">
                 <div class="page-header">
                     <h1>Our Team</h1>
                     <button id="add-employee-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Employee</button>
                 </div>
-                <div id="employees-list" class="cards-grid">
-                    <!-- Populated via JS -->
-                </div>
+                <div id="employees-list" class="cards-grid"></div>
             </section>
 
-            <!-- Announcements View -->
+            <!-- Announcements View ... same ... -->
             <section id="view-announcements" class="view-section">
                 <div class="page-header">
                     <h1>Announcement Banner</h1>
@@ -222,15 +228,13 @@
                 </div>
             </section>
 
-            <!-- Testimonials View -->
+            <!-- Testimonials View ... same ... -->
             <section id="view-testimonials" class="view-section">
                 <div class="page-header">
                     <h1>Testimonials</h1>
                     <button id="add-testimonial-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Testimonial</button>
                 </div>
-                <div id="testimonials-list" class="cards-grid">
-                    <!-- Populated via JS -->
-                </div>
+                <div id="testimonials-list" class="cards-grid"></div>
             </section>
 
         </main>
@@ -243,7 +247,7 @@
             <h2 id="modal-title">Edit Item</h2>
             <form id="edit-form">
                 <input type="hidden" id="edit-id">
-                <input type="hidden" id="edit-type"> <!-- 'plan', 'hood', 'testimonial', 'employee', 'install_step' -->
+                <input type="hidden" id="edit-type"> <!-- 'plan', 'hood', 'testimonial', 'employee', 'install_step', 'news' -->
                 <div id="modal-fields"></div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-outline close-modal-btn">Cancel</button>

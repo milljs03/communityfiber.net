@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speed Test | Community Fiber</title>
+    <title>News & Updates | Community Fiber</title>
     
-    <!-- UPDATED CSP: Added wildcards for googleapis and firebase to resolve connection blocks -->
+    <!-- CSP -->
     <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self' https://openspeedtest.com https://*.openspeedtest.com; 
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://openspeedtest.com https://*.openspeedtest.com; 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
                    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
-                   frame-src 'self' https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://openspeedtest.com https://*.openspeedtest.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://*.googleapis.com https://*.firebase.com https://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com https://openspeedtest.com https://*.openspeedtest.com;">
+                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/speedtest.css">
+    <link rel="stylesheet" href="assets/css/blog.css">
 </head>
 <body>
 
@@ -39,10 +39,10 @@
             <li><a href="residential.html">Residential</a></li>
             <li><a href="business.html">Business</a></li>
             <li><a href="builders.html">Builders</a></li>
+            <li><a href="blog.html" class="active">News</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="support.html">Support</a></li>
-            <li><a href="speedtest.html" class="active">Speed Test</a></li>
-
+            
              <!-- Bill Pay Dropdown -->
              <li class="dropdown-container">
                 <a href="#" class="dropdown-toggle btn-nav-highlight">Bill Pay</a>
@@ -55,31 +55,31 @@
         <div class="mobile-menu-btn">☰</div>
     </nav>
     
-    <main class="speedtest-wrapper">
-        <div class="container speedtest-container fade-in">
-            <div class="speedtest-header">
-                <h1>Test Your Internet Speed</h1>
-                <p>Verify your connection performance. For the most accurate results, please close other tabs.</p>
+    <main>
+        <section class="blog-hero fade-in">
+            <h1>Community News</h1>
+            <p>Stay up to date with the latest updates, expansion plans, and community stories from Community Fiber.</p>
+            <div class="social-links-hero">
+                <a href="https://www.facebook.com/profile.php?id=100075583852075" target="_blank" class="btn btn-outline btn-white">
+                    <i class="fa-brands fa-facebook" style="margin-right: 8px;"></i> Follow us on Facebook
+                </a>
             </div>
+        </section>
 
-            <div class="speedtest-iframe-wrapper">
-                <!-- OpenSpeedTest Embed -->
-                 <iframe src="https://openspeedtest.com/Get-widget.php" width="100%" height="600px" frameborder="0" allow="fullscreen"></iframe>
+        <section class="news-section">
+            <div class="container">
+                <div id="news-grid" class="news-grid">
+                    <!-- Populated via JS -->
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Loading news...</p>
+                    </div>
+                </div>
             </div>
-            
-            <div class="speed-tips">
-                <h3><i class="fa-solid fa-lightbulb" style="color:var(--cfn-green);"></i> Tips for Accurate Results</h3>
-                <ul>
-                    <li>Use a wired Ethernet connection if possible for Gigabit testing.</li>
-                    <li>Close other apps (Steam, Zoom, etc.) that might be using bandwidth.</li>
-                    <li>Ensure no other devices are streaming 4K video or downloading large files.</li>
-                    <li>If testing on WiFi, stand close to your router (5GHz band recommended).</li>
-                </ul>
-            </div>
-        </div>
+        </section>
     </main>
 
-    <footer>
+    <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-links">
                 <a href="footer/privacy-policy.html">Privacy Policy</a>
@@ -91,7 +91,8 @@
     </footer>
 
     <!-- Scripts -->
-    <script type="module" src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/blog.js"></script>
     <script type="module" src="assets/js/announcement.js"></script>
+    <script type="module" src="assets/js/traffic-logger.js"></script>
 </body>
 </html>

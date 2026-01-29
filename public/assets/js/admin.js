@@ -100,11 +100,12 @@ document.querySelectorAll('.nav-item').forEach(btn => {
 
         if (tab === 'leads') loadLeads();
         if (tab === 'plans') loadPlans();
-        if (tab === 'install') loadInstallSteps(); // New Listener
+        if (tab === 'install') loadInstallSteps(); 
         if (tab === 'neighborhoods') loadNeighborhoods();
         if (tab === 'employees') loadEmployees();
         if (tab === 'announcements') loadAnnouncementSettings();
         if (tab === 'testimonials') loadTestimonials();
+        if (tab === 'news') loadNews(); 
     });
 });
 
@@ -480,6 +481,53 @@ async function loadTestimonials() {
     }
 }
 
+// NEW: Load News Function
+async function loadNews() {
+    const container = document.getElementById('news-list');
+    container.innerHTML = '<p>Loading...</p>';
+    
+    try {
+        const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'news');
+        const q = query(ref, orderBy('date', 'desc'));
+        const snapshot = await getDocs(q);
+        
+        container.innerHTML = '';
+        snapshot.forEach(doc => {
+            const item = doc.data();
+            const date = item.date ? (item.date.toDate ? item.date.toDate().toLocaleDateString() : new Date(item.date).toLocaleDateString()) : 'No Date';
+            
+            const card = document.createElement('div');
+            card.className = 'admin-card';
+            card.innerHTML = `
+                <div style="margin-bottom:10px;">
+                    <span style="font-size:0.8rem; color:#64748b; font-weight:bold;">${date}</span>
+                    <h3 style="margin:5px 0;">${item.title}</h3>
+                </div>
+                <p style="font-size:0.9rem; color:#475569; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${item.excerpt}</p>
+                ${item.imageUrl ? `<img src="${item.imageUrl}" style="width:100%; height:120px; object-fit:cover; border-radius:8px; margin:10px 0;">` : ''}
+                <p style="font-size:0.8rem; color:#0369a1;">Link: ${item.linkText} (${item.linkUrl})</p>
+                
+                <div class="card-actions">
+                    ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="news">Edit</button>` : ''}
+                    ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="news">Delete</button>` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+             if(isAdmin) {
+                card.querySelector('.btn-edit').addEventListener('click', () => openEditModal('news', doc.id, item));
+                card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('news', doc.id));
+            }
+        });
+        
+         if (snapshot.empty) container.innerHTML = '<p>No news posts found. Add one!</p>';
+
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = '<p style="color:red;">Error loading news.</p>';
+    }
+}
+
 const editModal = document.getElementById('edit-modal');
 const editForm = document.getElementById('edit-form');
 const modalFields = document.getElementById('modal-fields');
@@ -595,6 +643,44 @@ function openEditModal(type, id, data = null) {
             </div>
         `;
         setupFileUploadListener();
+    } else if (type === 'news') {
+        // NEW: News Fields
+        const today = new Date().toISOString().split('T')[0];
+        let postDate = today;
+        if(data?.date) {
+             const d = data.date.toDate ? data.date.toDate() : new Date(data.date);
+             postDate = d.toISOString().split('T')[0];
+        }
+
+        modalFields.innerHTML = `
+            <div>
+                <label class="form-label">Post Title</label>
+                <input type="text" name="title" class="form-control" value="${data?.title || ''}" required>
+            </div>
+            <div>
+                <label class="form-label">Publish Date</label>
+                <input type="date" name="date" class="form-control" value="${postDate}" required>
+            </div>
+            <div>
+                <label class="form-label">Short Excerpt (Teaser text)</label>
+                <textarea name="excerpt" class="form-control" rows="3" required>${data?.excerpt || ''}</textarea>
+            </div>
+            <div>
+                <label class="form-label">Link URL (e.g., https://facebook.com/... or blog-post.html)</label>
+                <input type="text" name="linkUrl" class="form-control" value="${data?.linkUrl || ''}" required>
+            </div>
+            <div>
+                <label class="form-label">Link Button Text</label>
+                <input type="text" name="linkText" class="form-control" value="${data?.linkText || 'Read More'}" required>
+            </div>
+            <div>
+                <label class="form-label">Featured Image</label>
+                <input type="file" id="photo-upload" class="form-control" accept="image/*">
+                <input type="hidden" name="imageUrl" id="photo-url-input" value="${data?.imageUrl || ''}">
+                <p id="upload-status" style="font-size:0.8rem; color:#64748b;">${data?.imageUrl ? 'Current photo loaded' : 'No photo selected'}</p>
+            </div>
+        `;
+        setupFileUploadListener();
     }
 
     editModal.style.display = 'flex';
@@ -635,6 +721,7 @@ editForm.addEventListener('submit', async (e) => {
     
     if (data.price) data.price = Number(data.price);
     if (data.stepNumber) data.stepNumber = Number(data.stepNumber);
+    if (data.date) data.date = new Date(data.date); // Convert date string to Date object
 
     if (type === 'plan') {
         data.isPopular = !!editForm.querySelector('[name="isPopular"]').checked;
@@ -646,6 +733,7 @@ editForm.addEventListener('submit', async (e) => {
     else if (type === 'testimonial') collectionName = 'testimonials';
     else if (type === 'employee') collectionName = 'employees';
     else if (type === 'install_step') collectionName = 'install_steps';
+    else if (type === 'news') collectionName = 'news'; // NEW
 
     const collRef = collection(db, 'artifacts', '162296779236', 'public', 'data', collectionName);
 
@@ -663,6 +751,7 @@ editForm.addEventListener('submit', async (e) => {
         if (type === 'testimonial') loadTestimonials();
         if (type === 'employee') loadEmployees();
         if (type === 'install_step') loadInstallSteps();
+        if (type === 'news') loadNews(); // NEW
         
     } catch (err) {
         console.error("Save failed", err);
@@ -682,6 +771,7 @@ async function deleteItem(type, id) {
     else if (type === 'testimonials') collectionName = 'testimonials';
     else if (type === 'employee' || type === 'employees') collectionName = 'employees';
     else if (type === 'install_step') collectionName = 'install_steps';
+    else if (type === 'news') collectionName = 'news'; // NEW
     
     try {
         await deleteDoc(doc(db, 'artifacts', '162296779236', 'public', 'data', collectionName, id));
@@ -691,6 +781,7 @@ async function deleteItem(type, id) {
         if (type === 'testimonial' || type === 'testimonials') loadTestimonials();
         if (type === 'employee' || type === 'employees') loadEmployees();
         if (type === 'install_step') loadInstallSteps();
+        if (type === 'news') loadNews(); // NEW
     } catch (err) {
         console.error("Delete failed", err);
         alert("Error deleting item.");
@@ -706,4 +797,7 @@ if(document.getElementById('add-testimonial-btn')) {
 }
 if(document.getElementById('add-employee-btn')) {
     document.getElementById('add-employee-btn').addEventListener('click', () => openEditModal('employee'));
+}
+if(document.getElementById('add-news-btn')) {
+    document.getElementById('add-news-btn').addEventListener('click', () => openEditModal('news')); // NEW
 }
