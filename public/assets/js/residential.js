@@ -1,6 +1,6 @@
 import { db, app } from './config/firebase-config.js';
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, addDoc, getDocs, orderBy, query, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     // --- 0. Shared Animation Observer ---
@@ -65,7 +65,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         plansGrid.classList.remove('hidden');
 
         plansGrid.innerHTML = plans.map((plan, index) => generatePlanCard(plan, index)).join('');
-        injectAddonsSection(plansGrid);
+        
+        // Inject dynamic addons section
+        await injectAddonsSection(plansGrid);
 
     } catch (error) {
         console.error("Error rendering plans:", error);
@@ -243,47 +245,360 @@ function updatePageHeader() {
     }
 }
 
-function injectAddonsSection(targetElement) {
-    if (document.querySelector('.addons-section-container')) return;
+async function injectAddonsSection(targetElement) {
+    if (document.querySelector('.addons-wrapper')) return;
+
+    // Fetch dynamic content for "Save More"
+    let promoData = {
+        title: "Save More",
+        description: "We're committed to our community. Take advantage of our monthly savings programs.",
+        items: [
+            "$5/mo if you sign up for autopay",
+            "$5/mo discount for teachers*"
+        ],
+        finePrint: "*Teacher discount requires valid school ID."
+    };
+
+    try {
+        const docRef = doc(db, 'artifacts', '162296779236', 'public', 'data', 'site_content', 'promotions');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const fetched = docSnap.data();
+            promoData = { ...promoData, ...fetched };
+        }
+    } catch(e) {
+        console.warn("Could not load dynamic promotions, using defaults.", e);
+    }
+
     const addonsHTML = `
-    <div class="addons-section-container">
-        <!-- Home Phone -->
-        <div class="addon-card">
-            <div class="addon-top-bar" style="background: linear-gradient(90deg, var(--cfn-green) 0%, var(--cfn-light-green) 100%);"></div>
-            <div class="addon-content">
-                <div class="addon-icon-title"><i class="fa-solid fa-phone-volume" style="color: var(--cfn-green);"></i><h3>Home Phone</h3></div>
-                <p>Complete your home connection. Keep your current number or start fresh.</p>
-                <div class="addon-price-tag"><span class="symbol">$</span><span class="val">25</span><span class="per">/mo</span></div>
-                <div class="addon-features-list"><span><i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Phone Porting</span><span><i class="fa-solid fa-check" style="color: var(--cfn-green);"></i> Crystal Clear Voice</span></div>
-            </div>
-        </div>
+    <style>
+        .addons-wrapper {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: stretch;
+            font-family: 'Open Sans', sans-serif;
+        }
+        @media (max-width: 900px) {
+            .addons-wrapper { grid-template-columns: 1fr; }
+        }
 
-        <!-- Premium WiFi -->
-        <div class="addon-card">
-            <div class="addon-top-bar" style="background: linear-gradient(90deg, #05a5df 0%, #6cdbf7 100%);"></div>
-            <div class="addon-content">
-                 <div class="addon-image-wrapper"><img src="assets/images/eero.webp" alt="eero Mesh WiFi" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fa-solid fa-wifi\' style=\'font-size:3rem; color:#05a5df; margin-bottom:15px;\'></i>'"></div>
-                <div class="addon-icon-title"><h3 style="margin-top:0;">Premium WiFi</h3></div>
-                <p>Powered by <strong>eero</strong>. Blanket your home in fast, reliable WiFi with advanced security and controls.</p>
-                <div class="addon-features-list"><span><i class="fa-solid fa-shield-halved" style="color: #05a5df;"></i> Advanced Security</span><span><i class="fa-solid fa-house-signal" style="color: #05a5df;"></i> Guest Networks</span></div>
-            </div>
-        </div>
+        /* Card Styles */
+        .addons-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .addons-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
 
-        <!-- Money Saving Programs (New Section) -->
-        <div class="addon-card">
-            <div class="addon-top-bar" style="background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);"></div>
-            <div class="addon-content">
-                <div class="addon-icon-title"><i class="fa-solid fa-hand-holding-dollar" style="color: #f59e0b;"></i><h3>Save More</h3></div>
-                <p>We're committed to our community. Take advantage of our monthly savings programs.</p>
-                <div class="addon-features-list">
-                    <span><i class="fa-solid fa-calendar-check" style="color: #f59e0b;"></i> $5/mo if you sign up for autopay</span>
-                    <span><i class="fa-solid fa-graduation-cap" style="color: #f59e0b;"></i> $5/mo discount for teachers*</span>
+        /* Header */
+        .card-header {
+            background: #fff;
+            padding: 25px 30px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .card-header h2 {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.25rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+        .card-header i {
+            color: #64748b;
+            font-size: 1.2rem;
+        }
+
+        /* Content Sections */
+        .card-body {
+            padding: 0;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-block {
+            padding: 30px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .feature-block:last-child { border-bottom: none; }
+
+        .feature-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .feature-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #334155;
+            font-size: 1.1rem;
+        }
+        .feature-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .price-tag {
+            text-align: right;
+        }
+        .price-amount {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #0ea5e9; /* Light blue brand color */
+            line-height: 1;
+        }
+        .price-period {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .feature-desc {
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .pill-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .pill {
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pill-blue { background: #e0f2fe; color: #0284c7; }
+        .pill-green { background: #dcfce7; color: #166534; }
+        .pill-gray { background: #f1f5f9; color: #475569; }
+
+        /* Eero Special Styling */
+        .eero-integration {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        .eero-logo {
+            width: 90px;
+            height: auto;
+            object-fit: contain;
+        }
+        .eero-text {
+            font-size: 0.9rem;
+            color: #475569;
+            font-weight: 500;
+            border-left: 2px solid #e2e8f0;
+            padding-left: 20px;
+        }
+
+        /* Promo Side */
+        .promo-image {
+            height: 240px;
+            width: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .promo-content {
+            padding: 30px;
+            background: linear-gradient(180deg, #fff 0%, #fffbf0 100%);
+            flex-grow: 1;
+        }
+        .promo-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        .promo-text {
+            color: #475569;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .check-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s;
+        }
+        .check-item:hover { transform: translateX(5px); }
+        .check-icon {
+            color: #f59e0b; /* Amber/Gold */
+            font-size: 1.1rem;
+            margin-top: 2px;
+        }
+        .check-text {
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.95rem;
+        }
+        
+        .fine-print {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .included-badge {
+            background: #22c55e;
+            color: white;
+            font-weight: 800;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+    </style>
+    
+    <div class="addons-wrapper fade-in-section">
+        
+        <!-- Left Column: Addons -->
+        <div class="addons-card">
+            <div class="card-header">
+                <i class="fa-solid fa-layer-group"></i>
+                <h2>Connectivity Features</h2>
+            </div>
+            <div class="card-body">
+                
+                <!-- Home Phone -->
+                <div class="feature-block">
+                    <div class="feature-top">
+                        <div class="feature-title-group">
+                            <div class="feature-icon"><i class="fa-solid fa-phone"></i></div>
+                            <h3 class="feature-title">Home Phone</h3>
+                        </div>
+                        <div class="price-tag">
+                            <div class="price-amount">$25</div>
+                            <div class="price-period">/mo</div>
+                        </div>
+                    </div>
+                    <p class="feature-desc">Keep your current number or start fresh. Enjoy crystal clear voice quality integrated with your fiber connection.</p>
+                    <div class="pill-container">
+                        <span class="pill pill-gray"><i class="fa-solid fa-arrow-right-arrow-left"></i> Number Porting</span>
+                        <span class="pill pill-gray"><i class="fa-solid fa-check"></i> Unlimited Local</span>
+                    </div>
                 </div>
-                <p style="font-size: 0.75rem; margin-top: 15px; color: #94a3b8; font-style: italic;">*Teacher discount requires valid school ID.</p>
+
+                <!-- Premium WiFi -->
+                <div class="feature-block" style="background:#f8fafc; flex-grow:1;">
+                    <div class="feature-top">
+                        <div class="feature-title-group">
+                            <div class="feature-icon" style="background:#e0f2fe; color:#0284c7;"><i class="fa-solid fa-wifi"></i></div>
+                            <h3 class="feature-title">Premium WiFi</h3>
+                            <span class="included-badge">Included</span>
+                        </div>
+                    </div>
+                    
+                    <p class="feature-desc">Experience wall-to-wall coverage. We include advanced mesh hardware to ensure every corner of your home is connected.</p>
+
+                    <!-- Eero Integration -->
+                    <div class="eero-integration">
+                        <img src="assets/images/eero.webp" alt="eero" class="eero-logo">
+                        <div class="eero-text">
+                            <strong>Powered by eero.</strong> Advanced security, parental controls, and guest networks built-in.
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>`;
+
+        <!-- Right Column: Promotions -->
+        <div class="addons-card">
+            <img src="assets/images/teacher.jpg" alt="Community Support" class="promo-image">
+            <div class="promo-content">
+                <h2 class="promo-title">${promoData.title}</h2>
+                <p class="promo-text">${promoData.description}</p>
+                
+                <div class="check-list">
+                    ${(promoData.items || []).map(item => `
+                        <div class="check-item">
+                            <i class="fa-solid fa-circle-check check-icon"></i>
+                            <span class="check-text">${item}</span>
+                        </div>
+                    `).join('')}
+                </div>
+
+                ${promoData.finePrint ? `<div class="fine-print">${promoData.finePrint}</div>` : ''}
+            </div>
+        </div>
+
+    </div>
+    `;
     targetElement.insertAdjacentHTML('afterend', addonsHTML);
+    
+    // Animate newly injected elements
+    // Note: The observer logic at the top only runs once on load. We need to observe the new elements.
+    const newObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { root: null, rootMargin: '0px', threshold: 0.1 });
+
+    const wrapper = document.querySelector('.addons-wrapper');
+    if(wrapper) newObserver.observe(wrapper);
 }
 
 function generatePlanCard(plan, index) {

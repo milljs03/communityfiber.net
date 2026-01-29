@@ -99,6 +99,7 @@ document.querySelectorAll('.nav-item').forEach(btn => {
         document.getElementById(`view-${tab}`).classList.add('active');
 
         if (tab === 'leads') loadLeads();
+        if (tab === 'promotions') loadPromotions(); // NEW
         if (tab === 'plans') loadPlans();
         if (tab === 'install') loadInstallSteps(); 
         if (tab === 'neighborhoods') loadNeighborhoods();
@@ -231,6 +232,64 @@ async function loadLeads() {
 }
 
 document.getElementById('lead-filter').addEventListener('change', loadLeads);
+
+// --- PROMOTIONS / SAVE MORE ---
+const promotionsForm = document.getElementById('promotions-form');
+
+async function loadPromotions() {
+    try {
+        const docRef = doc(db, 'artifacts', '162296779236', 'public', 'data', 'site_content', 'promotions');
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            document.getElementById('promo-title').value = data.title || '';
+            document.getElementById('promo-description').value = data.description || '';
+            document.getElementById('promo-finePrint').value = data.finePrint || '';
+            
+            // Convert array back to newline separated string for textarea
+            if (data.items && Array.isArray(data.items)) {
+                document.getElementById('promo-items').value = data.items.join('\n');
+            } else {
+                document.getElementById('promo-items').value = '';
+            }
+        }
+    } catch (err) {
+        console.error("Error loading promotions:", err);
+    }
+}
+
+if(promotionsForm) {
+    promotionsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!isAdmin) {
+            alert("You must be an admin to save changes.");
+            return;
+        }
+
+        const itemsText = document.getElementById('promo-items').value;
+        const itemsArray = itemsText.split('\n').map(item => item.trim()).filter(item => item !== '');
+
+        const data = {
+            title: document.getElementById('promo-title').value,
+            description: document.getElementById('promo-description').value,
+            items: itemsArray,
+            finePrint: document.getElementById('promo-finePrint').value,
+            updatedAt: new Date()
+        };
+
+        try {
+            const docRef = doc(db, 'artifacts', '162296779236', 'public', 'data', 'site_content', 'promotions');
+            // Use setDoc with merge:true so we don't overwrite other fields if we add them later
+            await setDoc(docRef, data, { merge: true });
+            alert("Promotions content updated successfully!");
+        } catch (err) {
+            console.error(err);
+            alert("Error updating promotions content.");
+        }
+    });
+}
+// --- END PROMOTIONS ---
 
 async function loadPlans() {
     const container = document.getElementById('plans-list');
