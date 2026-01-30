@@ -140,6 +140,12 @@
                     <div class="form-card">
                         <h3 style="margin-bottom: 1.5rem;">Development Inquiry</h3>
                         <form id="builder-form">
+                            <!-- Anti-Spam Honeypot Field -->
+                            <div class="visual-hidden">
+                                <label for="website-check">Website</label>
+                                <input type="text" id="website-check" name="website_check" tabindex="-1" autocomplete="off">
+                            </div>
+
                             <div class="form-group">
                                 <label for="company-name">Company / Developer Name</label>
                                 <input type="text" id="company-name" class="form-input" required placeholder="Apex Developments LLC">

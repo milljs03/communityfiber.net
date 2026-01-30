@@ -2,6 +2,14 @@ import { db, app } from './config/firebase-config.js';
 import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+const pageLoadTime = Date.now(); // Track when the page loaded
+
+// Helper: Sanitize Input to prevent XSS
+const sanitize = (str) => {
+    if (typeof str !== 'string') return str;
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim();
+};
+
 // Animation Logic
 document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries) => {
@@ -27,6 +35,20 @@ if (form) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        // --- SPAM PROTECTION ---
+        const honeypot = document.getElementById('website-check');
+        const isTooFast = (Date.now() - pageLoadTime) < 2000; // Block if submitted in < 2 seconds
+
+        if ((honeypot && honeypot.value) || isTooFast) {
+            console.warn("Spam detected. Submission blocked.");
+            // Fake success to discourage retries
+            form.style.display = 'none';
+            successMsg.classList.remove('hidden');
+            successMsg.style.display = 'block';
+            return; // Stop execution
+        }
+        // -----------------------
+
         const btn = document.getElementById('submit-btn');
         const originalText = btn.textContent;
         btn.disabled = true;
@@ -34,12 +56,12 @@ if (form) {
 
         const formData = {
             type: 'business_quote',
-            businessName: document.getElementById('business-name').value,
-            contactName: document.getElementById('contact-name').value,
-            phone: document.getElementById('contact-phone').value,
-            email: document.getElementById('contact-email').value,
-            address: document.getElementById('business-address').value,
-            requirements: document.getElementById('requirements').value,
+            businessName: sanitize(document.getElementById('business-name').value),
+            contactName: sanitize(document.getElementById('contact-name').value),
+            phone: sanitize(document.getElementById('contact-phone').value),
+            email: sanitize(document.getElementById('contact-email').value),
+            address: sanitize(document.getElementById('business-address').value),
+            requirements: sanitize(document.getElementById('requirements').value),
             submittedAt: new Date(),
             status: 'new'
         };

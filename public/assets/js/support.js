@@ -3,6 +3,14 @@ import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/fi
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 document.addEventListener('DOMContentLoaded', () => {
+    const pageLoadTime = Date.now(); // Track when the page loaded
+
+    // Helper: Sanitize Input to prevent XSS
+    const sanitize = (str) => {
+        if (typeof str !== 'string') return str;
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim();
+    };
+
     // 1. Animations
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -59,6 +67,23 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            // --- SPAM PROTECTION ---
+            const honeypot = document.getElementById('website-check');
+            const isTooFast = (Date.now() - pageLoadTime) < 2000; // Block if submitted in < 2 seconds
+
+            if ((honeypot && honeypot.value) || isTooFast) {
+                console.warn("Spam detected. Submission blocked.");
+                // Fake success to discourage retries
+                document.querySelector('.form-container').style.display = 'none';
+                const successMsg = document.getElementById('success-message');
+                if (successMsg) {
+                    successMsg.classList.remove('hidden');
+                    successMsg.style.display = 'block';
+                }
+                return; // Stop execution
+            }
+            // -----------------------
+
             const btn = document.getElementById('submit-btn');
             const originalText = btn.textContent;
             btn.disabled = true;
@@ -66,24 +91,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const formData = {
                 type: 'support_ticket',
-                topic: topicInput ? topicInput.value : 'general',
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                message: document.getElementById('message').value,
+                topic: topicInput ? sanitize(topicInput.value) : 'general',
+                name: sanitize(document.getElementById('name').value),
+                email: sanitize(document.getElementById('email').value),
+                phone: sanitize(document.getElementById('phone').value),
+                message: sanitize(document.getElementById('message').value),
                 submittedAt: new Date(),
                 status: 'new'
             };
 
             // Add dynamic fields if visible
             const accNum = document.getElementById('account-number');
-            if(accNum && !accNum.closest('.hidden')) formData.accountNumber = accNum.value;
+            if(accNum && !accNum.closest('.hidden')) formData.accountNumber = sanitize(accNum.value);
 
             const addr = document.getElementById('address');
-            if(addr && !addr.closest('.hidden')) formData.address = addr.value;
+            if(addr && !addr.closest('.hidden')) formData.address = sanitize(addr.value);
 
             const issue = document.getElementById('issue-type');
-            if(issue && !issue.closest('.hidden')) formData.issueType = issue.value;
+            if(issue && !issue.closest('.hidden')) formData.issueType = sanitize(issue.value);
 
             try {
                 // Ensure auth
