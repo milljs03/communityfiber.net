@@ -17,25 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.fade-in, .fade-in-section').forEach(el => observer.observe(el));
 
     // --- Mobile Menu Toggle ---
-    const mobileBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (mobileBtn && navLinks) {
-        mobileBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent immediate closing if document listener exists
-            navLinks.classList.toggle('active');
-            // Toggle icon or style if needed, e.g., changing hamburger to X
-            mobileBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (navLinks.classList.contains('active') && !navLinks.contains(e.target) && !mobileBtn.contains(e.target)) {
-                navLinks.classList.remove('active');
-                mobileBtn.textContent = '☰';
-            }
-        });
-    }
 
     // --- 1. Initialize Auth for Lead Capture ---
     const auth = getAuth(app);

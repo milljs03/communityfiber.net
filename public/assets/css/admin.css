@@ -137,3 +137,37 @@ body {
 
 .form-label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem; color: #334155; }
 .form-control { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; }
+
+/* --- Detail View Modal --- */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.detail-item {
+    margin-bottom: 5px;
+}
+
+.detail-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-item label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #64748b;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.detail-item p {
+    background: #f8fafc;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    color: var(--npt-black);
+    font-size: 0.95rem;
+    word-wrap: break-word;
+}

@@ -9,6 +9,7 @@ const ALLOWED_DOMAIN = 'nptel.com';
 
 let currentUser = null;
 let isAdmin = false;
+let loadedLeads = [];
 
 // DOM Elements
 const loginOverlay = document.getElementById('login-overlay');
@@ -110,6 +111,19 @@ document.querySelectorAll('.nav-item').forEach(btn => {
     });
 });
 
+// Event Delegation for Leads Table (View Details)
+const leadsTableBody = document.getElementById('leads-table-body');
+if (leadsTableBody) {
+    leadsTableBody.addEventListener('click', (e) => {
+        const row = e.target.closest('tr');
+        if (row && row.dataset.id) {
+            const id = row.dataset.id;
+            const lead = loadedLeads.find(l => l.id === id);
+            if (lead) openViewLeadModal(lead);
+        }
+    });
+}
+
 // --- Data Loading Functions ---
 
 async function loadDashboard() {
@@ -197,6 +211,7 @@ async function loadLeads() {
         const snapshot = await getDocs(q);
         const leads = [];
         snapshot.forEach(doc => leads.push({ id: doc.id, ...doc.data() }));
+        loadedLeads = leads; // Store for View JSON
 
         leads.sort((a, b) => {
             const dateA = a.submittedAt?.toDate ? a.submittedAt.toDate() : new Date(0);
@@ -212,14 +227,16 @@ async function loadLeads() {
 
         leads.forEach(lead => {
             const date = lead.submittedAt?.toDate ? lead.submittedAt.toDate().toLocaleDateString() : 'N/A';
+            // Handle different name fields across forms (Support vs Business vs Builder)
+            const displayName = lead.name || lead.contactName || lead.businessName || lead.company || 'Unknown';
             const row = `
-                <tr>
+                <tr class="lead-row" data-id="${lead.id}" style="cursor: pointer;">
                     <td>${date}</td>
                     <td><span class="badge">${lead.type || 'General'}</span></td>
-                    <td>${lead.name || 'Unknown'}</td>
+                    <td>${displayName}</td>
                     <td>${lead.email || '-'}</td>
                     <td>${lead.status || 'New'}</td>
-                    <td><button class="btn-sm btn-edit" onclick="alert('${JSON.stringify(lead, null, 2).replace(/"/g, '&quot;')}')">View JSON</button></td>
+                    <td><button class="btn-sm btn-edit">View</button></td>
                 </tr>
             `;
             tbody.insertAdjacentHTML('beforeend', row);
@@ -744,6 +761,62 @@ function openEditModal(type, id, data = null) {
 
     editModal.style.display = 'flex';
 }
+
+// --- View Lead Modal Logic ---
+const viewLeadModal = document.getElementById('view-lead-modal');
+
+function openViewLeadModal(lead) {
+    const content = document.getElementById('view-lead-content');
+    if (!viewLeadModal || !content) return;
+
+    let html = '<div class="detail-grid">';
+    
+    // Define field priority for display order
+    const priority = ['type', 'status', 'submittedAt', 'name', 'businessName', 'company', 'contactName', 'email', 'phone', 'address', 'message', 'details', 'requirements', 'topic', 'projectType'];
+    
+    const formatVal = (key, val) => {
+        if (key === 'submittedAt' && val && val.toDate) return val.toDate().toLocaleString();
+        if (typeof val === 'object') return JSON.stringify(val);
+        return val;
+    };
+
+    // 1. Add Priority Fields
+    priority.forEach(key => {
+        if (lead[key]) {
+            const isLongText = ['message', 'details', 'requirements'].includes(key);
+            html += `
+                <div class="detail-item ${isLongText ? 'full-width' : ''}">
+                    <label>${key.replace(/([A-Z])/g, ' $1').trim()}</label>
+                    <p>${formatVal(key, lead[key])}</p>
+                </div>
+            `;
+        }
+    });
+
+    // 2. Add Remaining Fields
+    Object.keys(lead).forEach(key => {
+        if (!priority.includes(key) && key !== 'id') {
+             html += `
+                <div class="detail-item">
+                    <label>${key}</label>
+                    <p>${formatVal(key, lead[key])}</p>
+                </div>
+            `;
+        }
+    });
+
+    html += '</div>';
+    content.innerHTML = html;
+    viewLeadModal.style.display = 'flex';
+}
+
+// Close handlers for View Modal
+document.querySelectorAll('.view-lead-close').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if(viewLeadModal) viewLeadModal.style.display = 'none';
+    });
+});
+
 
 function setupFileUploadListener() {
     setTimeout(() => {

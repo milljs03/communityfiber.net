@@ -290,21 +290,54 @@ footer {
         padding: 0;
     }
 
-    /* Hide standard dropdown behavior on mobile for simplicity, or stack them */
+    /* Reset Bill Pay Button to look like a normal link */
+    .btn-nav-highlight {
+        background-color: transparent !important;
+        color: var(--npt-black) !important;
+        padding: 10px 0 !important;
+        box-shadow: none !important;
+        border-radius: 0;
+        width: 100%;
+        text-align: left;
+    }
+    
+    .btn-nav-highlight:hover {
+        background-color: transparent;
+        color: var(--cfn-green) !important;
+        box-shadow: none;
+        transform: none;
+    }
+
+    /* Show the arrow again (it was white and hidden on desktop hover state) */
+    .dropdown-toggle::after {
+        display: inline-block;
+        color: var(--cfn-green);
+        float: right;
+        margin-right: 1rem;
+        transform: rotate(180deg); /* Point up to indicate it is "open" */
+    }
+
+    /* Adjust dropdown menu to look like an indented sub-list */
     .dropdown-menu {
         position: static;
         transform: none;
         box-shadow: none;
         border: none;
-        padding-left: 1.5rem;
         display: block; /* Show nested items on mobile */
         opacity: 1;
-        background: #f8fafc;
-        margin-top: 0.5rem;
+        margin-top: 0;
+        
+        /* New sub-list styling */
+        background: transparent;
+        border-left: 2px solid var(--cfn-green);
+        margin-left: 10px;
+        padding-left: 0;
     }
 
-    .dropdown-toggle::after {
-        display: none; /* Hide arrow on mobile */
+    .dropdown-menu a {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        color: #64748b; /* Lighter text for hierarchy */
     }
 
     .mobile-menu-btn { 
