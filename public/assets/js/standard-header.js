@@ -50,6 +50,7 @@ const headerStyles = `
         align-items: center;
         text-decoration: none;
         height: 100%;
+        z-index: 10001; /* Ensure logo is above mobile menu */
     }
 
     .nav-logo img {
@@ -212,6 +213,7 @@ const headerStyles = `
         background: none;
         border: none;
         color: var(--npt-black);
+        z-index: 10002; /* Ensure button is above everything */
     }
 
     /* --- Cookie Consent Styles --- */
@@ -267,14 +269,75 @@ const headerStyles = `
 
     @media (max-width: 1150px) {
         .mobile-toggle { display: block; }
-        .nav-menu { display: none; } 
-        /* Mobile menu implementation would go here */
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            left: -100%; /* Hidden off-screen left */
+            width: 80%; /* Takes up most of screen */
+            height: 100vh;
+            background-color: var(--npt-white);
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 100px 2rem 2rem; /* Top padding for header height */
+            gap: 1.5rem;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            transition: left 0.3s ease-in-out;
+            z-index: 10000;
+            overflow-y: auto;
+        }
+        
+        .nav-menu.active {
+            left: 0; /* Slide in */
+        }
+
+        .nav-item {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 1rem;
+        }
+
+        .nav-link {
+            width: 100%;
+            padding: 0;
+            font-size: 1.1rem;
+            justify-content: flex-start;
+        }
+        
+        .nav-link::after {
+            display: none; /* No hover underline on mobile */
+        }
+
+        /* Hide Mega Menu on Mobile default hover */
+        .mega-menu-wrapper {
+            display: none; 
+        }
+        
+        /* Mobile Overlay */
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
     }
 </style>
 `;
 
 const headerHTML = `
 ${headerStyles}
+<div class="mobile-overlay"></div>
 <header class="main-header">
     <div class="nav-container">
         <!-- Logo -->
@@ -296,7 +359,7 @@ ${headerStyles}
         <!-- Mobile Menu Button -->
         <button class="mobile-toggle" aria-label="Toggle Menu">☰</button>
 
-        <!-- MEGA MENU OVERLAY -->
+        <!-- MEGA MENU OVERLAY (Desktop Only for now) -->
         <div class="mega-menu-wrapper">
             <div class="mega-menu-content">
                 
@@ -381,31 +444,27 @@ document.addEventListener("DOMContentLoaded", function() {
     // 3. Initialize Mobile Menu Logic
     const toggleBtn = document.querySelector('.mobile-toggle');
     const navMenu = document.querySelector('.nav-menu');
+    const mobileOverlay = document.querySelector('.mobile-overlay');
 
     if (toggleBtn && navMenu) {
         toggleBtn.addEventListener('click', () => {
             navMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
             toggleBtn.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
             
-            // Basic mobile fallback styles inline for immediate effect
-            if (navMenu.classList.contains('active')) {
-                Object.assign(navMenu.style, {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    position: 'absolute',
-                    top: '90px',
-                    left: '0',
-                    width: '100%',
-                    backgroundColor: 'white',
-                    padding: '1rem',
-                    boxShadow: '0 5px 10px rgba(0,0,0,0.1)',
-                    gap: '1rem',
-                    alignItems: 'flex-start'
-                });
-            } else {
-                navMenu.style = ''; // Revert to stylesheet
-            }
+            // Prevent scrolling when menu is open
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
         });
+        
+        // Close menu when clicking overlay
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                toggleBtn.innerHTML = '☰';
+                document.body.style.overflow = '';
+            });
+        }
     }
 
     // 4. Highlight Active Page
