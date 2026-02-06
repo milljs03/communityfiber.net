@@ -23,43 +23,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const auth = getAuth(app);
     signInAnonymously(auth).catch(err => console.error("Auth Error:", err));
 
-    // 3. Topic Selection Logic (Moved inside DOMContentLoaded)
-    const topicButtons = document.querySelectorAll('.topic-card');
-    const formSection = document.getElementById('form-section');
-    const topicInput = document.getElementById('topic-input');
-    const formTitle = document.getElementById('form-title');
+    // 3. Form Topic Logic
+    const topicSelect = document.getElementById('topic-select');
     const dynamicFields = document.querySelectorAll('.dynamic-field');
-
-    if (topicButtons.length === 0) {
-        console.warn("No topic buttons found!");
-    }
-
-    topicButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const topic = btn.dataset.topic;
-            
-            // Show Form
-            if (formSection) {
-                formSection.classList.remove('hidden');
-                // Small timeout to allow display:block to apply before scrolling
-                setTimeout(() => {
-                    formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 10);
-            }
-            
-            // Set Topic
-            if (topicInput) topicInput.value = topic;
-            if (formTitle) formTitle.textContent = `Submit Request: ${btn.querySelector('.topic-title').textContent}`;
-
-            // Reset & Show relevant fields
+    
+    if (topicSelect) {
+        topicSelect.addEventListener('change', () => {
+            const topic = topicSelect.value;
+    
+            // Hide all dynamic fields first
             dynamicFields.forEach(field => field.classList.add('hidden'));
-            
-            if (topic === 'billing') document.getElementById('field-billing')?.classList.remove('hidden');
-            if (topic === 'availability') document.getElementById('field-address')?.classList.remove('hidden');
-            if (topic === 'service') document.getElementById('field-service-type')?.classList.remove('hidden');
-            if (topic === 'outage') document.getElementById('field-address')?.classList.remove('hidden');
+    
+            // Show fields based on selected topic
+            if (topic === 'billing') {
+                document.getElementById('field-billing')?.classList.remove('hidden');
+            } else if (topic === 'availability' || topic === 'outage') {
+                document.getElementById('field-address')?.classList.remove('hidden');
+            } else if (topic === 'service') {
+                document.getElementById('field-service-type')?.classList.remove('hidden');
+            }
         });
-    });
+    }
 
     // 4. Form Submit Logic
     const form = document.getElementById('support-form');
@@ -91,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const formData = {
                 type: 'support_ticket',
-                topic: topicInput ? sanitize(topicInput.value) : 'general',
+                topic: topicSelect ? sanitize(topicSelect.value) : 'general',
                 name: sanitize(document.getElementById('name').value),
                 email: sanitize(document.getElementById('email').value),
                 phone: sanitize(document.getElementById('phone').value),

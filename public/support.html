@@ -63,116 +63,131 @@
 
     <main class="main-content">
         <div class="container">
-            
-            <!-- Topic Selection -->
-            <section class="topics-section fade-in-section">
-                <h2 class="section-label">What can we help you with?</h2>
-                <div class="topic-grid">
-                    <button class="topic-card" type="button" data-topic="billing">
-                        <div class="icon-wrapper"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                        <span class="topic-title">Billing & Payments</span>
-                    </button>
-                    
-                    <button class="topic-card" type="button" data-topic="service">
-                        <div class="icon-wrapper"><i class="fa-solid fa-wifi"></i></div>
-                        <span class="topic-title">Tech Support</span>
-                    </button>
-
-                    <button class="topic-card" type="button" data-topic="outage">
-                        <div class="icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
-                        <span class="topic-title">Report Outage</span>
-                    </button>
-
-                    <button class="topic-card" type="button" data-topic="availability">
-                        <div class="icon-wrapper"><i class="fa-solid fa-map-location-dot"></i></div>
-                        <span class="topic-title">Check Availability</span>
-                    </button>
-
-                    <button class="topic-card" type="button" data-topic="general">
-                        <div class="icon-wrapper"><i class="fa-regular fa-comment-dots"></i></div>
-                        <span class="topic-title">General Inquiry</span>
-                    </button>
-                </div>
-            </section>
-
-            <!-- Dynamic Support Form -->
-            <section id="form-section" class="form-section hidden">
-                <div class="form-container">
-                    <div class="form-header">
-                        <h2 id="form-title">Submit Request</h2>
-                        <p>Please fill out the details below so we can assist you.</p>
+            <section class="support-contact-section fade-in-section">
+                <div class="support-grid">
+                    <!-- Left Column: Contact Info -->
+                    <div class="contact-info-card">
+                        <h3>Contact Us Directly</h3>
+                        <p>For immediate assistance or to speak with our local team, please don't hesitate to reach out.</p>
+                        <ul class="contact-list">
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <div>
+                                    <span>Phone</span>
+                                    <a href="tel:5748312176">574.831.2176</a>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <div>
+                                    <span>Email</span>
+                                    <a href="mailto:info@communityfiber.net">info@communityfiber.net</a>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-location-dot"></i>
+                                <div>
+                                    <span>Office Address</span>
+                                    <p>19066 Co Rd 46<br>New Paris, IN 46553</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="office-hours">
+                            <p><strong>Office Hours:</strong> Mon-Fri, 8 AM - 5 PM</p>
+                        </div>
                     </div>
-                    
-                    <form id="support-form">
-                        <input type="hidden" id="topic-input" name="topic">
-
-                        <!-- Anti-Spam Honeypot Field -->
-                        <div class="visual-hidden">
-                            <label for="website-check">Website</label>
-                            <input type="text" id="website-check" name="website_check" tabindex="-1" autocomplete="off">
+            
+                    <!-- Right Column: Form -->
+                    <div class="form-container" id="form-container-wrapper">
+                        <div class="form-header">
+                            <h2 id="form-title">Send a Message</h2>
+                            <p>Please fill out the details below. We'll get back to you as soon as possible.</p>
                         </div>
-
-                        <!-- Contact Info -->
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="name">Full Name</label>
-                                <input type="text" id="name" required placeholder="e.g. Jane Doe">
+                        
+                        <form id="support-form">
+                            <!-- Anti-Spam Honeypot Field -->
+                            <div class="visual-hidden">
+                                <label for="website-check">Website</label>
+                                <input type="text" id="website-check" name="website_check" tabindex="-1" autocomplete="off">
                             </div>
+            
+                            <!-- Topic Selector -->
                             <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" required placeholder="e.g. jane@example.com">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" required placeholder="e.g. (555) 123-4567">
-                        </div>
-
-                        <!-- Dynamic Fields -->
-                        <div id="field-billing" class="dynamic-field hidden">
-                            <div class="form-group">
-                                <label>Account Number (Optional)</label>
-                                <input type="text" id="account-number" placeholder="Found on your bill header">
-                            </div>
-                        </div>
-
-                        <div id="field-address" class="dynamic-field hidden">
-                            <div class="form-group">
-                                <label>Service Address</label>
-                                <input type="text" id="address" placeholder="e.g. 123 Main St, Springfield">
-                            </div>
-                        </div>
-
-                        <div id="field-service-type" class="dynamic-field hidden">
-                            <div class="form-group">
-                                <label>What seems to be the issue?</label>
+                                <label for="topic-select">What can we help you with?</label>
                                 <div class="select-wrapper">
-                                    <select id="issue-type">
-                                        <option value="" disabled selected>Select an issue...</option>
-                                        <option value="slow">Slow Internet Speed</option>
-                                        <option value="disconnect">Frequent Disconnections</option>
-                                        <option value="equipment">Router/Modem Problems</option>
-                                        <option value="other">Other Technical Issue</option>
+                                    <select id="topic-select" name="topic" required>
+                                        <option value="" disabled selected>Please select a topic...</option>
+                                        <option value="billing">Billing & Payments</option>
+                                        <option value="service">Technical Support</option>
+                                        <option value="outage">Report an Outage</option>
+                                        <option value="availability">Check Availability</option>
+                                        <option value="general">General Inquiry</option>
                                     </select>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Message -->
-                        <div class="form-group">
-                            <label for="message">Details</label>
-                            <textarea id="message" rows="5" required placeholder="Please describe your request in detail..."></textarea>
-                        </div>
-
-                        <!-- Action -->
-                        <div class="form-actions">
-                            <button type="submit" id="submit-btn" class="submit-button">Submit Request</button>
-                        </div>
-                    </form>
+            
+                            <!-- Contact Info -->
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="name">Full Name</label>
+                                    <input type="text" id="name" required placeholder="e.g. Jane Doe">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" required placeholder="e.g. jane@example.com">
+                                </div>
+                            </div>
+            
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" required placeholder="e.g. (555) 123-4567">
+                            </div>
+            
+                            <!-- Dynamic Fields -->
+                            <div id="field-billing" class="dynamic-field hidden">
+                                <div class="form-group">
+                                    <label>Account Number (Optional)</label>
+                                    <input type="text" id="account-number" placeholder="Found on your bill header">
+                                </div>
+                            </div>
+            
+                            <div id="field-address" class="dynamic-field hidden">
+                                <div class="form-group">
+                                    <label>Service Address</label>
+                                    <input type="text" id="address" placeholder="e.g. 123 Main St, Springfield">
+                                </div>
+                            </div>
+            
+                            <div id="field-service-type" class="dynamic-field hidden">
+                                <div class="form-group">
+                                    <label>What seems to be the issue?</label>
+                                    <div class="select-wrapper">
+                                        <select id="issue-type">
+                                            <option value="" disabled selected>Select an issue...</option>
+                                            <option value="slow">Slow Internet Speed</option>
+                                            <option value="disconnect">Frequent Disconnections</option>
+                                            <option value="equipment">Router/Modem Problems</option>
+                                            <option value="other">Other Technical Issue</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <!-- Message -->
+                            <div class="form-group">
+                                <label for="message">Details</label>
+                                <textarea id="message" rows="5" required placeholder="Please describe your request in detail..."></textarea>
+                            </div>
+            
+                            <!-- Action -->
+                            <div class="form-actions">
+                                <button type="submit" id="submit-btn" class="submit-button">Submit Request</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </section>
-
+            
             <!-- Success Message -->
             <div id="success-message" class="success-container hidden">
                 <div class="success-icon"><i class="fa-solid fa-check"></i></div>
@@ -180,7 +195,7 @@
                 <p>Thanks for reaching out! Our team has received your ticket and will get back to you shortly.</p>
                 <button class="btn btn-outline" onclick="location.reload()">Return to Support</button>
             </div>
-
+            
             <!-- Comparison Table Section -->
             <section class="comparison-section fade-in-section">
                 <h2>Why Move to Fiber?</h2>
