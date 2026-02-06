@@ -104,6 +104,7 @@ document.querySelectorAll('.nav-item').forEach(btn => {
         if (tab === 'plans') loadPlans();
         if (tab === 'install') loadInstallSteps(); 
         if (tab === 'neighborhoods') loadNeighborhoods();
+        if (tab === 'business') loadBusinessLogos();
         if (tab === 'employees') loadEmployees();
         if (tab === 'announcements') loadAnnouncementSettings();
         if (tab === 'testimonials') loadTestimonials();
@@ -604,6 +605,45 @@ async function loadNews() {
     }
 }
 
+// NEW: Load Business Logos
+async function loadBusinessLogos() {
+    const container = document.getElementById('business-logos-list');
+    container.innerHTML = '<p>Loading...</p>';
+    
+    try {
+        const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'business_logos');
+        const q = query(ref, orderBy('name', 'asc'));
+        const snapshot = await getDocs(q);
+        
+        container.innerHTML = '';
+        snapshot.forEach(doc => {
+            const item = doc.data();
+            const card = document.createElement('div');
+            card.className = 'admin-card';
+            card.innerHTML = `
+                <img src="${item.logoUrl}" alt="${item.name}" class="business-logo-preview">
+                <h3 style="text-align:center; font-size: 1rem;">${item.name}</h3>
+                <div class="card-actions">
+                    ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="business_logo">Edit</button>` : ''}
+                    ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="business_logo">Delete</button>` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+             if(isAdmin) {
+                card.querySelector('.btn-edit').addEventListener('click', () => openEditModal('business_logo', doc.id, item));
+                card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('business_logo', doc.id));
+            }
+        });
+        
+         if (snapshot.empty) container.innerHTML = '<p>No business logos found. Add one!</p>';
+
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = '<p style="color:red;">Error loading business logos.</p>';
+    }
+}
+
 const editModal = document.getElementById('edit-modal');
 const editForm = document.getElementById('edit-form');
 const modalFields = document.getElementById('modal-fields');
@@ -757,6 +797,20 @@ function openEditModal(type, id, data = null) {
             </div>
         `;
         setupFileUploadListener();
+    } else if (type === 'business_logo') {
+        modalFields.innerHTML = `
+            <div>
+                <label class="form-label">Business Name</label>
+                <input type="text" name="name" class="form-control" value="${data?.name || ''}" required placeholder="e.g. Local Company Inc.">
+            </div>
+            <div>
+                <label class="form-label">Logo Upload (.png recommended)</label>
+                <input type="file" id="photo-upload" class="form-control" accept="image/png, image/jpeg, image/svg+xml">
+                <input type="hidden" name="logoUrl" id="photo-url-input" value="${data?.logoUrl || ''}">
+                <p id="upload-status" style="font-size:0.8rem; color:#64748b;">${data?.logoUrl ? 'Current logo loaded' : 'No logo selected'}</p>
+            </div>
+        `;
+        setupFileUploadListener();
     }
 
     editModal.style.display = 'flex';
@@ -866,6 +920,7 @@ editForm.addEventListener('submit', async (e) => {
     else if (type === 'employee') collectionName = 'employees';
     else if (type === 'install_step') collectionName = 'install_steps';
     else if (type === 'news') collectionName = 'news'; // NEW
+    else if (type === 'business_logo') collectionName = 'business_logos';
 
     const collRef = collection(db, 'artifacts', '162296779236', 'public', 'data', collectionName);
 
@@ -884,6 +939,7 @@ editForm.addEventListener('submit', async (e) => {
         if (type === 'employee') loadEmployees();
         if (type === 'install_step') loadInstallSteps();
         if (type === 'news') loadNews(); // NEW
+        if (type === 'business_logo') loadBusinessLogos();
         
     } catch (err) {
         console.error("Save failed", err);
@@ -904,6 +960,7 @@ async function deleteItem(type, id) {
     else if (type === 'employee' || type === 'employees') collectionName = 'employees';
     else if (type === 'install_step') collectionName = 'install_steps';
     else if (type === 'news') collectionName = 'news'; // NEW
+    else if (type === 'business_logo') collectionName = 'business_logos';
     
     try {
         await deleteDoc(doc(db, 'artifacts', '162296779236', 'public', 'data', collectionName, id));
@@ -914,6 +971,7 @@ async function deleteItem(type, id) {
         if (type === 'employee' || type === 'employees') loadEmployees();
         if (type === 'install_step') loadInstallSteps();
         if (type === 'news') loadNews(); // NEW
+        if (type === 'business_logo') loadBusinessLogos();
     } catch (err) {
         console.error("Delete failed", err);
         alert("Error deleting item.");
@@ -932,4 +990,7 @@ if(document.getElementById('add-employee-btn')) {
 }
 if(document.getElementById('add-news-btn')) {
     document.getElementById('add-news-btn').addEventListener('click', () => openEditModal('news')); // NEW
+}
+if(document.getElementById('add-business-logo-btn')) {
+    document.getElementById('add-business-logo-btn').addEventListener('click', () => openEditModal('business_logo'));
 }

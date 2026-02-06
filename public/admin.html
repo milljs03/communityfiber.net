@@ -12,7 +12,7 @@
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://communityfiber-net.firebaseapp.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
+                   connect-src 'self' https://www.gstatic.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,6 +69,9 @@
                 </button>
                 <button class="nav-item" data-tab="neighborhoods">
                     <i class="fa-solid fa-map-location-dot"></i> Neighborhoods
+                </button>
+                <button class="nav-item" data-tab="business">
+                    <i class="fa-solid fa-briefcase"></i> Business Logos
                 </button>
                 <button class="nav-item" data-tab="employees">
                     <i class="fa-solid fa-users"></i> Employees
@@ -219,6 +222,18 @@
                     <button id="add-hood-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Neighborhood</button>
                 </div>
                 <div id="hoods-list" class="cards-grid"></div>
+            </section>
+
+            <!-- Business View -->
+            <section id="view-business" class="view-section">
+                <div class="page-header">
+                    <h1>Business Page Logos</h1>
+                    <button id="add-business-logo-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Logo</button>
+                </div>
+                <p style="margin-bottom: 20px; color: #64748b;">Manage the partner logos displayed in the carousel on the Business page.</p>
+                <div id="business-logos-list" class="cards-grid">
+                    <!-- Populated via JS -->
+                </div>
             </section>
 
             <!-- Employees View -->
