@@ -189,7 +189,7 @@ const headerStyles = `
 
     /* Bill Pay Dropdown (Simple) */
     .bill-pay-btn {
-        background-color: var(--cfn-green);
+        background-color: var(--npt-black);
         color: white !important;
         padding: 0.6rem 1.2rem !important;
         border-radius: 4px;
@@ -200,7 +200,7 @@ const headerStyles = `
         font-weight: 600;
     }
     .bill-pay-btn:hover {
-        background-color: var(--cfn-dark-green);
+        background-color: var(--cfn-green);
     }
     .bill-pay-btn::after { display: none; }
 
@@ -212,6 +212,57 @@ const headerStyles = `
         background: none;
         border: none;
         color: var(--npt-black);
+    }
+
+    /* --- Cookie Consent Styles --- */
+    .cookie-consent-banner {
+        position: fixed;
+        bottom: -100px; /* Start hidden below screen */
+        left: 20px;
+        right: 20px;
+        max-width: 500px;
+        background-color: var(--npt-black);
+        color: var(--npt-white);
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        transition: bottom 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        border-left: 5px solid var(--cfn-green);
+    }
+    .cookie-consent-banner.show {
+        bottom: 20px;
+    }
+    .cookie-content p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        font-family: var(--font-body);
+    }
+    .cookie-content a {
+        color: var(--cfn-green);
+        text-decoration: underline;
+    }
+    .cookie-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .cookie-btn-accept {
+        background-color: var(--cfn-green);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-family: var(--font-heading);
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .cookie-btn-accept:hover {
+        background-color: var(--cfn-dark-green);
     }
 
     @media (max-width: 1150px) {
@@ -317,7 +368,8 @@ document.addEventListener("DOMContentLoaded", function() {
         headerPlaceholder.innerHTML = headerHTML;
     }
 
-        const existingFavicon = document.querySelector('link[rel="icon"]');
+    // 2. Inject Favicon Global (Standardized)
+    const existingFavicon = document.querySelector('link[rel="icon"]');
     if (!existingFavicon) {
         const faviconLink = document.createElement('link');
         faviconLink.rel = 'icon';
@@ -325,7 +377,8 @@ document.addEventListener("DOMContentLoaded", function() {
         faviconLink.type = 'image/png';
         document.head.appendChild(faviconLink);
     }
-    // 2. Initialize Mobile Menu Logic
+
+    // 3. Initialize Mobile Menu Logic
     const toggleBtn = document.querySelector('.mobile-toggle');
     const navMenu = document.querySelector('.nav-menu');
 
@@ -355,7 +408,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // 3. Highlight Active Page
+    // 4. Highlight Active Page
     const currentPath = window.location.pathname; 
     const links = document.querySelectorAll('.nav-link, .section-link');
     
@@ -366,4 +419,33 @@ document.addEventListener("DOMContentLoaded", function() {
             link.style.fontWeight = '700';
         }
     });
+
+    // 5. Cookie Consent Logic
+    const cookieConsentKey = 'cfn_cookie_consent';
+    if (!localStorage.getItem(cookieConsentKey)) {
+        const banner = document.createElement('div');
+        banner.className = 'cookie-consent-banner';
+        banner.innerHTML = `
+            <div class="cookie-content">
+                <p>We use cookies to ensure you get the best experience on our website. By continuing to use this site, you agree to our <a href="/footer/privacy-policy.html">Privacy Policy</a>.</p>
+            </div>
+            <div class="cookie-actions">
+                <button class="cookie-btn-accept">Got it</button>
+            </div>
+        `;
+        document.body.appendChild(banner);
+        
+        // Slight delay for animation
+        setTimeout(() => {
+            banner.classList.add('show');
+        }, 500);
+
+        banner.querySelector('.cookie-btn-accept').addEventListener('click', () => {
+            localStorage.setItem(cookieConsentKey, 'true');
+            banner.classList.remove('show');
+            setTimeout(() => {
+                banner.remove();
+            }, 500);
+        });
+    }
 });
