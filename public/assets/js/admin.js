@@ -10,6 +10,8 @@ const ALLOWED_DOMAIN = 'nptel.com';
 let currentUser = null;
 let isAdmin = false;
 let loadedLeads = [];
+let trafficSourceChart = null; // Chart instance
+let deviceTypeChart = null; // Chart instance
 
 // DOM Elements
 const loginOverlay = document.getElementById('login-overlay');
@@ -129,60 +131,69 @@ if (leadsTableBody) {
 
 async function loadDashboard() {
     try {
-        const leadsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'leads');
-        const leadsSnap = await getDocs(leadsRef);
+        // Load core stats
+        const leadsSnap = await getDocs(collection(db, 'artifacts', '162296779236', 'public', 'data', 'leads'));
         document.getElementById('stat-leads').textContent = leadsSnap.size;
 
-        const plansRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'plans');
-        const plansSnap = await getDocs(plansRef);
-        document.getElementById('stat-plans').textContent = plansSnap.size;
-
-        const hoodsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'neighborhoods');
-        const hoodsSnap = await getDocs(hoodsRef);
+        const hoodsSnap = await getDocs(collection(db, 'artifacts', '162296779236', 'public', 'data', 'neighborhoods'));
         document.getElementById('stat-hoods').textContent = hoodsSnap.size;
 
-        // Enhanced Analytics Visualization
+        // Load and process analytics data
         const analyticsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'analytics_pageviews');
-        const analyticsSnap = await getDocs(query(analyticsRef, limit(200)));
+        const analyticsSnap = await getDocs(query(analyticsRef, orderBy('timestamp', 'desc'), limit(500))); // Increased limit for better data
         
         let totalViews = analyticsSnap.size;
         let deviceStats = { mobile: 0, desktop: 0, tablet: 0 };
         let pageStats = {};
+        let referrerStats = { Direct: 0, Google: 0, Facebook: 0, Other: 0 };
+        const uniqueSessions = new Set();
 
         analyticsSnap.forEach(doc => {
             const data = doc.data();
-            if (data.deviceType) {
-                deviceStats[data.deviceType] = (deviceStats[data.deviceType] || 0) + 1;
-            } else {
-                deviceStats.desktop++; 
-            }
+            
+            // Device stats
+            deviceStats[data.deviceType || 'desktop']++;
+            
+            // Page stats
             const p = data.page || 'unknown';
             pageStats[p] = (pageStats[p] || 0) + 1;
+
+            // Session stats
+            if(data.sessionId) uniqueSessions.add(data.sessionId);
+
+            // Referrer stats
+            const ref = data.referrer || 'direct';
+            if (ref === 'direct' || ref === '') {
+                referrerStats.Direct++;
+            } else if (ref.includes('google.com')) {
+                referrerStats.Google++;
+            } else if (ref.includes('facebook.com') || ref.includes('fb.com')) {
+                referrerStats.Facebook++;
+            } else {
+                referrerStats.Other++;
+            }
         });
 
-        let viewsCard = document.getElementById('stat-views-card');
-        if (!viewsCard) {
-            const statsGrid = document.querySelector('.stats-grid');
-            viewsCard = document.createElement('div');
-            viewsCard.id = 'stat-views-card';
-            viewsCard.className = 'stat-card';
-            viewsCard.innerHTML = `<h3>Page Views (Last 200)</h3><p class="stat-value">${totalViews}</p><p style="font-size:0.8rem; color:#64748b;">${deviceStats.mobile} Mobile / ${deviceStats.desktop} Desktop</p>`;
-            statsGrid.appendChild(viewsCard);
-        } else {
-            viewsCard.innerHTML = `<h3>Page Views (Last 200)</h3><p class="stat-value">${totalViews}</p><p style="font-size:0.8rem; color:#64748b;">${deviceStats.mobile} Mobile / ${deviceStats.desktop} Desktop</p>`;
+        // Update stat cards
+        document.getElementById('stat-views').textContent = totalViews;
+        document.getElementById('stat-sessions').textContent = uniqueSessions.size;
+
+        // Render Charts
+        renderDeviceChart(deviceStats);
+        renderTrafficSourceChart(referrerStats);
+
+        // Render Top Pages List
+        let topPagesContainer = document.querySelector('.analytics-grid'); // Place it within the new grid
+        let topPagesCard = document.getElementById('top-pages-card');
+        if (!topPagesCard) {
+            topPagesCard = document.createElement('div');
+            topPagesCard.id = 'top-pages-card';
+            topPagesCard.className = 'admin-card';
+            topPagesCard.innerHTML = `<h3>Top Pages Visited</h3><div id="top-pages-list"></div>`;
+            topPagesContainer.appendChild(topPagesCard);
         }
 
-        let topPagesContainer = document.getElementById('top-pages-container');
-        if (!topPagesContainer) {
-            topPagesContainer = document.createElement('div');
-            topPagesContainer.id = 'top-pages-container';
-            topPagesContainer.className = 'admin-card';
-            topPagesContainer.style.marginTop = '30px';
-            topPagesContainer.innerHTML = `<h3>Top Pages Visited</h3><div id="top-pages-list"></div>`;
-            document.querySelector('#view-dashboard').appendChild(topPagesContainer);
-        }
-
-        const sortedPages = Object.entries(pageStats).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        const sortedPages = Object.entries(pageStats).sort((a, b) => b[1] - a[1]).slice(0, 7);
         const listHtml = sortedPages.map(([page, count]) => `
             <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9;">
                 <span style="font-weight:600; color:#334155;">${page}</span>
@@ -195,6 +206,79 @@ async function loadDashboard() {
     } catch (err) {
         console.error("Dashboard Load Error:", err);
     }
+}
+
+function renderDeviceChart(deviceData) {
+    const ctx = document.getElementById('device-type-chart').getContext('2d');
+    if (deviceTypeChart) {
+        deviceTypeChart.destroy();
+    }
+    deviceTypeChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Desktop', 'Mobile', 'Tablet'],
+            datasets: [{
+                label: 'Device Types',
+                data: [deviceData.desktop, deviceData.mobile, deviceData.tablet],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.8)', // Blue
+                    'rgba(75, 192, 192, 0.8)', // Green
+                    'rgba(255, 159, 64, 0.8)'  // Orange
+                ],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    });
+}
+
+function renderTrafficSourceChart(referrerData) {
+    const ctx = document.getElementById('traffic-source-chart').getContext('2d');
+    if (trafficSourceChart) {
+        trafficSourceChart.destroy();
+    }
+    trafficSourceChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(referrerData),
+            datasets: [{
+                label: 'Visits by Source',
+                data: Object.values(referrerData),
+                backgroundColor: [
+                    'rgba(153, 102, 255, 0.8)', // Purple
+                    'rgba(255, 99, 132, 0.8)',  // Red
+                    'rgba(54, 162, 235, 0.8)',  // Blue
+                    'rgba(201, 203, 207, 0.8)'  // Grey
+                ],
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 10 // Adjust based on expected traffic
+                    }
+                }
+            }
+        }
+    });
 }
 
 async function loadLeads() {

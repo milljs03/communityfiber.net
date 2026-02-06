@@ -1,6 +1,6 @@
 /* support.css */
 
-/* Hero */
+/* --- Hero Section --- */
 .support-hero {
     background-color: #141414;
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
@@ -23,7 +23,7 @@
     color: #cbd5e1;
 }
 
-/* New Support Contact Section */
+/* --- Support Contact Section --- */
 .support-contact-section {
     padding: 60px 0;
 }
@@ -75,7 +75,7 @@
     animation: slideInContact 0.5s ease-out forwards;
 }
 
-/* Animation pizzazz */
+/* Animation timing */
 .contact-list li:nth-child(1) { animation-delay: 0.2s; }
 .contact-list li:nth-child(2) { animation-delay: 0.3s; }
 .contact-list li:nth-child(3) { animation-delay: 0.4s; }
@@ -134,6 +134,7 @@
     color: #cbd5e1;
 }
 
+/* --- Form Styles --- */
 .form-container {
     max-width: none;
     margin: 0;
@@ -142,7 +143,6 @@
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
     border-top: 5px solid var(--cfn-green);
-    /* Ensure opacity is 1 */
     opacity: 1;
 }
 
@@ -184,8 +184,8 @@
     border-radius: 8px;
     font-size: 1rem;
     font-family: inherit;
-    background-color: white; /* Ensure background is white */
-    color: #334155; /* Ensure text is dark */
+    background-color: white;
+    color: #334155;
 }
 
 .form-group input:focus, 
@@ -281,7 +281,7 @@ select { -webkit-appearance: none; appearance: none; }
     color: white;
 }
 
-/* Responsive */
+/* --- Responsive Helpers --- */
 @media (max-width: 600px) {
     .form-grid { grid-template-columns: 1fr; }    
     .hero-content h1 { font-size: 2.5rem; }
@@ -292,7 +292,7 @@ select { -webkit-appearance: none; appearance: none; }
     .contact-info-card { position: static; }
 }
 
-/* Comparison Table Section */
+/* --- Comparison Table Section (UPDATED) --- */
 .comparison-section {
     padding: 80px 20px;
     background-color: #fff;
@@ -308,15 +308,16 @@ select { -webkit-appearance: none; appearance: none; }
 .table-wrapper {
     max-width: 900px;
     margin: 0 auto;
-    overflow-x: auto; /* For responsive behavior */
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    overflow-x: auto;
+    /* Removed border/shadow from wrapper so the column pop-out looks clean */
+    padding: 10px; /* Space for shadows/badges */
 }
 
 .comparison-table {
     width: 100%;
-    border-collapse: collapse;
+    /* Changed to separate to allow border-radius on columns */
+    border-collapse: separate; 
+    border-spacing: 0;
     font-size: 1rem;
 }
 
@@ -331,35 +332,107 @@ select { -webkit-appearance: none; appearance: none; }
     border-bottom: none;
 }
 
-.comparison-table thead {
+.comparison-table thead th {
     background-color: #f8fafc;
-}
-
-.comparison-table th {
     font-family: var(--font-heading);
     font-weight: 700;
     font-size: 1rem;
     color: #475569;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    border-top: 1px solid #e2e8f0;
 }
 
+/* First Column Styling */
 .comparison-table td:first-child {
     font-weight: 700;
     color: #334155;
+    border-left: 1px solid #e2e8f0;
+}
+.comparison-table th:first-child {
+    border-left: 1px solid #e2e8f0;
+    border-top-left-radius: 8px;
+}
+.comparison-table tr:last-child td:first-child {
+    border-bottom: 1px solid #e2e8f0;
+    border-bottom-left-radius: 8px;
+}
+
+/* Last Column Styling */
+.comparison-table td:last-child {
+    border-right: 1px solid #e2e8f0;
+}
+.comparison-table th:last-child {
+    border-right: 1px solid #e2e8f0;
+    border-top-right-radius: 8px;
+}
+.comparison-table tr:last-child td:last-child {
+    border-bottom: 1px solid #e2e8f0;
+    border-bottom-right-radius: 8px;
 }
 
 .comparison-table td {
     color: #64748b;
 }
 
-.comparison-table .highlight-col {
-    background-color: #f0fdf4; /* Light green background */
+/* --- HIGHLIGHTED FIBER COLUMN (New Pop-out Style) --- */
+
+/* 1. Header (Top) */
+.comparison-table thead th.highlight-col {
+    background-color: var(--cfn-green);
+    color: white;
+    font-size: 1.1rem;
+    border-top: 2px solid var(--cfn-green);
+    border-left: 2px solid var(--cfn-green);
+    border-right: 2px solid var(--cfn-green);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    position: relative;
+    box-shadow: 0 -4px 15px rgba(3, 166, 60, 0.2);
+    /* Override default gray styling */
+    border-bottom: 1px solid rgba(255,255,255,0.2);
 }
 
-.comparison-table tbody tr .highlight-col {
-    color: var(--cfn-dark-green);
-    font-weight: 600;
+/* Badge */
+.comparison-table thead th.highlight-col::before {
+    content: "RECOMMENDED";
+    display: block;
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--npt-black);
+    color: white;
+    font-size: 0.65rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* 2. Body Cells (Middle) */
+.comparison-table tbody td.highlight-col {
+    background-color: #f0fdf4;
+    border-left: 2px solid var(--cfn-green);
+    border-right: 2px solid var(--cfn-green);
+    border-bottom: 1px solid rgba(3, 166, 60, 0.1);
+    color: var(--npt-black);
+    font-weight: 700;
+}
+
+/* 3. Footer Cell (Bottom) */
+.comparison-table tbody tr:last-child td.highlight-col {
+    border-bottom: 2px solid var(--cfn-green);
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    box-shadow: 0 4px 15px rgba(3, 166, 60, 0.15);
+}
+
+/* Hover Effect Fix */
+.comparison-table tr:hover td.highlight-col {
+    background-color: #dcfce7;
 }
 
 @media (max-width: 768px) {
@@ -369,7 +442,7 @@ select { -webkit-appearance: none; appearance: none; }
     }
 }
 
-/* FAQ Section */
+/* --- FAQ Section --- */
 .faq-section {
     padding: 60px 20px;
     background-color: #f8fafc;
@@ -414,12 +487,12 @@ select { -webkit-appearance: none; appearance: none; }
     font-size: 1.1rem;
     color: #334155;
     cursor: pointer;
-    list-style: none; /* Remove default marker */
+    list-style: none;
     transition: color 0.2s;
 }
 
 .faq-item summary::-webkit-details-marker {
-    display: none; /* Hide for Chrome */
+    display: none;
 }
 
 .faq-item summary:hover {
@@ -456,11 +529,7 @@ select { -webkit-appearance: none; appearance: none; }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ... existing code ... */
-
-/* ADD THIS TO THE BOTTOM OF support.css */
-
-/* Fade In Animation logic */
+/* --- Fade In Animation Logic --- */
 .fade-in-section {
     opacity: 0;
     transform: translateY(20px);
@@ -473,7 +542,7 @@ select { -webkit-appearance: none; appearance: none; }
     transform: none;
 }
 
-/* Fallback: If JS fails or is disabled, show content */
+/* Fallback: If JS fails or is disabled */
 @media (scripting: none) {
     .fade-in-section {
         opacity: 1;

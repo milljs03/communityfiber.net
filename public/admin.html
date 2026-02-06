@@ -7,7 +7,7 @@
     <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy" 
           content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://cdn.jsdelivr.net; 
                    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
@@ -105,17 +105,32 @@
                     <p>Welcome back, <span class="user-name-display">Admin</span>.</p>
                 </div>
                 <div class="stats-grid">
-                    <div class="stat-card">
+                    <div class="stat-card" id="stat-views-card">
+                        <h3>Page Views (Last 500)</h3>
+                        <p class="stat-value" id="stat-views">0</p>
+                    </div>
+                     <div class="stat-card" id="stat-sessions-card">
+                        <h3>Unique Sessions</h3>
+                        <p class="stat-value" id="stat-sessions">0</p>
+                    </div>
+                     <div class="stat-card">
                         <h3>Total Leads</h3>
                         <p class="stat-value" id="stat-leads">0</p>
                     </div>
                     <div class="stat-card">
-                        <h3>Active Plans</h3>
-                        <p class="stat-value" id="stat-plans">0</p>
-                    </div>
-                    <div class="stat-card">
                         <h3>Neighborhoods</h3>
                         <p class="stat-value" id="stat-hoods">0</p>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="admin-card chart-container">
+                        <h3>Traffic Sources</h3>
+                        <canvas id="traffic-source-chart"></canvas>
+                    </div>
+                    <div class="admin-card chart-container">
+                        <h3>Device Types</h3>
+                        <canvas id="device-type-chart"></canvas>
                     </div>
                 </div>
             </section>
@@ -318,6 +333,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="assets/js/admin.js"></script>
 </body>
 </html>

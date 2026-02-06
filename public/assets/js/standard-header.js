@@ -189,7 +189,7 @@ const headerStyles = `
 
     /* Bill Pay Dropdown (Simple) */
     .bill-pay-btn {
-        background-color: var(--npt-black);
+        background-color: var(--cfn-green);
         color: white !important;
         padding: 0.6rem 1.2rem !important;
         border-radius: 4px;
@@ -200,7 +200,7 @@ const headerStyles = `
         font-weight: 600;
     }
     .bill-pay-btn:hover {
-        background-color: var(--cfn-green);
+        background-color: var(--cfn-dark-green);
     }
     .bill-pay-btn::after { display: none; }
 
@@ -317,6 +317,14 @@ document.addEventListener("DOMContentLoaded", function() {
         headerPlaceholder.innerHTML = headerHTML;
     }
 
+        const existingFavicon = document.querySelector('link[rel="icon"]');
+    if (!existingFavicon) {
+        const faviconLink = document.createElement('link');
+        faviconLink.rel = 'icon';
+        faviconLink.href = '/assets/images/favicon.png';
+        faviconLink.type = 'image/png';
+        document.head.appendChild(faviconLink);
+    }
     // 2. Initialize Mobile Menu Logic
     const toggleBtn = document.querySelector('.mobile-toggle');
     const navMenu = document.querySelector('.nav-menu');

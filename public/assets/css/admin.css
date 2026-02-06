@@ -103,7 +103,13 @@ body {
 .page-header h1 { font-size: 1.8rem; color: var(--npt-black); margin: 0; }
 
 /* Stats Grid */
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.stats-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+    gap: 20px; 
+    margin-bottom: 30px;
+}
+
 .stat-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
 .stat-card h3 { font-size: 0.9rem; color: #64748b; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; }
 .stat-value { font-size: 2.5rem; font-weight: 800; color: var(--npt-black); }
@@ -114,6 +120,16 @@ body {
 .data-table th, .data-table td { padding: 15px 20px; text-align: left; border-bottom: 1px solid #f1f5f9; }
 .data-table th { background: #f8fafc; font-weight: 700; color: #475569; font-size: 0.85rem; text-transform: uppercase; }
 .data-table tr:hover { background: #f8fafc; }
+
+/* Analytics Grid */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+.chart-container { padding: 30px; }
+.chart-container canvas { max-height: 300px; }
 
 /* Cards Grid (Plans/Hoods) */
 .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
