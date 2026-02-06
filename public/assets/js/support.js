@@ -133,4 +133,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // 5. FAQ Accordion Logic
+    const faqItems = document.querySelectorAll('.faq-item');
+    if (faqItems.length > 0) {
+        faqItems.forEach(item => {
+            item.addEventListener('toggle', (event) => {
+                if (item.open) {
+                    // Close all other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.open) {
+                            otherItem.open = false;
+                        }
+                    });
+                }
+            });
+        });
+    }
 });

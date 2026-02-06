@@ -102,56 +102,134 @@
 }
 
 /* --- Benefits Grid --- */
+/* --- Enhanced Benefit Cards --- */
+/* --- Benefits Grid: The "Architectural" Look --- */
 .benefits-section {
+    position: relative;
     margin-bottom: 5rem;
+    padding: 2rem 0;
+    /* Adds a subtle engineering "dot grid" pattern to the background */
+    background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+    background-size: 20px 20px;
 }
 
 .benefits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    position: relative;
+    z-index: 2;
 }
 
 .benefit-card {
-    background: white;
-    padding: 2.5rem;
-    border-radius: 12px;
+    background: #ffffff;
+    padding: 3rem 2.5rem;
+    border-radius: 4px; /* Sharper corners for a "technical" feel */
     border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease;
-    text-align: center;
+    position: relative;
+    overflow: hidden; /* Keeps the watermark inside */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.benefit-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-    border-color: #fdba74; /* Light orange */
+/* The Large Watermark Number (01, 02, 03) */
+.benefit-card::before {
+    content: attr(data-step);
+    position: absolute;
+    top: -1rem;
+    right: -1rem;
+    font-size: 8rem;
+    font-weight: 800;
+    font-family: 'Montserrat', sans-serif;
+    color: #f1f5f9; /* Very subtle gray */
+    z-index: 0;
+    line-height: 1;
+    transition: all 0.4s ease;
+}
+
+/* Ensure content sits above the watermark */
+.card-content {
+    position: relative;
+    z-index: 1;
 }
 
 .icon-box {
-    width: 70px;
-    height: 70px;
-    background: #fff7ed; /* Very light orange */
-    color: #ea580c; /* Dark orange */
-    border-radius: 50%;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
-    margin: 0 auto 1.5rem;
+    width: 60px;
+    height: 60px;
+    background: #fff7ed; /* Light orange background */
+    color: #f97316;
+    font-size: 1.75rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
 }
 
 .benefit-card h3 {
     font-size: 1.5rem;
+    font-weight: 700;
     margin-bottom: 1rem;
-    color: var(--npt-black);
+    color: #1e293b;
+    transition: color 0.3s ease;
 }
 
 .benefit-card p {
     color: #64748b;
-    line-height: 1.6;
+    line-height: 1.7;
+    font-size: 1rem;
 }
 
+/* The Animated Bottom Border (The "Progress Bar") */
+.card-border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #e2e8f0; /* Start gray */
+    transition: background 0.3s ease;
+}
+
+.card-border::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: #f97316; /* Brand Orange */
+    transition: width 0.4s ease-out;
+}
+
+/* --- Hover Effects --- */
+
+.benefit-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+    border-color: #cbd5e1;
+}
+
+/* 1. Watermark moves slightly and darkens */
+.benefit-card:hover::before {
+    color: #fff7ed; /* Turns subtle orange tint */
+    transform: translate(-10px, 10px); /* Shifts position */
+}
+
+/* 2. Icon box changes style */
+.benefit-card:hover .icon-box {
+    background: #f97316;
+    color: white;
+    transform: rotateY(180deg); /* Optional: A cool 3D flip, or just scale(1.1) */
+}
+
+/* 3. The Bottom Line Fills Up */
+.benefit-card:hover .card-border::after {
+    width: 100%;
+}
 /* --- Form Section --- */
 .inquiry-section {
     max-width: 1000px;

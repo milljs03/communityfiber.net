@@ -224,3 +224,192 @@
     .form-grid { grid-template-columns: 1fr; }
     .hero-content h1 { font-size: 2.5rem; }
 }
+
+/* Comparison Table Section */
+.comparison-section {
+    padding: 80px 20px;
+    background-color: #fff;
+}
+
+.comparison-section h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    color: var(--npt-black);
+    margin-bottom: 50px;
+}
+
+.table-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    overflow-x: auto; /* For responsive behavior */
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 18px 20px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.comparison-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.comparison-table thead {
+    background-color: #f8fafc;
+}
+
+.comparison-table th {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.comparison-table td:first-child {
+    font-weight: 700;
+    color: #334155;
+}
+
+.comparison-table td {
+    color: #64748b;
+}
+
+.comparison-table .highlight-col {
+    background-color: #f0fdf4; /* Light green background */
+}
+
+.comparison-table tbody tr .highlight-col {
+    color: var(--cfn-dark-green);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .comparison-table th, .comparison-table td {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* FAQ Section */
+.faq-section {
+    padding: 60px 20px;
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 60px;
+}
+
+.faq-section h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    color: var(--npt-black);
+    margin-bottom: 50px;
+}
+
+.faq-category {
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.faq-category h3 {
+    font-size: 1.5rem;
+    color: var(--cfn-green);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.faq-item {
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-item summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #334155;
+    cursor: pointer;
+    list-style: none; /* Remove default marker */
+    transition: color 0.2s;
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none; /* Hide for Chrome */
+}
+
+.faq-item summary:hover {
+    color: var(--cfn-green);
+}
+
+.faq-item summary::after {
+    content: '\f067'; /* FontAwesome plus */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 1rem;
+    color: #94a3b8;
+    transition: transform 0.3s ease, color 0.2s;
+    margin-left: 15px;
+}
+
+.faq-item[open] > summary {
+    color: var(--cfn-green);
+}
+
+.faq-item[open] > summary::after {
+    transform: rotate(45deg);
+}
+
+.faq-content {
+    padding: 0 10px 20px 10px;
+    color: #475569;
+    line-height: 1.7;
+    animation: fadeInFaq 0.4s ease;
+}
+
+@keyframes fadeInFaq {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ... existing code ... */
+
+/* ADD THIS TO THE BOTTOM OF support.css */
+
+/* Fade In Animation logic */
+.fade-in-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: opacity, visibility;
+}
+
+.fade-in-section.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Fallback: If JS fails or is disabled, show content */
+@media (scripting: none) {
+    .fade-in-section {
+        opacity: 1;
+        transform: none;
+    }
+}
