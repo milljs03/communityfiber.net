@@ -71,6 +71,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Inject dynamic addons section
         await injectAddonsSection(plansGrid);
 
+        // NEW: Add Parallax Effect to pricing cards
+        setupPricingCardParallax();
+
     } catch (error) {
         console.error("Error rendering plans:", error);
         loadingEl.classList.add('hidden');
@@ -656,3 +659,36 @@ window.toggleLabel = function(id) {
         else { btn.innerHTML = 'Broadband Facts <i class="fa-solid fa-chevron-down" style="margin-left:5px"></i>'; }
     }
 };
+
+function setupPricingCardParallax() {
+    const cards = document.querySelectorAll('.pricing-box');
+    cards.forEach(card => {
+        const isPopular = card.classList.contains('popular');
+        const initialScale = isPopular ? 'scale(1.05)' : 'scale(1)';
+        
+        // Set initial state for popular card to be scaled
+        if (isPopular) {
+            card.style.transform = initialScale;
+        }
+
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -4; // Reduced Max rotation
+            const rotateY = ((x - centerX) / centerX) * 4;  // Reduced Max rotation
+
+            card.style.transition = 'transform 0.1s linear'; // Smooth follow
+            card.style.transform = `${initialScale} rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transition = 'transform 0.5s ease'; // Smooth reset
+            card.style.transform = `${initialScale} rotateX(0) rotateY(0)`;
+        });
+    });
+}
