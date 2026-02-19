@@ -36,6 +36,11 @@ body {
     -webkit-font-smoothing: antialiased; /* Smoother fonts on Mac */
 }
 
+/* Keep anchor targets visible beneath sticky headers */
+[id] {
+    scroll-margin-top: 120px;
+}
+
 h1, h2, h3, h4 {
     font-family: var(--font-heading);
     font-weight: 700;

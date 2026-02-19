@@ -87,21 +87,41 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Initial State: Hidden
         teamGrid.style.display = 'none';
+
+        const showTeamGrid = () => {
+            teamGrid.style.display = 'grid';
+            toggleBtn.innerHTML = 'Hide Team <i class="fa-solid fa-chevron-up" style="margin-left:8px;"></i>';
+            const mirrorCard = document.querySelector('.mirror-card');
+            if (mirrorCard) mirrorCard.classList.add('is-visible');
+            handleScroll();
+        };
+
+        const hideTeamGrid = () => {
+            teamGrid.style.display = 'none';
+            toggleBtn.innerHTML = 'Meet Our Team <i class="fa-solid fa-chevron-down" style="margin-left:8px;"></i>';
+        };
         
         // Toggle Logic
         toggleBtn.addEventListener('click', () => {
             if (teamGrid.style.display === 'none') {
-                teamGrid.style.display = 'grid';
-                toggleBtn.innerHTML = 'Hide Team <i class="fa-solid fa-chevron-up" style="margin-left:8px;"></i>';
-                // Trigger animation for "You" card if it exists
-                const mirrorCard = document.querySelector('.mirror-card');
-                if(mirrorCard) mirrorCard.classList.add('is-visible');
-                
-                // Trigger scroll handler once to set initial position
-                handleScroll();
+                showTeamGrid();
             } else {
-                teamGrid.style.display = 'none';
-                toggleBtn.innerHTML = 'Meet Our Team <i class="fa-solid fa-chevron-down" style="margin-left:8px;"></i>';
+                hideTeamGrid();
+            }
+        });
+
+        // Open the section when arriving via anchor links.
+        const shouldOpenTeamFromHash = () => {
+            return window.location.hash === '#team-section' || window.location.hash === '#employees-container';
+        };
+
+        if (shouldOpenTeamFromHash()) {
+            showTeamGrid();
+        }
+
+        window.addEventListener('hashchange', () => {
+            if (shouldOpenTeamFromHash() && teamGrid.style.display === 'none') {
+                showTeamGrid();
             }
         });
     }

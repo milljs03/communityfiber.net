@@ -367,10 +367,10 @@ ${headerStyles}
                 <div class="nav-column">
                     <h3><a href="/residential.html">Residential</a></h3>
                     <ul>
-                        <li><a href="/residential.html#plans-grid" class="section-link">Plans & Pricing</a></li>
-                        <li><a href="/residential.html" class="section-link">The Installation Process</a></li>
-                        <li><a href="/residential.html#testimonials-grid" class="section-link">Customer Reviews</a></li>
-                        <li><a href="/residential.html#neighborhood-list" class="section-link">Neighborhood Highlights</a></li>
+                        <li><a href="/residential.html#plans-pricing" class="section-link">Plans & Pricing</a></li>
+                        <li><a href="/residential.html#installation-process" class="section-link">The Installation Process</a></li>
+                        <li><a href="/residential.html#customer-reviews" class="section-link">Customer Reviews</a></li>
+                        <li><a href="/residential.html#neighborhood-highlights" class="section-link">Neighborhood Highlights</a></li>
                     </ul>
                 </div>
 
@@ -378,10 +378,10 @@ ${headerStyles}
                 <div class="nav-column">
                     <h3><a href="/business.html">Business</a></h3>
                     <ul>
-                        <li><a href="/business.html" class="section-link">Enterprise Fiber</a></li>
-                        <li><a href="/business.html" class="section-link">Trusted Partners</a></li>
-                        <li><a href="/business.html" class="section-link">Service Territory Map</a></li>
-                        <li><a href="/business.html#business-form" class="section-link">Request a Quote</a></li>
+                        <li><a href="/business.html#enterprise-fiber" class="section-link">Enterprise Fiber</a></li>
+                        <li><a href="/business.html#trusted-partners" class="section-link">Trusted Partners</a></li>
+                        <li><a href="/business.html#service-territory" class="section-link">Service Territory Map</a></li>
+                        <li><a href="/business.html#business-quote" class="section-link">Request a Quote</a></li>
                     </ul>
                 </div>
 
@@ -389,9 +389,9 @@ ${headerStyles}
                 <div class="nav-column">
                     <h3><a href="/builders.html">Builders</a></h3>
                     <ul>
-                        <li><a href="/builders.html" class="section-link">Development Benefits</a></li>
-                        <li><a href="/builders.html" class="section-link">Our Partners</a></li>
-                        <li><a href="/builders.html#builder-form" class="section-link">Submit Inquiry</a></li>
+                        <li><a href="/builders.html#development-benefits" class="section-link">Development Benefits</a></li>
+                        <li><a href="/builders.html#builder-partners" class="section-link">Our Partners</a></li>
+                        <li><a href="/builders.html#builder-inquiry" class="section-link">Submit Inquiry</a></li>
                     </ul>
                 </div>
 
@@ -399,9 +399,9 @@ ${headerStyles}
                 <div class="nav-column">
                     <h3><a href="/support.html">Support</a></h3>
                     <ul>
-                        <li><a href="/support.html#support-form" class="section-link">Contact Us</a></li>
-                        <li><a href="/support.html" class="section-link">Why Move to Fiber?</a></li>
-                        <li><a href="/support.html" class="section-link">FAQ</a></li>
+                        <li><a href="/support.html#support-contact" class="section-link">Contact Us</a></li>
+                        <li><a href="/support.html#fiber-comparison" class="section-link">Why Move to Fiber?</a></li>
+                        <li><a href="/support.html#support-faq" class="section-link">FAQ</a></li>
                         <li><a href="https://nptel.smarthub.coop/Login.html" target="_blank" class="section-link">SmartHub Login</a></li>
                     </ul>
                 </div>
@@ -410,10 +410,10 @@ ${headerStyles}
                 <div class="nav-column">
                     <h3><a href="/about.html">About Us</a></h3>
                     <ul>
-                        <li><a href="/about.html" class="section-link">Our Mission</a></li>
-                        <li><a href="/about.html" class="section-link">Heritage & Future</a></li>
-                        <li><a href="/about.html" class="section-link">Heritage Gallery</a></li>
-                        <li><a href="/about.html#employees-container" class="section-link">Meet the Team</a></li>
+                        <li><a href="/about.html#our-mission" class="section-link">Our Mission</a></li>
+                        <li><a href="/about.html#heritage-future" class="section-link">Heritage & Future</a></li>
+                        <li><a href="/about.html#heritage-gallery" class="section-link">Heritage Gallery</a></li>
+                        <li><a href="/about.html#team-section" class="section-link">Meet the Team</a></li>
                         <li><a href="/blog.html" class="section-link">Latest News</a></li>
                     </ul>
                 </div>

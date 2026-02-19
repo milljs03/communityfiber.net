@@ -45,6 +45,61 @@
     line-height: 1.6;
 }
 
+/* --- FAQ CTA --- */
+.faq-cta-section {
+    padding: 0 20px;
+    margin: 30px auto 40px;
+    position: relative;
+    z-index: 12;
+}
+
+.faq-cta-card {
+    max-width: 1000px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    padding: 22px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.faq-cta-copy h2 {
+    margin: 0 0 6px;
+    color: var(--npt-black);
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.faq-cta-copy p {
+    margin: 0;
+    color: #475569;
+    font-size: 0.98rem;
+}
+
+.faq-cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--cfn-green) 0%, var(--cfn-dark-green) 100%);
+    color: #ffffff;
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    padding: 12px 18px;
+    border-radius: 10px;
+    white-space: nowrap;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faq-cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(3, 166, 60, 0.3);
+}
+
 /* --- Pricing Grid Layout --- */
 .pricing-container {
     display: flex;
@@ -392,6 +447,16 @@
         align-items: center; 
         margin-top: 20px; 
         padding: 0 1rem;
+    }
+
+    .faq-cta-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .faq-cta-button {
+        width: 100%;
+        justify-content: center;
     }
     
     .pricing-box { 
