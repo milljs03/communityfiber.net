@@ -38,29 +38,21 @@ window.initAutocomplete = function() {
 
 let isRedirecting = false;
 
-function redirectToApp(address) {
-    if (isRedirecting) return;
-    
-    const input = document.getElementById('cfn-address-input');
-    const msg = document.getElementById('redirect-message');
+function redirectToApp(address, siteSource) {
+  if (!address || address.length <= 5) return;
 
-    if(address && address.length > 5) {
-        isRedirecting = true;
-        
-        // Visual Feedback
-        if(input) {
-            input.style.borderColor = "var(--cfn-green)";
-            input.style.backgroundColor = "#f0fdf4";
-        }
-        if(msg) {
-            msg.classList.remove('hidden');
-        }
-        
-        // Redirect Logic
-        const targetUrl = 'https://fiber-service-query.web.app/query.html?auto=true&address=' + encodeURIComponent(address);
-        window.location.href = targetUrl;
-    }
+  const params = new URLSearchParams({
+    auto: 'true',
+    address,
+    utm_source: 'community-fiber.web.app',          // e.g. "site_a" or "site_b"
+    utm_medium: 'redirect',
+    utm_campaign: 'address_lookup',
+    utm_content: 'homepage_form'     // optional placement tag
+  });
+
+  window.location.href = `https://fiber-service-query.web.app/query.html?${params.toString()}`;
 }
+
 
 // --- Standard Site Logic ---
 document.addEventListener('DOMContentLoaded', () => {
