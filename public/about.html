@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us | Community Fiber</title>
+    <meta name="description" content="Learn about Community Fiber, a locally-owned fiber internet provider with over 125 years of service history. Meet our team and discover our mission.">
+    <meta name="keywords" content="about community fiber, local internet provider, fiber company history, team">
+    <meta property="og:title" content="About Us | Community Fiber">
+    <meta property="og:description" content="Locally-owned fiber internet provider with over 125 years of service history.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://communityfiber.net/about.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="About Us | Community Fiber">
+    <meta name="twitter:description" content="Learn about Community Fiber's history, mission, and team.">
+    <link rel="canonical" href="https://communityfiber.net/about.html">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
     
     <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy" 
@@ -13,7 +24,7 @@
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +35,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/about.css">
 </head>
 <body>
@@ -43,8 +55,8 @@
         <div class="container">
             
             <!-- Intro / Mission -->
-            <section id="our-mission" class="mission-section fade-in-section">
-                <div class="mission-card">
+            <section id="our-mission" class="mission-section" data-animate="fade-up">
+                <div class="mission-card glass-card">
                     <h2>More Than Just Internet</h2>
                     <p>In an age of faceless corporate giants, we remain proudly <strong>owned by local shareholders</strong>. We live in the communities we serve, which means your connection is our connection. We don't just build networks; we build relationships that stand the test of time.</p>
                 </div>
@@ -54,7 +66,7 @@
             <section id="heritage-future" class="history-grid">
                 
                 <!-- Left: NPTech Heritage -->
-                <div class="history-col fade-in-section">
+                <div class="history-col glass-card" data-animate="fade-right">
                     <div class="col-icon">
                         <a href="https://www.np-tech.com" target="_blank" title="Visit NPTech Website">
                             <img src="assets/images/NPtech_logo.png" alt="NPTech Logo">
@@ -77,7 +89,7 @@
                 <div class="divider-line"></div>
 
                 <!-- Right: Community Fiber Future -->
-                <div class="history-col fade-in-section" style="transition-delay: 200ms;">
+                <div class="history-col glass-card" data-animate="fade-left">
                     <div class="col-icon">
                         <img src="assets/images/community-fiber-logo.png" alt="Community Fiber Logo">
                     </div>
@@ -101,9 +113,9 @@
             </section>
 
             <!-- NEW: Heritage Gallery Slideshow -->
-            <section id="heritage-gallery" class="heritage-gallery-section fade-in-section" style="margin-top: 60px; margin-bottom: 60px;">
+            <section id="heritage-gallery" class="heritage-gallery-section" data-animate="fade-up" style="margin-top: 60px; margin-bottom: 60px;">
                 <div class="gallery-intro" style="text-align: center; margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
-                    <h2 style="color: var(--primary-color); margin-bottom: 15px;">A Glimpse into Our Past</h2>
+                    <h2 style="color: var(--npt-black); margin-bottom: 15px;">A Glimpse into Our Past</h2>
                     <p style="color: #555; line-height: 1.6;">Travel back to the WWI era in downtown New Paris. In every photo below, you can spot the original telephone lines in the background—infrastructure installed by New Paris Telephone over a century ago.</p>
                 </div>
 
@@ -142,7 +154,7 @@
                         <div class="numbertext">5 / 7</div>
                         <img src="assets/images/NP5.JPG" alt="New Paris Main Street">
                         <div class="caption-text">Downtown New Paris</div>
-                    </div>q
+                    </div>
 
                     <!-- Slide 6 -->
                     <div class="mySlides fade">
@@ -178,8 +190,8 @@
 
             <!-- Employees Section -->
             <section id="team-section" class="team-section fade-in-section">
-                <div class="team-grid">
-                    
+                <div class="team-grid" data-animate="stagger">
+
                     <!-- 'You' Mirror Card -->
                     <div class="employee-card mirror-card">
                         <div class="employee-photo mirror-effect">
@@ -202,7 +214,7 @@
             </section>
 
             <!-- Call to Action -->
-            <section class="cta-section fade-in-section">
+            <section class="cta-section" data-animate="fade-up">
                 <h2>Join Our Network</h2>
                 <p>Experience the difference of a locally owned, century-old provider.</p>
                 <div class="cta-buttons">

@@ -1,5 +1,6 @@
 import { db, app } from './config/firebase-config.js';
 import { collection, getDocs, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { escapeHtml, safeUrl } from './security.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     
@@ -167,7 +168,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Handle image logic
             let imgHtml = '';
             if (emp.photoUrl) {
-                imgHtml = `<img src="${emp.photoUrl}" alt="${emp.name}">`;
+                imgHtml = `<img src="${safeUrl(emp.photoUrl, 'assets/images/community-fiber-logo.png', { allowDataImage: true })}" alt="${escapeHtml(emp.name || 'Team member')}">`;
             } else {
                 imgHtml = `<div style="width:100%; height:100%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:3rem;"><i class="fa-solid fa-user"></i></div>`;
             }
@@ -177,12 +178,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ${imgHtml}
                 </div>
                 <div class="employee-info">
-                    <h3>${emp.name}</h3>
-                    <p class="employee-title">${emp.title}</p>
+                    <h3>${escapeHtml(emp.name || '')}</h3>
+                    <p class="employee-title">${escapeHtml(emp.title || '')}</p>
                     <div class="employee-stats">
-                        <span class="years-badge">Team member for ${emp.years} Years</span>
+                        <span class="years-badge">Team member for ${escapeHtml(emp.years || '')} Years</span>
                     </div>
-                    <p class="employee-fact">Fun fact about me: "${emp.fact}"</p>
+                    <p class="employee-fact">Fun fact about me: "${escapeHtml(emp.fact || '')}"</p>
                 </div>
             `;
             container.appendChild(card);

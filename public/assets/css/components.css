@@ -24,30 +24,34 @@
 .btn-primary {
     background: linear-gradient(135deg, var(--cfn-green) 0%, var(--cfn-dark-green) 100%);
     color: white;
-    box-shadow: 0 4px 6px rgba(3, 166, 60, 0.2);
+    box-shadow: 0 8px 16px rgba(3, 166, 60, 0.25),
+                0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 15px rgba(3, 166, 60, 0.3);
-    background: linear-gradient(135deg, var(--cfn-mute-green) 0%, var(--cfn-green) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(3, 166, 60, 0.35),
+                0 4px 8px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #05b856 0%, #039633 100%);
 }
 
 .btn-primary:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(3, 166, 60, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(3, 166, 60, 0.2);
 }
 
 .btn-outline {
     background: transparent;
     color: var(--npt-black);
-    border-color: rgba(20, 20, 20, 0.2);
+    border: 2px solid rgba(20, 20, 20, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-outline:hover {
-    border-color: var(--npt-black);
-    background-color: var(--npt-black);
-    color: var(--npt-white);
+    border-color: rgba(20, 20, 20, 0.4);
+    background-color: rgba(20, 20, 20, 0.04);
+    color: var(--npt-black);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .btn-block {
@@ -85,19 +89,22 @@
     font-family: var(--font-body);
     color: var(--npt-black);
     background-color: #fff;
-    border: 1px solid #e5e7eb; /* Much lighter border */
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
     outline: none;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .form-input:hover {
-    border-color: #d1d5db;
+    border-color: #cbd5e1;
+    background-color: #fafbfc;
 }
 
 .form-input:focus {
     border-color: var(--cfn-green);
-    box-shadow: 0 0 0 4px rgba(3, 166, 60, 0.1); /* Soft ring instead of hard border */
+    box-shadow: 0 0 0 3px rgba(3, 166, 60, 0.12),
+                0 0 0 1px var(--cfn-green);
+    background-color: #fff;
 }
 
 .form-input.error {
@@ -167,6 +174,66 @@
     animation: spin 0.8s linear infinite;
     display: inline-block;
 }
+
+/* --- Glass Card System --- */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow:
+        0 1px 0 0 rgba(255, 255, 255, 0.95) inset,
+        0 0 0 1px rgba(255, 255, 255, 0.4) inset,
+        0 20px 25px -5px rgba(0, 0, 0, 0.06),
+        0 10px 10px -5px rgba(0, 0, 0, 0.03);
+    transition:
+        transform 0.3s var(--transition-smooth),
+        box-shadow 0.3s var(--transition-smooth),
+        border-color 0.3s ease,
+        backdrop-filter 0.3s ease;
+    position: relative;
+}
+
+.glass-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(3, 166, 60, 0.3);
+    box-shadow:
+        0 1px 0 0 rgba(255, 255, 255, 0.95) inset,
+        0 0 0 1px rgba(255, 255, 255, 0.4) inset,
+        0 3px 0 0 rgba(3, 166, 60, 0.2),
+        0 30px 40px -10px rgba(3, 166, 60, 0.15),
+        0 15px 20px -8px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(16px) saturate(200%);
+    -webkit-backdrop-filter: blur(16px) saturate(200%);
+}
+
+/* --- Enhanced Micro-Interactions --- */
+.card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+    box-shadow:
+        0 25px 40px rgba(3, 166, 60, 0.1),
+        0 10px 15px rgba(0, 0, 0, 0.05);
+    border-color: rgba(3, 166, 60, 0.2);
+}
+
+.btn:focus-visible {
+    outline: 3px solid rgba(3, 166, 60, 0.5);
+    outline-offset: 3px;
+}
+
+.arrow-micro {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.2s ease;
+}
+
+.arrow-micro:hover { gap: 12px; }
 
 @keyframes spin { 
     0% { transform: rotate(0deg); } 

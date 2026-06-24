@@ -134,6 +134,10 @@
     justify-content: space-between;
 }
 
+.benefit-card.glass-card {
+    border-radius: 12px;
+}
+
 /* The Large Watermark Number (01, 02, 03) */
 .benefit-card::before {
     content: attr(data-step);

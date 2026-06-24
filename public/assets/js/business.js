@@ -1,14 +1,10 @@
 import { db, app } from './config/firebase-config.js';
-import { collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { escapeHtml, postJson, safeUrl } from './security.js';
 
 const pageLoadTime = Date.now(); // Track when the page loaded
 
-// Helper: Sanitize Input to prevent XSS
-const sanitize = (str) => {
-    if (typeof str !== 'string') return str;
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim();
-};
+const normalize = (str) => typeof str === 'string' ? str.trim() : '';
 
 // Load business logos into carousel
 async function loadBusinessLogos() {
@@ -31,7 +27,7 @@ async function loadBusinessLogos() {
 
         const dynamicLogosHtml = snapshot.docs.map(doc => {
             const logo = doc.data();
-            return `<div class="logo-slide"><img src="${logo.logoUrl}" alt="${sanitize(logo.name)}"></div>`;
+            return `<div class="logo-slide"><img src="${safeUrl(logo.logoUrl, 'assets/images/community-fiber-logo.png', { allowDataImage: true })}" alt="${escapeHtml(logo.name)}"></div>`;
         }).join('');
 
         // Combine and rebuild
@@ -65,10 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
 
-    // Auth Init
-    const auth = getAuth(app);
-    signInAnonymously(auth).catch(err => console.error("Auth Error:", err));
-
     loadBusinessLogos();
 });
 
@@ -101,24 +93,17 @@ if (form) {
 
         const formData = {
             type: 'business_quote',
-            businessName: sanitize(document.getElementById('business-name').value),
-            contactName: sanitize(document.getElementById('contact-name').value),
-            phone: sanitize(document.getElementById('contact-phone').value),
-            email: sanitize(document.getElementById('contact-email').value),
-            address: sanitize(document.getElementById('business-address').value),
-            requirements: sanitize(document.getElementById('requirements').value),
-            submittedAt: new Date(),
-            status: 'new'
+            businessName: normalize(document.getElementById('business-name').value),
+            contactName: normalize(document.getElementById('contact-name').value),
+            phone: normalize(document.getElementById('contact-phone').value),
+            email: normalize(document.getElementById('contact-email').value),
+            address: normalize(document.getElementById('business-address').value),
+            requirements: normalize(document.getElementById('requirements').value),
+            website_check: honeypot ? honeypot.value : ''
         };
 
         try {
-            // Ensure auth
-            const auth = getAuth(app);
-            if (!auth.currentUser) {
-                await signInAnonymously(auth);
-            }
-
-            await addDoc(collection(db, 'artifacts', '162296779236', 'public', 'data', 'leads'), formData);
+            await postJson('/api/submitLead', formData);
             
             form.style.display = 'none';
             successMsg.classList.remove('hidden');

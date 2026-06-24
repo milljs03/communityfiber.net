@@ -4,6 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News & Updates | Community Fiber</title>
+    <meta name="description" content="Stay informed with Community Fiber's latest news, updates, network expansion announcements, and industry insights.">
+    <meta name="keywords" content="news, updates, fiber internet news, network expansion, community fiber announcements">
+    <meta property="og:title" content="News & Updates | Community Fiber">
+    <meta property="og:description" content="Stay informed with Community Fiber's latest news, updates, and network expansion announcements.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://communityfiber.net/blog.html">
+    <meta property="og:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="News & Updates | Community Fiber">
+    <meta name="twitter:description" content="Latest news and updates from Community Fiber.">
+    <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
+    <link rel="canonical" href="https://communityfiber.net/blog.html">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "@id": "https://communityfiber.net/blog.html#blog",
+      "name": "Community Fiber News and Guides",
+      "url": "https://communityfiber.net/blog.html",
+      "description": "Local fiber internet guides, Community Fiber updates, and practical resources for homes, businesses, builders, and neighborhoods.",
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://communityfiber.net/#organization",
+        "name": "Community Fiber",
+        "url": "https://communityfiber.net/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://communityfiber.net/assets/images/community-fiber-logo.png"
+        }
+      },
+      "blogPost": [
+        {
+          "@type": "BlogPosting",
+          "headline": "Fiber vs Cable Internet",
+          "url": "https://communityfiber.net/fiber-vs-cable.html",
+          "description": "Compare fiber internet and cable internet for speed, reliability, latency, pricing, and data caps."
+        }
+      ]
+    }
+    </script>
     
     <!-- CSP -->
     <meta http-equiv="Content-Security-Policy" 
@@ -13,7 +54,7 @@
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +65,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/blog.css">
 </head>
 <body>
@@ -32,7 +74,7 @@
     <div id="master-header"></div>
     
     <main>
-        <section class="blog-hero fade-in">
+        <section class="blog-hero" data-animate="fade-up">
             <h1>Community News</h1>
             <p>Stay up to date with the latest updates, expansion plans, and community stories from Community Fiber.</p>
             <div class="social-links-hero">
@@ -42,9 +84,47 @@
             </div>
         </section>
 
+        <section class="seo-guides-section" aria-labelledby="fiber-guides-heading">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Fiber Internet Guides</span>
+                    <h2 id="fiber-guides-heading">Helpful local fiber internet resources</h2>
+                    <p>Use these guides to compare internet options, understand Community Fiber service, and find the right next step for your home, business, or new development.</p>
+                </div>
+
+                <div class="guide-grid">
+                    <article class="guide-card">
+                        <span class="guide-kicker">Internet comparison</span>
+                        <h3><a href="fiber-vs-cable.html">Fiber vs cable internet</a></h3>
+                        <p>Compare fiber and cable service for speed, upload performance, latency, reliability, data caps, contracts, and long-term value.</p>
+                        <a class="guide-link" href="fiber-vs-cable.html">Read the comparison <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    </article>
+
+                    <article class="guide-card">
+                        <span class="guide-kicker">Home internet</span>
+                        <h3><a href="residential.html">Residential fiber internet plans</a></h3>
+                        <p>Check local availability, review no-contract home internet options, and see how symmetrical fiber speeds support streaming, gaming, work, and smart homes.</p>
+                        <a class="guide-link" href="residential.html">View residential service <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    </article>
+
+                    <article class="guide-card">
+                        <span class="guide-kicker">Support</span>
+                        <h3><a href="support.html#support-faq">Fiber internet FAQ</a></h3>
+                        <p>Find answers about installation, billing, equipment, speed, data caps, and local support from the Community Fiber team.</p>
+                        <a class="guide-link" href="support.html#support-faq">Browse FAQs <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
         <section class="news-section">
             <div class="container">
-                <div id="news-grid" class="news-grid">
+                <div class="section-header">
+                    <span class="section-tag">Latest Updates</span>
+                    <h2>Community Fiber news</h2>
+                    <p>Recent announcements, network updates, and community notes from our local fiber team.</p>
+                </div>
+                <div id="news-grid" class="news-grid" data-animate="stagger">
                     <!-- Populated via JS -->
                     <div class="loading-state">
                         <div class="spinner"></div>

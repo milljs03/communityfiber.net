@@ -281,6 +281,15 @@
     border-radius: 16px;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
     border: 1px solid #e2e8f0;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.form-card:hover {
+    box-shadow: var(--glow-green);
+}
+
+.form-card.glass-card {
+    background: rgba(255, 255, 255, 0.9);
 }
 
 /* Input Consistency with Support Page */

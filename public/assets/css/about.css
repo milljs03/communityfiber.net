@@ -90,6 +90,18 @@
     border-radius: 16px;
     border: 1px solid #e2e8f0;
     position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.history-col.glass-card {
+    background: rgba(248, 250, 252, 0.8);
+    border-color: rgba(226, 232, 240, 0.6);
+}
+
+.history-col.glass-card:hover {
+    box-shadow: var(--glow-green-hover),
+                0 2px 0 0 rgba(255,255,255,0.9) inset;
+    transform: translateY(-4px);
 }
 
 /* Updated .col-icon to remove circle styling */
@@ -191,26 +203,6 @@
     margin-top: 30px;
 }
 
-.btn {
-    padding: 12px 30px;
-    border-radius: 8px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.2s;
-    display: inline-block;
-}
-
-.btn-primary {
-    background: var(--cfn-green);
-    color: white;
-}
-.btn-primary:hover { background: var(--cfn-dark-green); }
-
-.btn-outline {
-    border: 2px solid var(--npt-black);
-    color: var(--npt-black);
-}
-.btn-outline:hover { background: var(--npt-black); color: white; }
 
 /* --- Team Section --- */
 .team-section {

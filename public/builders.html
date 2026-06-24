@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Builders & Developers | Community Fiber</title>
+    <meta name="description" content="Partner with Community Fiber to install utility-grade fiber infrastructure in your developments. Explore our builder partnership program.">
+    <meta name="keywords" content="builders, developers, fiber infrastructure, partnership program, fiber installation">
+    <meta property="og:title" content="Builders & Developers | Community Fiber">
+    <meta property="og:description" content="Partner with Community Fiber to install utility-grade fiber infrastructure in your developments.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://communityfiber.net/builders.html">
+    <meta property="og:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Builders & Developers | Community Fiber">
+    <meta name="twitter:description" content="Partner with Community Fiber for fiber infrastructure in your developments.">
+    <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
+    <link rel="canonical" href="https://communityfiber.net/builders.html">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
     
     <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy" 
@@ -13,7 +26,7 @@
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +37,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/builders.css">
 </head>
 <body>
@@ -42,7 +56,7 @@
     <main class="main-content">
         
         <!-- Builder Partners Ribbon -->
-        <section id="builder-partners" class="builder-partners fade-in-section">
+        <section id="builder-partners" class="builder-partners" data-animate="fade-up">
             <div class="container" style="text-align:center; margin-bottom: 2rem;">
                 <h2 class="section-title" style="margin-bottom:0.5rem; font-size: 1.5rem; color: var(--npt-black);">Who we've worked with</h2>
             </div>
@@ -86,10 +100,10 @@
 
         <div class="container">
             <!-- Benefits Grid -->
-         <section id="development-benefits" class="benefits-section fade-in-section">
-    <div class="benefits-grid">
+         <section id="development-benefits" class="benefits-section" data-animate="fade-up">
+    <div class="benefits-grid" data-animate="stagger">
         
-        <div class="benefit-card" data-step="01">
+        <div class="benefit-card glass-card" data-step="01">
             <div class="card-content">
                 <div class="icon-box">
                     <i class="fa-solid fa-hard-hat"></i>
@@ -100,7 +114,7 @@
             <div class="card-border"></div>
         </div>
 
-        <div class="benefit-card" data-step="02">
+        <div class="benefit-card glass-card" data-step="02">
             <div class="card-content">
                 <div class="icon-box">
                     <i class="fa-solid fa-file-contract"></i>
@@ -111,7 +125,7 @@
             <div class="card-border"></div>
         </div>
 
-        <div class="benefit-card" data-step="03">
+        <div class="benefit-card glass-card" data-step="03">
             <div class="card-content">
                 <div class="icon-box">
                     <i class="fa-solid fa-house-signal"></i>
@@ -126,7 +140,7 @@
 </section>
 
             <!-- Partnership Form -->
-            <section id="builder-inquiry" class="inquiry-section fade-in-section">
+            <section id="builder-inquiry" class="inquiry-section" data-animate="fade-up">
                 <div class="form-wrapper">
                     <div class="form-intro">
                         <h2>Partner With Us</h2>
@@ -196,8 +210,15 @@
         </div>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Community Fiber. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="footer/privacy-policy.html">Privacy Policy</a>
+                <a href="footer/terms-of-service.html">Terms of Service</a>
+                <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
+            </div>
+            <p>&copy; 2026 Community Fiber. All rights reserved.</p>
+        </div>
     </footer>
 
     <!-- Scripts -->

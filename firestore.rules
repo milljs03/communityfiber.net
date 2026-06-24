@@ -1,0 +1,85 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function verifiedEmail() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && request.auth.token.email is string;
+    }
+
+    function staffEmail() {
+      return verifiedEmail()
+        && request.auth.token.email.matches('.*@nptel\\.com$');
+    }
+
+    function adminEmail() {
+      return verifiedEmail()
+        && request.auth.token.email == 'jmiller@nptel.com';
+    }
+
+    function adminClaim() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    function canReadStaffData() {
+      return staffEmail() || adminEmail() || adminClaim();
+    }
+
+    function canAdminWrite() {
+      return adminEmail() || adminClaim();
+    }
+
+    function isPublicDisplayCollection(collectionId) {
+      return collectionId in [
+        'plans',
+        'neighborhoods',
+        'install_steps',
+        'employees',
+        'testimonials',
+        'news',
+        'business_logos'
+      ];
+    }
+
+    match /artifacts/{appId}/public/data/leads/{leadId} {
+      allow read: if appId == '162296779236' && canReadStaffData();
+      allow create, update, delete: if false;
+    }
+
+    match /artifacts/{appId}/public/data/analytics_pageviews/{viewId} {
+      allow read: if appId == '162296779236' && canReadStaffData();
+      allow create, update, delete: if false;
+    }
+
+    match /artifacts/{appId}/public/data/site_content/{docId} {
+      allow read: if appId == '162296779236';
+      allow create, update, delete: if appId == '162296779236' && canAdminWrite();
+    }
+
+    match /artifacts/{appId}/public/data/settings/{docId} {
+      allow read: if appId == '162296779236';
+      allow create, update, delete: if appId == '162296779236' && canAdminWrite();
+    }
+
+    match /artifacts/{appId}/public/data/{collectionId}/{docId} {
+      allow read: if appId == '162296779236'
+        && isPublicDisplayCollection(collectionId);
+      allow create, update, delete: if appId == '162296779236'
+        && canAdminWrite()
+        && isPublicDisplayCollection(collectionId);
+    }
+
+    match /serverControls/{document=**} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

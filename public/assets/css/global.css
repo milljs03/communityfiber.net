@@ -19,6 +19,15 @@
     /* Spacing */
     --spacing-md: 2rem;
     --spacing-lg: 4rem;
+
+    /* Premium UI Tokens */
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --glass-blur: blur(12px) saturate(180%);
+    --glow-green: 0 0 0 1px rgba(3, 166, 60, 0.15), 0 8px 24px rgba(3, 166, 60, 0.18), 0 20px 40px rgba(3, 166, 60, 0.08);
+    --glow-green-hover: 0 0 0 1px rgba(3, 166, 60, 0.3), 0 12px 32px rgba(3, 166, 60, 0.28), 0 24px 48px rgba(3, 166, 60, 0.12);
+    --transition-smooth: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --cfn-light-green-dim: rgba(139, 217, 173, 0.15);
 }
 
 * {

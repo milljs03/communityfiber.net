@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outage Map | Community Fiber</title>
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https://maps.gstatic.com https://maps.googleapis.com https://lh3.googleusercontent.com;
+                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
+                   connect-src 'self' https://residential-fiber.web.app https://maps.googleapis.com https://*.googleapis.com https://www.google-analytics.com;">
+
+    <meta name="google-maps-api-key" content="AIzaSyBw8z2IL4dN5oldPzRW3a581mkXC7VuXe4">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/outage.css">
+</head>
+<body>
+    <div id="master-header"></div>
+
+    <main class="outage-page">
+        <section class="outage-intro">
+            <div class="container outage-intro__inner">
+                <div>
+                    <p class="outage-kicker">Network Status</p>
+                    <h1>Live outage map</h1>
+                    <p class="outage-lead">Search your address and compare it against the same public outage polygons that power the site-wide banner.</p>
+                </div>
+                <p class="outage-refresh-note" id="refresh-note">Live feed refreshes every 30 seconds.</p>
+            </div>
+        </section>
+
+        <section class="outage-summary-band">
+            <div class="container">
+                <div class="outage-summary" id="outage-summary" data-state="loading">
+                    <div class="outage-summary__main">
+                        <span class="outage-badge" id="outage-badge">Loading live feed</span>
+                        <h2 id="outage-title">Checking network status...</h2>
+                        <p id="outage-message">Fetching the latest public outage map.</p>
+                    </div>
+                    <div class="outage-summary__meta">
+                        <p id="outage-meta">Updates every 30 seconds.</p>
+                        <p class="outage-detail" id="outage-detail">The outage banner and map stay in sync with the public JSON feed.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="outage-workspace">
+            <div class="container outage-grid">
+                <section class="outage-map-panel" aria-labelledby="map-panel-title">
+                    <div class="panel-heading">
+                        <div>
+                            <h2 id="map-panel-title">Outage area map</h2>
+                            <p>Red polygons are currently affected. Green polygons are healthy.</p>
+                        </div>
+                        <button type="button" id="map-reset" class="btn btn-outline">Reset view</button>
+                    </div>
+                    <div class="outage-availability-note" role="note" aria-label="Availability notice">
+                        <p><strong>This map is not an accurate representation of fiber availability.</strong> It only shows published outage polygons and current outage status.</p>
+                        <div class="outage-availability-actions">
+                            <a class="btn btn-primary" href="https://search.np-tech.com/query">Check fiber availability</a>
+                            <a class="btn btn-outline" href="/index.html">Use home page search</a>
+                        </div>
+                    </div>
+                    <div class="outage-map-frame">
+                        <div id="outage-map" aria-label="Community Fiber outage map"></div>
+                        <div id="outage-map-overlay" class="outage-map-overlay">Loading Google Maps and outage geometry...</div>
+                    </div>
+                </section>
+
+                <div class="outage-sidebar">
+                    <section class="outage-lookup-panel" aria-labelledby="lookup-panel-title">
+                        <div class="panel-heading panel-heading--stack">
+                            <h2 id="lookup-panel-title">Check your address</h2>
+                            <p>Enter a service address to compare it against the current outage area. This does not confirm fiber availability.</p>
+                        </div>
+                        <form id="outage-lookup-form" class="outage-form">
+                            <label for="outage-address" class="form-label">Service address</label>
+                            <input id="outage-address"
+                                   class="form-input"
+                                   type="text"
+                                   autocomplete="street-address"
+                                   placeholder="123 Main St, Goshen, IN 46526">
+                            <button type="submit" id="outage-lookup-submit" class="btn btn-primary btn-block">Check address</button>
+                        </form>
+                        <div id="lookup-result" class="lookup-result lookup-result--pending" aria-live="polite">
+                            <h3>Address check</h3>
+                            <p>Enter an address to compare it against the current outage polygons.</p>
+                        </div>
+                    </section>
+
+                    <section class="outage-legend-panel" aria-labelledby="legend-panel-title">
+                        <div class="panel-heading panel-heading--stack">
+                            <h2 id="legend-panel-title">Map key</h2>
+                            <p>Colors update automatically as the public feed changes.</p>
+                        </div>
+                        <div class="legend-list" aria-hidden="true">
+                            <div class="legend-row">
+                                <span class="legend-swatch legend-swatch--healthy"></span>
+                                <div>
+                                    <strong>Healthy area</strong>
+                                    <p>No active outage is currently reported.</p>
+                                </div>
+                            </div>
+                            <div class="legend-row">
+                                <span class="legend-swatch legend-swatch--outage"></span>
+                                <div>
+                                    <strong>Current outage area</strong>
+                                    <p>An active outage is currently reported in this area.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="footer/privacy-policy.html">Privacy Policy</a>
+                <a href="footer/terms-of-service.html">Terms of Service</a>
+                <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
+            </div>
+            <p>&copy; 2026 Community Fiber. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/standard-header.js"></script>
+    <script type="module" src="assets/js/outage.js"></script>
+</body>
+</html>

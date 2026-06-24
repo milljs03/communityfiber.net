@@ -1,14 +1,8 @@
-import { db, app } from './config/firebase-config.js';
-import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { postJson } from './security.js';
 
 const pageLoadTime = Date.now(); // Track when the page loaded
 
-// Helper: Sanitize Input to prevent XSS
-const sanitize = (str) => {
-    if (typeof str !== 'string') return str;
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim();
-};
+const normalize = (str) => typeof str === 'string' ? str.trim() : '';
 
 // Animation Logic
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,9 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
     
-    // Auth Init
-    const auth = getAuth(app);
-    signInAnonymously(auth).catch(err => console.error("Auth Error:", err));
 });
 
 // Form Handling
@@ -60,26 +51,17 @@ if(form) {
         // Gather Data
         const formData = {
             type: 'builder_inquiry',
-            company: sanitize(document.getElementById('company-name').value),
-            contactName: sanitize(document.getElementById('contact-name').value),
-            phone: sanitize(document.getElementById('contact-phone').value),
-            email: sanitize(document.getElementById('contact-email').value),
-            projectType: sanitize(document.getElementById('project-type').value),
-            details: sanitize(document.getElementById('project-details').value),
-            submittedAt: new Date(),
-            status: 'new'
+            company: normalize(document.getElementById('company-name').value),
+            contactName: normalize(document.getElementById('contact-name').value),
+            phone: normalize(document.getElementById('contact-phone').value),
+            email: normalize(document.getElementById('contact-email').value),
+            projectType: normalize(document.getElementById('project-type').value),
+            details: normalize(document.getElementById('project-details').value),
+            website_check: honeypot ? honeypot.value : ''
         };
 
         try {
-            // Ensure auth before write
-            const auth = getAuth(app);
-            if (!auth.currentUser) {
-                await signInAnonymously(auth);
-            }
-
-            // Write to Firestore (Use correct path)
-            const colRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'leads');
-            await addDoc(colRef, formData);
+            await postJson('/api/submitLead', formData);
 
             // Success State
             form.style.display = 'none';

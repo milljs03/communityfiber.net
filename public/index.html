@@ -4,6 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Fiber | Fast, Reliable Internet</title>
+    <meta name="description" content="Fast, reliable fiber internet for your home. No contracts, no data caps. Get gigabit speeds in Elkhart County with Community Fiber.">
+    <meta name="keywords" content="fiber internet, gigabit speed, high-speed internet, residential internet, Elkhart County">
+    <meta property="og:title" content="Community Fiber | Fast, Reliable Internet">
+    <meta property="og:description" content="Fast, reliable fiber internet for your home. No contracts, no data caps. Get gigabit speeds in Elkhart County.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://communityfiber.net/">
+    <meta property="og:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Community Fiber | Fast, Reliable Internet">
+    <meta name="twitter:description" content="Fast, reliable fiber internet for your home. No contracts, no data caps.">
+    <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
+    <link rel="canonical" href="https://communityfiber.net/">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "InternetServiceProvider",
+          "@id": "https://communityfiber.net/#organization",
+          "name": "Community Fiber",
+          "url": "https://communityfiber.net/",
+          "logo": "https://communityfiber.net/assets/images/community-fiber-logo.png",
+          "image": "https://communityfiber.net/assets/images/community-fiber-logo.png",
+          "telephone": "+1-574-831-2176",
+          "email": "info@communityfiber.net",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "19066 County Road 46",
+            "addressLocality": "New Paris",
+            "addressRegion": "IN",
+            "postalCode": "46553",
+            "addressCountry": "US"
+          },
+          "areaServed": [
+            "Elkhart County, Indiana",
+            "Goshen, Indiana",
+            "New Paris, Indiana"
+          ],
+          "sameAs": [
+            "https://www.facebook.com/profile.php?id=100070795525884"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://communityfiber.net/#website",
+          "url": "https://communityfiber.net/",
+          "name": "Community Fiber",
+          "publisher": {
+            "@id": "https://communityfiber.net/#organization"
+          }
+        }
+      ]
+    }
+    </script>
     
     <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy" 
@@ -13,7 +68,7 @@
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com;">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +79,12 @@
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/home.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script src="assets/js/analytics.js"></script>
 </head>
 <body>
 
@@ -54,16 +114,16 @@
     </header>
 
     <!-- Residential Fiber Promo Section -->
-    <section class="res-promo-section fade-in-section">
+    <section class="res-promo-section" data-animate="fade-up">
         <div class="container">
             <div class="res-promo-content">
-                <div class="res-promo-text">
+                <div class="res-promo-text" data-animate="fade-right">
                     <span class="section-tag">Residential Fiber</span>
                     <h2>Experience Internet Without Limits</h2>
                     <p>Stop buffering and start living. Our 100% fiber-optic network delivers symmetrical gigabit speeds directly to your home. No contracts, no data caps, and local support you can trust.</p>
                     <a href="residential.html" class="btn-primary-action">See Our Pricing <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
-                <div class="res-promo-image">
+                <div class="res-promo-image" data-animate="fade-left">
                     <img src="assets/images/eero.webp" alt="Premium WiFi Equipment" onerror="this.style.display='none';">
                 </div>
             </div>
@@ -71,24 +131,32 @@
     </section>
 
     <!-- Other Services Section -->
-    <section class="other-services-section fade-in-section">
+    <section class="other-services-section">
         <div class="container">
-            <h2 class="section-title-small">Explore Our Site</h2>
-            <div class="services-grid">
-   
+            <div class="explore-header">
+                <span class="section-tag">Explore Community Fiber</span>
+                <h2 class="section-title-small">Find the right path</h2>
+                <p>Start with service, support, local updates, or the team building fiber across our communities.</p>
+            </div>
+            <div class="services-grid" data-animate="stagger">
+
                 <!--Residential-->
-                <a href="residential.html" class="service-card">
+                <a href="residential.html" class="service-card glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-house-signal"></i></div>
                     <div class="service-content">
+                        <span class="service-kicker">For homes</span>
                         <h3>Residential Internet</h3>
                         <p>Fast, reliable fiber internet for your home. No contracts, no data caps.</p>
                         <span class="service-link">Learn More <i class="fa-solid fa-arrow-right-long"></i></span>
                     </div>
                 </a>
 
-                
+
                 <!-- Business -->
-                <a href="business.html" class="service-card">
+                <a href="business.html" class="service-card glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-briefcase"></i></div>
                     <div class="service-content">
+                        <span class="service-kicker">For work</span>
                         <h3>Business Internet</h3>
                         <p>Enterprise-grade reliability and dedicated support to keep your business running smoothly.</p>
                         <span class="service-link">Get a Quote <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -96,8 +164,10 @@
                 </a>
 
                 <!-- Builders -->
-                <a href="builders.html" class="service-card">
+                <a href="builders.html" class="service-card glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-helmet-safety"></i></div>
                     <div class="service-content">
+                        <span class="service-kicker">For projects</span>
                         <h3>Builders & Developers</h3>
                         <p>Partner with us to install utility-grade fiber infrastructure in your new developments.</p>
                         <span class="service-link">Partner Program <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -105,8 +175,10 @@
                 </a>
 
                 <!-- Support -->
-                <a href="support.html" class="service-card">
+                <a href="support.html" class="service-card glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-headset"></i></div>
                     <div class="service-content">
+                        <span class="service-kicker">Local help</span>
                         <h3>Support Center</h3>
                         <p>Have a question or issue? Visit our help center to submit a ticket or find answers.</p>
                         <span class="service-link">Get Help <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -114,8 +186,10 @@
                 </a>
 
                 <!-- About Us -->
-                <a href="about.html" class="service-card">
+                <a href="about.html" class="service-card glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-people-group"></i></div>
                     <div class="service-content">
+                        <span class="service-kicker">Local roots</span>
                         <h3>About Us</h3>
                         <p>Learn about our history, our mission, and the local team dedicated to serving you.</p>
                         <span class="service-link">Meet the Team <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -123,8 +197,10 @@
                 </a>
 
                 <!-- News -->
-                <a href="blog.html" class="service-card">
+                <a href="blog.html" class="service-card glass-card">
+                    <div class="service-icon"><i class="fa-solid fa-newspaper"></i></div>
                     <div class="service-content">
+                        <span class="service-kicker">Stay current</span>
                         <h3>News & Updates</h3>
                         <p>Stay informed about our network expansion, community events, and latest announcements.</p>
                         <span class="service-link">Read More <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -151,7 +227,7 @@
     <script type="module" src="assets/js/announcement.js"></script>
     <script src="assets/js/standard-header.js"></script>
 
-    <script type="module" src="assets/js/traffic-logger.js"></script> 
+    <script type="module" src="assets/js/traffic-logger.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBw8z2IL4dN5oldPzRW3a581mkXC7VuXe4&libraries=places&callback=initAutocomplete&loading=async" async defer></script>
 </body>
 </html>

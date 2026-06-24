@@ -1,5 +1,6 @@
 import { db, app } from './config/firebase-config.js';
 import { collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { escapeHtml, safeUrl } from './security.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     loadNews();
@@ -35,21 +36,22 @@ async function loadNews() {
             }
 
             // Determine link target
-            const linkUrl = post.linkUrl || '#';
-            const linkText = post.linkText || 'Read More';
-            const target = linkUrl.startsWith('http') ? '_blank' : '_self';
-            const image = post.imageUrl || 'assets/images/community-fiber-logo.png'; // Fallback image
+            const linkUrl = safeUrl(post.linkUrl || '#', '#');
+            const linkText = escapeHtml(post.linkText || 'Read More');
+            const target = /^https?:\/\//i.test(linkUrl) ? '_blank' : '_self';
+            const image = safeUrl(post.imageUrl || 'assets/images/community-fiber-logo.png', 'assets/images/community-fiber-logo.png', { allowDataImage: true });
+            const title = escapeHtml(post.title || 'Community Fiber update');
 
             html += `
                 <article class="news-card fade-in">
                     <div class="news-image">
-                        <img src="${image}" alt="${post.title}" loading="lazy" onerror="this.src='assets/images/community-fiber-logo.png'">
+                        <img src="${image}" alt="${title}" loading="lazy" onerror="this.src='assets/images/community-fiber-logo.png'">
                     </div>
                     <div class="news-content">
-                        <span class="news-date">${dateStr}</span>
-                        <h3 class="news-title">${post.title}</h3>
-                        <p class="news-excerpt">${post.excerpt}</p>
-                        <a href="${linkUrl}" class="news-link" target="${target}">
+                        <span class="news-date">${escapeHtml(dateStr)}</span>
+                        <h3 class="news-title">${title}</h3>
+                        <p class="news-excerpt">${escapeHtml(post.excerpt || '')}</p>
+                        <a href="${linkUrl}" class="news-link" target="${target}" rel="noopener noreferrer">
                             ${linkText} <i class="fa-solid fa-arrow-right-long"></i>
                         </a>
                     </div>

@@ -1,6 +1,7 @@
 import { db, app } from './config/firebase-config.js';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { collection, getDocs, doc, updateDoc, addDoc, deleteDoc, query, orderBy, where, getDoc, setDoc, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { escapeHtml, safeUrl } from './security.js';
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -19,6 +20,7 @@ const adminApp = document.getElementById('admin-app');
 const loginBtn = document.getElementById('google-login-btn');
 const logoutBtn = document.getElementById('logout-btn');
 const loginError = document.getElementById('login-error');
+const imageFallback = 'assets/images/community-fiber-logo.png';
 
 // --- Auth Handling ---
 
@@ -70,7 +72,7 @@ function checkAccess(user) {
     isAdmin = (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
     
     document.getElementById('user-name').textContent = user.displayName || user.email || 'User';
-    document.getElementById('user-avatar').src = user.photoURL || 'assets/images/community-fiber-logo.png';
+    document.getElementById('user-avatar').src = safeUrl(user.photoURL, imageFallback);
     document.getElementById('user-role').textContent = isAdmin ? 'Admin' : 'Viewer';
     document.getElementById('user-role').className = `badge ${isAdmin ? 'bg-green' : 'bg-gray'}`;
     
@@ -196,8 +198,8 @@ async function loadDashboard() {
         const sortedPages = Object.entries(pageStats).sort((a, b) => b[1] - a[1]).slice(0, 7);
         const listHtml = sortedPages.map(([page, count]) => `
             <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9;">
-                <span style="font-weight:600; color:#334155;">${page}</span>
-                <span style="background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:10px; font-size:0.85rem; font-weight:700;">${count}</span>
+                <span style="font-weight:600; color:#334155;">${escapeHtml(page)}</span>
+                <span style="background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:10px; font-size:0.85rem; font-weight:700;">${escapeHtml(count)}</span>
             </div>
         `).join('');
         
@@ -316,11 +318,11 @@ async function loadLeads() {
             const displayName = lead.name || lead.contactName || lead.businessName || lead.company || 'Unknown';
             const row = `
                 <tr class="lead-row" data-id="${lead.id}" style="cursor: pointer;">
-                    <td>${date}</td>
-                    <td><span class="badge">${lead.type || 'General'}</span></td>
-                    <td>${displayName}</td>
-                    <td>${lead.email || '-'}</td>
-                    <td>${lead.status || 'New'}</td>
+                    <td>${escapeHtml(date)}</td>
+                    <td><span class="badge">${escapeHtml(lead.type || 'General')}</span></td>
+                    <td>${escapeHtml(displayName)}</td>
+                    <td>${escapeHtml(lead.email || '-')}</td>
+                    <td>${escapeHtml(lead.status || 'New')}</td>
                     <td><button class="btn-sm btn-edit">View</button></td>
                 </tr>
             `;
@@ -407,8 +409,8 @@ async function loadPlans() {
             const card = document.createElement('div');
             card.className = 'admin-card';
             card.innerHTML = `
-                <h3>${plan.name} <span style="font-size:0.8rem; color:green;">$${plan.price}</span></h3>
-                <p>${plan.speed} - ${plan.description?.substring(0, 50)}...</p>
+                <h3>${escapeHtml(plan.name || '')} <span style="font-size:0.8rem; color:green;">$${escapeHtml(plan.price || '')}</span></h3>
+                <p>${escapeHtml(plan.speed || '')} - ${escapeHtml(plan.description?.substring(0, 50) || '')}...</p>
                 <div class="card-actions">
                     ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="plan">Edit</button>` : ''}
                     ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="plan">Delete</button>` : ''}
@@ -443,21 +445,22 @@ async function loadInstallSteps() {
         container.innerHTML = '';
         snapshot.forEach(doc => {
             const step = doc.data();
+            const stepImageUrl = safeUrl(step.imageUrl, '', { allowDataImage: true });
             const card = document.createElement('div');
             card.className = 'admin-card';
             card.innerHTML = `
                 <div style="display:flex; gap:15px; align-items:center;">
                     <div style="background:var(--cfn-green); color:white; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">
-                        ${step.stepNumber}
+                        ${escapeHtml(step.stepNumber || '')}
                     </div>
                     <div>
-                        <h3 style="margin:0;">${step.title}</h3>
+                        <h3 style="margin:0;">${escapeHtml(step.title || '')}</h3>
                     </div>
                 </div>
                 <div style="margin-top:10px; color:#64748b; font-size:0.9rem;">
-                    <p>${step.description}</p>
+                    <p>${escapeHtml(step.description || '')}</p>
                 </div>
-                ${step.imageUrl ? `<img src="${step.imageUrl}" style="width:100%; height:120px; object-fit:cover; border-radius:8px; margin-top:10px;">` : ''}
+                ${stepImageUrl ? `<img src="${stepImageUrl}" alt="" style="width:100%; height:120px; object-fit:cover; border-radius:8px; margin-top:10px;">` : ''}
                 <div class="card-actions">
                     ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="install_step">Edit</button>` : ''}
                     ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="install_step">Delete</button>` : ''}
@@ -493,8 +496,8 @@ async function loadNeighborhoods() {
             const card = document.createElement('div');
             card.className = 'admin-card';
             card.innerHTML = `
-                <h3>${hood.name}</h3>
-                <p>Status: <strong>${hood.status}</strong></p>
+                <h3>${escapeHtml(hood.name || '')}</h3>
+                <p>Status: <strong>${escapeHtml(hood.status || '')}</strong></p>
                 <div class="card-actions">
                     ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="hood">Edit</button>` : ''}
                     ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="hood">Delete</button>` : ''}
@@ -527,21 +530,22 @@ async function loadEmployees() {
         container.innerHTML = '';
         snapshot.forEach(doc => {
             const emp = doc.data();
+            const photoUrl = safeUrl(emp.photoUrl, '', { allowDataImage: true });
             const card = document.createElement('div');
             card.className = 'admin-card';
             card.innerHTML = `
                 <div style="display:flex; gap:15px; align-items:center;">
                     <div style="width:50px; height:50px; border-radius:50%; background:#eee; overflow:hidden; flex-shrink:0;">
-                        ${emp.photoUrl ? `<img src="${emp.photoUrl}" style="width:100%; height:100%; object-fit:cover;">` : '<i class="fa-solid fa-user" style="line-height:50px; text-align:center; display:block; color:#ccc;"></i>'}
+                        ${photoUrl ? `<img src="${photoUrl}" alt="" style="width:100%; height:100%; object-fit:cover;">` : '<i class="fa-solid fa-user" style="line-height:50px; text-align:center; display:block; color:#ccc;"></i>'}
                     </div>
                     <div>
-                        <h3 style="margin:0; font-size:1.1rem;">${emp.name}</h3>
-                        <p style="margin:0; font-size:0.9rem; color:#64748b;">${emp.title}</p>
+                        <h3 style="margin:0; font-size:1.1rem;">${escapeHtml(emp.name || '')}</h3>
+                        <p style="margin:0; font-size:0.9rem; color:#64748b;">${escapeHtml(emp.title || '')}</p>
                     </div>
                 </div>
                 <div style="margin-top:15px; font-size:0.9rem; color:#475569;">
-                    <p style="margin-bottom:5px;"><strong>${emp.years}</strong> years at CFN/NPT</p>
-                    <p style="font-style:italic;">"${emp.fact}"</p>
+                    <p style="margin-bottom:5px;"><strong>${escapeHtml(emp.years || '')}</strong> years at CFN/NPT</p>
+                    <p style="font-style:italic;">"${escapeHtml(emp.fact || '')}"</p>
                 </div>
                 <div class="card-actions">
                     ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="employee">Edit</button>` : ''}
@@ -619,8 +623,8 @@ async function loadTestimonials() {
             const card = document.createElement('div');
             card.className = 'admin-card';
             card.innerHTML = `
-                <h3>${t.author} <small style="font-weight:400; color:#64748b;">(${t.location})</small></h3>
-                <p><em>"${t.quote}"</em></p>
+                <h3>${escapeHtml(t.author || '')} <small style="font-weight:400; color:#64748b;">(${escapeHtml(t.location || '')})</small></h3>
+                <p><em>"${escapeHtml(t.quote || '')}"</em></p>
                 <div class="card-actions">
                     ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="testimonial">Edit</button>` : ''}
                     ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="testimonial">Delete</button>` : ''}
@@ -656,17 +660,18 @@ async function loadNews() {
         snapshot.forEach(doc => {
             const item = doc.data();
             const date = item.date ? (item.date.toDate ? item.date.toDate().toLocaleDateString() : new Date(item.date).toLocaleDateString()) : 'No Date';
+            const itemImageUrl = safeUrl(item.imageUrl, '', { allowDataImage: true });
             
             const card = document.createElement('div');
             card.className = 'admin-card';
             card.innerHTML = `
                 <div style="margin-bottom:10px;">
-                    <span style="font-size:0.8rem; color:#64748b; font-weight:bold;">${date}</span>
-                    <h3 style="margin:5px 0;">${item.title}</h3>
+                    <span style="font-size:0.8rem; color:#64748b; font-weight:bold;">${escapeHtml(date)}</span>
+                    <h3 style="margin:5px 0;">${escapeHtml(item.title || '')}</h3>
                 </div>
-                <p style="font-size:0.9rem; color:#475569; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${item.excerpt}</p>
-                ${item.imageUrl ? `<img src="${item.imageUrl}" style="width:100%; height:120px; object-fit:cover; border-radius:8px; margin:10px 0;">` : ''}
-                <p style="font-size:0.8rem; color:#0369a1;">Link: ${item.linkText} (${item.linkUrl})</p>
+                <p style="font-size:0.9rem; color:#475569; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(item.excerpt || '')}</p>
+                ${itemImageUrl ? `<img src="${itemImageUrl}" alt="" style="width:100%; height:120px; object-fit:cover; border-radius:8px; margin:10px 0;">` : ''}
+                <p style="font-size:0.8rem; color:#0369a1;">Link: ${escapeHtml(item.linkText || '')} (${escapeHtml(safeUrl(item.linkUrl, '#'))})</p>
                 
                 <div class="card-actions">
                     ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="news">Edit</button>` : ''}
@@ -702,11 +707,12 @@ async function loadBusinessLogos() {
         container.innerHTML = '';
         snapshot.forEach(doc => {
             const item = doc.data();
+            const logoUrl = safeUrl(item.logoUrl, imageFallback, { allowDataImage: true });
             const card = document.createElement('div');
             card.className = 'admin-card';
             card.innerHTML = `
-                <img src="${item.logoUrl}" alt="${item.name}" class="business-logo-preview">
-                <h3 style="text-align:center; font-size: 1rem;">${item.name}</h3>
+                <img src="${logoUrl}" alt="${escapeHtml(item.name || '')}" class="business-logo-preview">
+                <h3 style="text-align:center; font-size: 1rem;">${escapeHtml(item.name || '')}</h3>
                 <div class="card-actions">
                     ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="business_logo">Edit</button>` : ''}
                     ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="business_logo">Delete</button>` : ''}
@@ -734,6 +740,7 @@ const modalFields = document.getElementById('modal-fields');
 
 function openEditModal(type, id, data = null) {
     if (!isAdmin) return;
+    const field = (value) => escapeHtml(value || '');
     
     document.getElementById('edit-id').value = id || '';
     document.getElementById('edit-type').value = type;
@@ -745,19 +752,19 @@ function openEditModal(type, id, data = null) {
         modalFields.innerHTML = `
             <div>
                 <label class="form-label">Plan Name</label>
-                <input type="text" name="name" class="form-control" value="${data?.name || ''}" required>
+                <input type="text" name="name" class="form-control" value="${field(data?.name)}" required>
             </div>
             <div>
                 <label class="form-label">Price</label>
-                <input type="number" name="price" class="form-control" value="${data?.price || ''}" required>
+                <input type="number" name="price" class="form-control" value="${field(data?.price)}" required>
             </div>
             <div>
                 <label class="form-label">Speed</label>
-                <input type="text" name="speed" class="form-control" value="${data?.speed || ''}" required>
+                <input type="text" name="speed" class="form-control" value="${field(data?.speed)}" required>
             </div>
             <div>
                 <label class="form-label">Description</label>
-                <textarea name="description" class="form-control" rows="3">${data?.description || ''}</textarea>
+                <textarea name="description" class="form-control" rows="3">${field(data?.description)}</textarea>
             </div>
             <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
                 <input type="checkbox" id="plan-popular" name="isPopular" ${data?.isPopular ? 'checked' : ''} style="width: auto;">
@@ -768,7 +775,7 @@ function openEditModal(type, id, data = null) {
          modalFields.innerHTML = `
             <div>
                 <label class="form-label">Neighborhood Name</label>
-                <input type="text" name="name" class="form-control" value="${data?.name || ''}" required>
+                <input type="text" name="name" class="form-control" value="${field(data?.name)}" required>
             </div>
             <div>
                 <label class="form-label">Status</label>
@@ -784,35 +791,35 @@ function openEditModal(type, id, data = null) {
         modalFields.innerHTML = `
             <div>
                 <label class="form-label">Author Name</label>
-                <input type="text" name="author" class="form-control" value="${data?.author || ''}" required>
+                <input type="text" name="author" class="form-control" value="${field(data?.author)}" required>
             </div>
             <div>
                 <label class="form-label">Location / Neighborhood</label>
-                <input type="text" name="location" class="form-control" value="${data?.location || ''}" required placeholder="e.g. Maple Ridge">
+                <input type="text" name="location" class="form-control" value="${field(data?.location)}" required placeholder="e.g. Maple Ridge">
             </div>
             <div>
                 <label class="form-label">Quote</label>
-                <textarea name="quote" class="form-control" rows="3" required>${data?.quote || ''}</textarea>
+                <textarea name="quote" class="form-control" rows="3" required>${field(data?.quote)}</textarea>
             </div>
         `;
     } else if (type === 'install_step') {
         modalFields.innerHTML = `
             <div>
                 <label class="form-label">Step Number (Order)</label>
-                <input type="number" name="stepNumber" class="form-control" value="${data?.stepNumber || ''}" required placeholder="e.g. 1">
+                <input type="number" name="stepNumber" class="form-control" value="${field(data?.stepNumber)}" required placeholder="e.g. 1">
             </div>
             <div>
                 <label class="form-label">Title</label>
-                <input type="text" name="title" class="form-control" value="${data?.title || ''}" required placeholder="e.g. Site Survey">
+                <input type="text" name="title" class="form-control" value="${field(data?.title)}" required placeholder="e.g. Site Survey">
             </div>
             <div>
                 <label class="form-label">Description</label>
-                <textarea name="description" class="form-control" rows="3" required>${data?.description || ''}</textarea>
+                <textarea name="description" class="form-control" rows="3" required>${field(data?.description)}</textarea>
             </div>
              <div>
                 <label class="form-label">Step Photo Upload</label>
                 <input type="file" id="photo-upload" class="form-control" accept="image/*">
-                <input type="hidden" name="imageUrl" id="photo-url-input" value="${data?.imageUrl || ''}">
+                <input type="hidden" name="imageUrl" id="photo-url-input" value="${field(data?.imageUrl)}">
                 <p id="upload-status" style="font-size:0.8rem; color:#64748b;">${data?.imageUrl ? 'Current photo loaded' : 'No photo selected'}</p>
             </div>
         `;
@@ -821,24 +828,24 @@ function openEditModal(type, id, data = null) {
         modalFields.innerHTML = `
             <div>
                 <label class="form-label">Name</label>
-                <input type="text" name="name" class="form-control" value="${data?.name || ''}" required>
+                <input type="text" name="name" class="form-control" value="${field(data?.name)}" required>
             </div>
             <div>
                 <label class="form-label">Title</label>
-                <input type="text" name="title" class="form-control" value="${data?.title || ''}" required>
+                <input type="text" name="title" class="form-control" value="${field(data?.title)}" required>
             </div>
             <div>
                 <label class="form-label">Years at Company</label>
-                <input type="number" name="years" class="form-control" value="${data?.years || ''}" required>
+                <input type="number" name="years" class="form-control" value="${field(data?.years)}" required>
             </div>
             <div>
                 <label class="form-label">Fun Fact</label>
-                <textarea name="fact" class="form-control" rows="2" required>${data?.fact || ''}</textarea>
+                <textarea name="fact" class="form-control" rows="2" required>${field(data?.fact)}</textarea>
             </div>
             <div>
                 <label class="form-label">Photo Upload</label>
                 <input type="file" id="photo-upload" class="form-control" accept="image/*">
-                <input type="hidden" name="photoUrl" id="photo-url-input" value="${data?.photoUrl || ''}">
+                <input type="hidden" name="photoUrl" id="photo-url-input" value="${field(data?.photoUrl)}">
                 <p id="upload-status" style="font-size:0.8rem; color:#64748b;">${data?.photoUrl ? 'Current photo loaded' : 'No photo selected'}</p>
             </div>
         `;
@@ -855,7 +862,7 @@ function openEditModal(type, id, data = null) {
         modalFields.innerHTML = `
             <div>
                 <label class="form-label">Post Title</label>
-                <input type="text" name="title" class="form-control" value="${data?.title || ''}" required>
+                <input type="text" name="title" class="form-control" value="${field(data?.title)}" required>
             </div>
             <div>
                 <label class="form-label">Publish Date</label>
@@ -863,20 +870,20 @@ function openEditModal(type, id, data = null) {
             </div>
             <div>
                 <label class="form-label">Short Excerpt (Teaser text)</label>
-                <textarea name="excerpt" class="form-control" rows="3" required>${data?.excerpt || ''}</textarea>
+                <textarea name="excerpt" class="form-control" rows="3" required>${field(data?.excerpt)}</textarea>
             </div>
             <div>
                 <label class="form-label">Link URL (e.g., https://facebook.com/... or blog-post.html)</label>
-                <input type="text" name="linkUrl" class="form-control" value="${data?.linkUrl || ''}" required>
+                <input type="text" name="linkUrl" class="form-control" value="${field(data?.linkUrl)}" required>
             </div>
             <div>
                 <label class="form-label">Link Button Text</label>
-                <input type="text" name="linkText" class="form-control" value="${data?.linkText || 'Read More'}" required>
+                <input type="text" name="linkText" class="form-control" value="${field(data?.linkText || 'Read More')}" required>
             </div>
             <div>
                 <label class="form-label">Featured Image</label>
                 <input type="file" id="photo-upload" class="form-control" accept="image/*">
-                <input type="hidden" name="imageUrl" id="photo-url-input" value="${data?.imageUrl || ''}">
+                <input type="hidden" name="imageUrl" id="photo-url-input" value="${field(data?.imageUrl)}">
                 <p id="upload-status" style="font-size:0.8rem; color:#64748b;">${data?.imageUrl ? 'Current photo loaded' : 'No photo selected'}</p>
             </div>
         `;
@@ -885,12 +892,12 @@ function openEditModal(type, id, data = null) {
         modalFields.innerHTML = `
             <div>
                 <label class="form-label">Business Name</label>
-                <input type="text" name="name" class="form-control" value="${data?.name || ''}" required placeholder="e.g. Local Company Inc.">
+                <input type="text" name="name" class="form-control" value="${field(data?.name)}" required placeholder="e.g. Local Company Inc.">
             </div>
             <div>
                 <label class="form-label">Logo Upload (.png recommended)</label>
-                <input type="file" id="photo-upload" class="form-control" accept="image/png, image/jpeg, image/svg+xml">
-                <input type="hidden" name="logoUrl" id="photo-url-input" value="${data?.logoUrl || ''}">
+                <input type="file" id="photo-upload" class="form-control" accept="image/png, image/jpeg, image/webp">
+                <input type="hidden" name="logoUrl" id="photo-url-input" value="${field(data?.logoUrl)}">
                 <p id="upload-status" style="font-size:0.8rem; color:#64748b;">${data?.logoUrl ? 'Current logo loaded' : 'No logo selected'}</p>
             </div>
         `;
@@ -924,8 +931,8 @@ function openViewLeadModal(lead) {
             const isLongText = ['message', 'details', 'requirements'].includes(key);
             html += `
                 <div class="detail-item ${isLongText ? 'full-width' : ''}">
-                    <label>${key.replace(/([A-Z])/g, ' $1').trim()}</label>
-                    <p>${formatVal(key, lead[key])}</p>
+                    <label>${escapeHtml(key.replace(/([A-Z])/g, ' $1').trim())}</label>
+                    <p>${escapeHtml(formatVal(key, lead[key]))}</p>
                 </div>
             `;
         }
@@ -936,8 +943,8 @@ function openViewLeadModal(lead) {
         if (!priority.includes(key) && key !== 'id') {
              html += `
                 <div class="detail-item">
-                    <label>${key}</label>
-                    <p>${formatVal(key, lead[key])}</p>
+                    <label>${escapeHtml(key)}</label>
+                    <p>${escapeHtml(formatVal(key, lead[key]))}</p>
                 </div>
             `;
         }
@@ -992,6 +999,10 @@ editForm.addEventListener('submit', async (e) => {
     if (data.price) data.price = Number(data.price);
     if (data.stepNumber) data.stepNumber = Number(data.stepNumber);
     if (data.date) data.date = new Date(data.date); // Convert date string to Date object
+    if (data.imageUrl) data.imageUrl = safeUrl(data.imageUrl, '', { allowDataImage: true });
+    if (data.photoUrl) data.photoUrl = safeUrl(data.photoUrl, '', { allowDataImage: true });
+    if (data.logoUrl) data.logoUrl = safeUrl(data.logoUrl, '', { allowDataImage: true });
+    if (data.linkUrl) data.linkUrl = safeUrl(data.linkUrl, '#');
 
     if (type === 'plan') {
         data.isPopular = !!editForm.querySelector('[name="isPopular"]').checked;

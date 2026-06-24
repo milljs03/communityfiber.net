@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Internet | Community Fiber</title>
+    <meta name="description" content="Enterprise-grade fiber internet for businesses. Dedicated support, high-speed connectivity, and reliable service for your company.">
+    <meta name="keywords" content="business internet, enterprise fiber, dedicated internet, business broadband, fiber connection">
+    <meta property="og:title" content="Business Internet | Community Fiber">
+    <meta property="og:description" content="Enterprise-grade fiber internet for businesses. Dedicated support and high-speed connectivity.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://communityfiber.net/business.html">
+    <meta property="og:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Business Internet | Community Fiber">
+    <meta name="twitter:description" content="Enterprise-grade fiber internet for businesses with dedicated support.">
+    <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
+    <link rel="canonical" href="https://communityfiber.net/business.html">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
     
     <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy" 
@@ -13,7 +26,7 @@
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
                    frame-src https://www.google.com https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
-                   connect-src 'self' https://www.gstatic.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
+                   connect-src 'self' https://www.gstatic.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +37,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/business.css">
 </head>
 <body>
@@ -41,7 +55,7 @@
 
     <main class="main-content">
         <!-- Trusted Partners Ribbon -->
-        <section id="trusted-partners" class="trusted-partners fade-in-section">
+        <section id="trusted-partners" class="trusted-partners" data-animate="fade-up">
             <div class="container" style="text-align:center; margin-bottom: 2rem;">
                 <h2 class="section-title" style="margin-bottom:0.5rem; font-size: 1.8rem; color: var(--npt-black);">Trusted by Local Businesses</h2>
                 <p style="color:#64748b;">Powering the connectivity of our community's best enterprises.</p>
@@ -79,7 +93,7 @@
         <div class="container">
             
             <!-- Map Section -->
-            <section id="service-territory" class="map-section fade-in-section">
+            <section id="service-territory" class="map-section" data-animate="fade-up">
                 <div class="section-header">
                     <h2>Service Territory Map</h2>
                     <p>Use the map below to see if your business is located near our fiber infrastructure.</p>
@@ -129,12 +143,12 @@
             </section>
 
             <!-- Inquiry Form Section -->
-            <section id="business-quote" class="inquiry-section fade-in-section">
+            <section id="business-quote" class="inquiry-section" data-animate="fade-up">
                 <div class="form-wrapper">
-                    <div class="form-intro">
+                    <div class="form-intro" data-animate="fade-right">
                         <h2>Request a Custom Quote</h2>
                         <p>Business connections are often unique. We assess costs and construction requirements on a case-by-case basis.</p>
-                        <ul class="benefit-list">
+                        <ul class="benefit-list" data-animate="stagger">
                             <li><i class="fa-solid fa-check"></i> <strong>Symmetrical Speeds</strong> up to 10 Gbps</li>
                             <li><i class="fa-solid fa-check"></i> <strong>SLA</strong> (Service Level Agreements) Available</li>
                             <li><i class="fa-solid fa-check"></i> <strong>Local Support</strong> & Priority Repair</li>
@@ -143,7 +157,7 @@
                         </ul>
                     </div>
 
-                    <div class="form-card">
+                    <div class="form-card glass-card" data-animate="fade-left">
                         <form id="business-form">
                             <!-- Anti-Spam Honeypot Field -->
                             <div class="visual-hidden">
@@ -199,8 +213,15 @@
         </div>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Community Fiber. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="footer/privacy-policy.html">Privacy Policy</a>
+                <a href="footer/terms-of-service.html">Terms of Service</a>
+                <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
+            </div>
+            <p>&copy; 2026 Community Fiber. All rights reserved.</p>
+        </div>
     </footer>
 
     <!-- Scripts -->

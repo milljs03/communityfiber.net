@@ -97,16 +97,31 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Scroll Animations ---
     const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-            }
+            if (!entry.isIntersecting) return;
+
+            const el = entry.target;
+            el.classList.add('is-visible');
+            obs.unobserve(el);
         });
     }, observerOptions);
 
-    document.querySelectorAll('.fade-in-section').forEach(section => {
-        observer.observe(section);
+    const animatedEls = document.querySelectorAll('.fade-in-section, .fade-in, [data-animate]');
+    animatedEls.forEach(el => observer.observe(el));
+
+    // Handle dynamically injected content in stagger containers
+    const staggerContainers = document.querySelectorAll('[data-animate="stagger"]');
+    staggerContainers.forEach(container => {
+        if (container.children.length === 0) {
+            const mo = new MutationObserver(() => {
+                if (container.children.length > 0) {
+                    mo.disconnect();
+                    observer.unobserve(container);
+                    observer.observe(container);
+                }
+            });
+            mo.observe(container, { childList: true });
+        }
     });
 });

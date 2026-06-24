@@ -4,6 +4,25 @@
  * Usage: Place <div id="master-header"></div> at the top of your body.
  */
 
+const ANNOUNCEMENT_MODULE_PATH = '/assets/js/announcement.js';
+
+function ensureAnnouncementModule() {
+    const alreadyPresent = Array.from(document.scripts).some((script) => {
+        const src = script.getAttribute('src') || '';
+        return src === ANNOUNCEMENT_MODULE_PATH || src.endsWith('assets/js/announcement.js');
+    });
+
+    if (alreadyPresent) {
+        return;
+    }
+
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = ANNOUNCEMENT_MODULE_PATH;
+    script.dataset.autoAnnouncement = 'true';
+    document.head.appendChild(script);
+}
+
 // Injecting CSS directly to ensure Brand Style Guide compliance
 const headerStyles = `
 <style>
@@ -337,6 +356,7 @@ const headerStyles = `
 
 const headerHTML = `
 ${headerStyles}
+<div id="site-announcement-root" hidden></div>
 <div class="mobile-overlay"></div>
 <header class="main-header">
     <div class="nav-container">
@@ -402,6 +422,7 @@ ${headerStyles}
                         <li><a href="/support.html#support-contact" class="section-link">Contact Us</a></li>
                         <li><a href="/support.html#fiber-comparison" class="section-link">Why Move to Fiber?</a></li>
                         <li><a href="/support.html#support-faq" class="section-link">FAQ</a></li>
+                        <li><a href="/outage.html" class="section-link">Outage Map</a></li>
                         <li><a href="https://nptel.smarthub.coop/Login.html" target="_blank" class="section-link">SmartHub Login</a></li>
                     </ul>
                 </div>
@@ -424,7 +445,14 @@ ${headerStyles}
 </header>
 `;
 
-document.addEventListener("DOMContentLoaded", function() {
+function initializeStandardHeader() {
+    if (!document.body || document.body.dataset.cfnHeaderInitialized === 'true') {
+        return;
+    }
+
+    document.body.dataset.cfnHeaderInitialized = 'true';
+    ensureAnnouncementModule();
+
     // 1. Inject the HTML into the placeholder
     const headerPlaceholder = document.getElementById("master-header");
     if (headerPlaceholder) {
@@ -507,4 +535,10 @@ document.addEventListener("DOMContentLoaded", function() {
             }, 500);
         });
     }
-});
+}
+
+if (document.body) {
+    initializeStandardHeader();
+} else {
+    document.addEventListener("DOMContentLoaded", initializeStandardHeader, { once: true });
+}

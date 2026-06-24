@@ -1,6 +1,6 @@
 import { db, app } from './config/firebase-config.js';
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { collection, addDoc, getDocs, orderBy, query, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs, orderBy, query, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { escapeHtml, safeUrl } from './security.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // --- 0. Shared Animation Observer ---
@@ -18,11 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Mobile Menu Toggle ---
 
-    // --- 1. Initialize Auth for Lead Capture ---
-    const auth = getAuth(app);
-    signInAnonymously(auth).catch(err => console.warn("Auth warning:", err));
-
-    // --- 2. Render Plans (Dynamic from DB) ---
+    // --- 1. Render Plans (Dynamic from DB) ---
     const plansGrid = document.getElementById('plans-grid');
     const loadingEl = document.getElementById('loading-indicator');
     const errorEl = document.getElementById('error-message');
@@ -80,34 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         errorEl.classList.remove('hidden');
     }
 
-    // --- 3. Render Neighborhoods ---
-    const hoodList = document.getElementById('neighborhood-list');
-    if(hoodList) {
-        try {
-            const hoodsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'neighborhoods');
-            const hoodSnap = await getDocs(hoodsRef);
-            let neighborhoods = [];
-            hoodSnap.forEach(doc => neighborhoods.push(doc.data()));
-            
-            if (neighborhoods.length === 0) {
-                 neighborhoods = [ { name: "Maple Ridge", status: "Live Now" } ];
-            }
-
-            hoodList.innerHTML = ''; 
-            neighborhoods.forEach(hood => {
-                const card = document.createElement('div');
-                card.className = 'hood-card fade-in-section';
-                card.innerHTML = `
-                    <div class="hood-image"><span>${hood.name}</span></div>
-                    <div class="hood-info"><h4>${hood.name}</h4><p style="color: var(--cfn-mute-green); font-weight:600;">${hood.status}</p></div>
-                `;
-                hoodList.appendChild(card);
-                observer.observe(card);
-            });
-        } catch(err) { console.error("Error loading neighborhoods:", err); }
-    }
-
-    // --- 4. Render Testimonials ---
+    // --- 2. Render Testimonials ---
     const testimonialContainer = document.getElementById('testimonials-grid');
     if (testimonialContainer) {
         try {
@@ -121,10 +90,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 testimonialContainer.innerHTML = items.map(t => `
                     <div class="testimonial-card fade-in-section">
                         <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
-                        <p class="quote-text">"${t.quote}"</p>
+                        <p class="quote-text">"${escapeHtml(t.quote || '')}"</p>
                         <div class="quote-author">
-                            <strong>${t.author}</strong>
-                            <span>${t.location}</span>
+                            <strong>${escapeHtml(t.author || '')}</strong>
+                            <span>${escapeHtml(t.location || '')}</span>
                         </div>
                     </div>
                 `).join('');
@@ -135,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (err) { console.error("Error loading testimonials:", err); }
     }
 
-    // --- 5. Install Process Timeline (New) ---
+    // --- 3. Install Process Timeline ---
     loadTimeline();
 });
 
@@ -166,7 +135,7 @@ async function loadTimeline() {
         // Render Bubbles
         bubblesContainer.innerHTML = installSteps.map((step, idx) => `
             <div class="timeline-step-bubble ${idx === 0 ? 'active' : ''}" data-index="${idx}">
-                ${step.stepNumber}
+                ${escapeHtml(step.stepNumber || idx + 1)}
             </div>
         `).join('');
 
@@ -222,7 +191,7 @@ function updateTimelineView(index) {
         
         const imgEl = document.getElementById('step-image');
         if (step.imageUrl) {
-            imgEl.src = step.imageUrl;
+            imgEl.src = safeUrl(step.imageUrl, '', { allowDataImage: true });
             imgEl.parentElement.style.display = 'flex';
         } else {
             // Fallback icon if no image
@@ -571,19 +540,19 @@ async function injectAddonsSection(targetElement) {
         <div class="addons-card">
             <img src="assets/images/teacher.jpg" alt="Community Support" class="promo-image">
             <div class="promo-content">
-                <h2 class="promo-title">${promoData.title}</h2>
-                <p class="promo-text">${promoData.description}</p>
+                <h2 class="promo-title">${escapeHtml(promoData.title)}</h2>
+                <p class="promo-text">${escapeHtml(promoData.description)}</p>
                 
                 <div class="check-list">
                     ${(promoData.items || []).map(item => `
                         <div class="check-item">
                             <i class="fa-solid fa-circle-check check-icon"></i>
-                            <span class="check-text">${item}</span>
+                            <span class="check-text">${escapeHtml(item)}</span>
                         </div>
                     `).join('')}
                 </div>
 
-                ${promoData.finePrint ? `<div class="fine-print">${promoData.finePrint}</div>` : ''}
+                ${promoData.finePrint ? `<div class="fine-print">${escapeHtml(promoData.finePrint)}</div>` : ''}
             </div>
         </div>
 
@@ -610,55 +579,23 @@ function generatePlanCard(plan, index) {
     const isPopular = plan.isPopular === true || plan.isPopular === "true";
     const highlightClass = isPopular ? 'popular' : '';
     const badge = isPopular ? '<div class="popular-badge">Best Value</div>' : '';
-    const labelId = `bbf-${index}`;
     const features = Array.isArray(plan.features) ? plan.features : ["Local Service", "No Contracts"];
-    const featuresHtml = features.map(f => `<div class="highlight-text"><i class="fa-solid fa-check"></i> ${f}</div>`).join('');
+    const featuresHtml = features.map(f => `<div class="highlight-text"><i class="fa-solid fa-check"></i> ${escapeHtml(f)}</div>`).join('');
 
     return `
         <div class="pricing-box ${highlightClass}">
             ${badge}
             <div class="pricing-box-inner">
-                <h3 class="panel-heading">${plan.name}</h3>
-                <div class="price-wrapper"><span class="price">$${plan.price}<small>/mo</small></span></div>
-                <div class="speed-display"><div class="speed-val">${plan.speed}</div><div class="speed-label">Download & Upload</div></div>
-                <div class="plan-description">${plan.description || "Reliable fiber internet."}</div>
+                <h3 class="panel-heading">${escapeHtml(plan.name || '')}</h3>
+                <div class="price-wrapper"><span class="price">$${escapeHtml(plan.price || '')}<small>/mo</small></span></div>
+                <div class="speed-display"><div class="speed-val">${escapeHtml(plan.speed || '')}</div><div class="speed-label">Download & Upload</div></div>
+                <div class="plan-description">${escapeHtml(plan.description || "Reliable fiber internet.")}</div>
                 <div class="core-benefits">${featuresHtml}</div>
-                <div class="broadband-label-container">${generateBroadbandLabel(plan, labelId)}</div>
                  <a href="https://fiber-service-query.web.app/query.html" class="sign-up-btn" style="text-align: center; text-decoration: none; display: block;">I'm Interested</a>
             </div>
         </div>
     `;
 }
-
-function generateBroadbandLabel(plan, labelId) {
-    return `<div class="broadband-facts-wrapper" id="${labelId}">
-            <div class="expand-trigger" onclick="toggleLabel('${labelId}')"><button class="expand-btn">Broadband Facts <i class="fa-solid fa-chevron-down" style="margin-left:5px"></i></button></div>
-            <div class="bbf-header"><h4 class="bbf-title">Broadband Facts</h4><div style="font-size:12px; margin-top:5px; font-weight:bold;">Community Fiber Network</div><div style="font-weight:bold;">${plan.name} Plan</div><div style="font-size:14px; margin-top:5px;">Fixed Broadband Consumer Disclosure</div></div>
-            <div class="bbf-row strong"><span>Monthly Price</span><strong>$${plan.price}</strong></div>
-            <div class="bbf-row"><span>Introductory Rate</span><strong>No</strong></div>
-            <div class="bbf-row strong"><span>Contract</span><strong>None</strong></div>
-            <div style="background-color: #f1f5f9; font-weight: bold; padding: 8px 15px; border-bottom: 1px solid #ccc; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">Additional Charges & Terms</div>
-            <div class="bbf-row"><span style="font-weight:bold">Install Fee</span><strong>$50 - $150*</strong></div>
-            <div class="bbf-row"><span>Equipment Fee</span><strong>$99.00</strong></div>
-            <div class="bbf-row"><span>Taxes</span><strong>Varies</strong></div>
-            <div style="background-color: #f1f5f9; font-weight: bold; padding: 8px 15px; border-bottom: 1px solid #ccc; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px;">Performance</div>
-            <div class="bbf-row"><span>Download Speed</span><strong>${plan.speed}</strong></div>
-            <div class="bbf-row"><span>Upload Speed</span><strong>${plan.speed}</strong></div>
-            <div class="bbf-row strong"><span>Latency</span><strong>17 ms</strong></div>
-             <div class="bbf-row strong"><span>Data Cap</span><strong>Unlimited</strong></div>
-            <div class="bbf-footer"><p><strong>Support:</strong> (574) 533-4237</p><a href="https://fcc.gov/consumer" target="_blank" style="color:var(--npt-black)">fcc.gov/consumer</a></div>
-        </div>`;
-}
-
-window.toggleLabel = function(id) {
-    const el = document.getElementById(id);
-    if(el) {
-        el.classList.toggle('expanded');
-        const btn = el.querySelector('.expand-btn');
-        if(el.classList.contains('expanded')) { btn.innerHTML = 'Hide Facts <i class="fa-solid fa-chevron-up" style="margin-left:5px"></i>'; } 
-        else { btn.innerHTML = 'Broadband Facts <i class="fa-solid fa-chevron-down" style="margin-left:5px"></i>'; }
-    }
-};
 
 function setupPricingCardParallax() {
     const cards = document.querySelectorAll('.pricing-box');

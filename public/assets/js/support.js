@@ -1,15 +1,9 @@
-import { db, app } from './config/firebase-config.js';
-import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { postJson } from './security.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const pageLoadTime = Date.now(); // Track when the page loaded
 
-    // Helper: Sanitize Input to prevent XSS
-    const sanitize = (str) => {
-        if (typeof str !== 'string') return str;
-        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;').trim();
-    };
+    const normalize = (str) => typeof str === 'string' ? str.trim() : '';
 
     // 1. Animations
     const observer = new IntersectionObserver((entries) => {
@@ -19,11 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
 
-    // 2. Auth Init
-    const auth = getAuth(app);
-    signInAnonymously(auth).catch(err => console.error("Auth Error:", err));
-
-    // 3. Form Topic Logic
+    // 2. Form Topic Logic
     const topicSelect = document.getElementById('topic-select');
     const dynamicFields = document.querySelectorAll('.dynamic-field');
     
@@ -45,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Form Submit Logic
+    // 3. Form Submit Logic
     const form = document.getElementById('support-form');
     if (form) {
         form.addEventListener('submit', async (e) => {
@@ -75,32 +65,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const formData = {
                 type: 'support_ticket',
-                topic: topicSelect ? sanitize(topicSelect.value) : 'general',
-                name: sanitize(document.getElementById('name').value),
-                email: sanitize(document.getElementById('email').value),
-                phone: sanitize(document.getElementById('phone').value),
-                message: sanitize(document.getElementById('message').value),
-                submittedAt: new Date(),
-                status: 'new'
+                topic: topicSelect ? normalize(topicSelect.value) : 'general',
+                name: normalize(document.getElementById('name').value),
+                email: normalize(document.getElementById('email').value),
+                phone: normalize(document.getElementById('phone').value),
+                message: normalize(document.getElementById('message').value),
+                website_check: honeypot ? honeypot.value : ''
             };
 
             // Add dynamic fields if visible
             const accNum = document.getElementById('account-number');
-            if(accNum && !accNum.closest('.hidden')) formData.accountNumber = sanitize(accNum.value);
+            if(accNum && !accNum.closest('.hidden')) formData.accountNumber = normalize(accNum.value);
 
             const addr = document.getElementById('address');
-            if(addr && !addr.closest('.hidden')) formData.address = sanitize(addr.value);
+            if(addr && !addr.closest('.hidden')) formData.address = normalize(addr.value);
 
             const issue = document.getElementById('issue-type');
-            if(issue && !issue.closest('.hidden')) formData.issueType = sanitize(issue.value);
+            if(issue && !issue.closest('.hidden')) formData.issueType = normalize(issue.value);
 
             try {
-                // Ensure auth
-                if (!auth.currentUser) {
-                    await signInAnonymously(auth);
-                }
-
-                await addDoc(collection(db, 'artifacts', '162296779236', 'public', 'data', 'leads'), formData);
+                await postJson('/api/submitLead', formData);
                 
                 document.querySelector('.form-container').style.display = 'none';
                 const successMsg = document.getElementById('success-message');
@@ -118,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. FAQ Accordion Logic
+    // 4. FAQ Accordion Logic
     const faqItems = document.querySelectorAll('.faq-item');
     if (faqItems.length > 0) {
         faqItems.forEach(item => {

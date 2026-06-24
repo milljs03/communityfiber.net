@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Checker</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --npt-blue: #0663AF;
+            --npt-lt-blue: #64ADD9;
+            --font-body: 'Open Sans', sans-serif;
+            --font-heading: 'Montserrat', sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        html {
+            background: transparent;
+        }
+
+        body {
+            font-family: var(--font-body);
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+        }
+
+        html.is-embedded,
+        html.is-embedded body {
+            overflow: hidden;
+        }
+
+        .embed-shell {
+            position: relative;
+            max-width: 860px;
+            margin: 0 auto;
+            border-radius: 28px;
+            padding: 44px 24px 42px;
+            background: linear-gradient(135deg, #0f172a 0%, #0663AF 100%);
+            color: #fff;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .embed-shell::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            margin: 0 0 14px 0;
+            font-size: 2.15rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+
+        .highlight-text {
+            color: var(--npt-lt-blue);
+            background: -webkit-linear-gradient(45deg, var(--npt-lt-blue), #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            margin: 0 0 24px 0;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #cdd9ea;
+        }
+
+        .availability-search-container {
+            max-width: 620px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            background: #fff;
+            border-radius: 999px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 20px 28px rgba(3, 14, 34, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .search-input-wrapper:focus-within {
+            transform: translateY(-2px);
+            box-shadow: 0 24px 34px rgba(6, 99, 175, 0.35);
+        }
+
+        .search-icon {
+            width: 22px;
+            height: 22px;
+            color: #94a3b8;
+            margin-left: 14px;
+            flex-shrink: 0;
+            transition: color 0.2s ease;
+        }
+
+        .search-input-wrapper:focus-within .search-icon {
+            color: var(--npt-blue);
+        }
+
+        #cfn-address-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            padding: 12px 18px 12px 10px;
+            font-size: 1rem;
+            border-radius: 999px;
+            color: #0f172a;
+            background: transparent;
+            font-family: var(--font-body);
+        }
+
+        #cfn-address-input::placeholder {
+            color: #7b8794;
+        }
+
+        #redirect-message {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: var(--npt-lt-blue);
+            font-weight: 600;
+        }
+
+        .business-contact {
+            margin-top: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(100, 173, 217, 0.44);
+            background: rgba(6, 99, 175, 0.2);
+            color: #dbeafe;
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        .business-contact a {
+            color: #ffffff;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: 0.2px;
+        }
+
+        .business-contact a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .pac-container {
+            position: fixed !important;
+            z-index: 10000 !important;
+            border-radius: 12px;
+            margin-top: 8px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+            border: none;
+            font-family: var(--font-body) !important;
+            max-height: min(280px, calc(100vh - 120px));
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .pac-item {
+            padding: 12px 16px;
+            font-size: 15px;
+            cursor: pointer;
+            border-top: 1px solid #f1f5f9;
+            color: #334155;
+        }
+
+        .pac-item:first-child { border-top: none; }
+
+        .pac-item-query {
+            color: #0f172a;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        @media (max-width: 740px) {
+            body { padding: 0; }
+            .embed-shell {
+                border-radius: 20px;
+                padding: 30px 16px 28px;
+            }
+            .hero-title {
+                font-size: 1.7rem;
+            }
+            .hero-subtitle {
+                font-size: 0.96rem;
+                margin-bottom: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="embed-shell">
+    <div class="hero-content">
+        <h2 class="hero-title">Check Your <span class="highlight-text">Home Fiber</span> Availability</h2>
+        <p class="hero-subtitle">
+            Enter your address to see if fiber internet is available at your home.
+        </p>
+        <div class="availability-search-container">
+            <div class="search-input-wrapper">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+                <input type="text" id="cfn-address-input" placeholder="Start entering your address..." autocomplete="off">
+            </div>
+            <div id="redirect-message" class="hidden">Taking you to the availability tool...</div>
+        </div>
+        <div class="business-contact">
+            For commercial service availability, please call <a href="tel:5748312176">574.831.2176</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function markEmbeddedContext() {
+        try {
+            if (window.self !== window.top) {
+                document.documentElement.classList.add('is-embedded');
+            }
+        } catch (_err) {
+            document.documentElement.classList.add('is-embedded');
+        }
+    })();
+
+    function initCFNWidget() {
+        var APP_ORIGIN = 'https://search.np-tech.com';
+        var DEFAULT_SOURCE_SITE = 'npt_embed';
+        var PASSTHROUGH_KEYS = [
+            'source_site',
+            'utm_source',
+            'utm_medium',
+            'utm_campaign',
+            'utm_adset',
+            'utm_content',
+            'campaign',
+            'campaign_id',
+            'campaign_name'
+        ];
+        var input = document.getElementById('cfn-address-input');
+        var msg = document.getElementById('redirect-message');
+
+        var options = {
+            fields: ["formatted_address", "geometry", "name"],
+        };
+
+        var autocomplete = new google.maps.places.Autocomplete(input, options);
+
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (place.formatted_address) {
+                redirectToApp(place.formatted_address);
+            } else {
+                redirectToApp(input.value);
+            }
+        });
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                setTimeout(function() {
+                    if (!isRedirecting) redirectToApp(input.value);
+                }, 250);
+            }
+        });
+
+        var isRedirecting = false;
+
+        function applyAttributionParams(targetUrl) {
+            var pageParams = new URLSearchParams(window.location.search || '');
+            var sourceSite = pageParams.get('source_site') || DEFAULT_SOURCE_SITE;
+            targetUrl.searchParams.set('source_site', sourceSite);
+
+            PASSTHROUGH_KEYS.forEach(function(key) {
+                if (key === 'source_site') return;
+                var value = pageParams.get(key);
+                if (value && value.trim()) {
+                    targetUrl.searchParams.set(key, value.trim());
+                }
+            });
+
+            if (window.UTMAttribution && typeof window.UTMAttribution.buildEventPayload === 'function') {
+                var payload = window.UTMAttribution.buildEventPayload({ source_site: sourceSite });
+                ['utm_source', 'utm_medium', 'utm_campaign', 'utm_adset', 'utm_content'].forEach(function(key) {
+                    if (targetUrl.searchParams.get(key)) return;
+                    var value = payload && payload[key];
+                    if (value && value !== 'organic / unknown') {
+                        targetUrl.searchParams.set(key, value);
+                    }
+                });
+
+                if (!targetUrl.searchParams.get('campaign') && payload && payload.campaign_at_search_time_id) {
+                    targetUrl.searchParams.set('campaign', payload.campaign_at_search_time_id);
+                }
+            }
+        }
+
+        function redirectToApp(address) {
+            if (isRedirecting) return;
+
+            if (address && address.length > 5) {
+                isRedirecting = true;
+
+                input.style.borderColor = "#2563eb";
+                input.style.backgroundColor = "#eff6ff";
+                if (msg) msg.classList.remove('hidden');
+
+                var targetUrl = new URL('/query.html', APP_ORIGIN);
+                targetUrl.searchParams.set('auto', 'true');
+                targetUrl.searchParams.set('address', address);
+                applyAttributionParams(targetUrl);
+
+                var url = targetUrl.toString();
+                var newTab = window.open(url, '_blank');
+                if (newTab) {
+                    newTab.opener = null;
+                } else {
+                    window.location.href = url;
+                }
+            }
+        }
+    }
+</script>
+<script src="https://search.np-tech.com/maps-loader.js"></script>
+<script src="https://search.np-tech.com/utm-attribution.js"></script>
+<script>
+    window.loadGoogleMapsFromSecret({
+        callbackName: "initCFNWidget",
+        libraries: ["places"]
+    }).catch((err) => {
+        console.error(err);
+    });
+</script>
+
+</body>
+</html>

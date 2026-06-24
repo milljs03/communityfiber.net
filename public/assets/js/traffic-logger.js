@@ -1,16 +1,9 @@
-import { db, app } from './config/firebase-config.js';
-import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getSessionId as getSharedSessionId, postJson } from './security.js';
 
 const LOG_COOLDOWN = 1000 * 60 * 5; // 5 minutes cooldown per page to avoid refresh spam
 
 function getSessionId() {
-    let sid = sessionStorage.getItem('analytics_session_id');
-    if (!sid) {
-        sid = crypto.randomUUID();
-        sessionStorage.setItem('analytics_session_id', sid);
-    }
-    return sid;
+    return getSharedSessionId();
 }
 
 function getDeviceType() {
@@ -36,14 +29,8 @@ async function logVisit() {
     }
 
     try {
-        const auth = getAuth(app);
-        if (!auth.currentUser) {
-            await signInAnonymously(auth);
-        }
-
         const visitData = {
             page: page,
-            timestamp: new Date(),
             sessionId: getSessionId(),
             referrer: document.referrer || 'direct',
             deviceType: getDeviceType(),
@@ -52,8 +39,7 @@ async function logVisit() {
             userAgent: navigator.userAgent
         };
 
-        // Fire and forget
-        await addDoc(collection(db, 'artifacts', '162296779236', 'public', 'data', 'analytics_pageviews'), visitData);
+        await postJson('/api/logPageView', visitData);
 
         localStorage.setItem(storageKey, now.toString());
         console.log(`[Analytics] Logged visit to ${page}`);

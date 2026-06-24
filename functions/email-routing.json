@@ -1,0 +1,27 @@
+{
+  "from": "Community Fiber Forms <forms@communityfiber.net>",
+  "defaultReplyTo": "info@communityfiber.net",
+  "routes": {
+    "support_ticket": {
+      "label": "Support Request",
+      "to": [
+        "info@communityfiber.net"
+      ],
+      "subjectPrefix": "New Support Request"
+    },
+    "business_quote": {
+      "label": "Business Internet Quote",
+      "to": [
+        "info@communityfiber.net"
+      ],
+      "subjectPrefix": "New Business Internet Quote"
+    },
+    "builder_inquiry": {
+      "label": "Builder Inquiry",
+      "to": [
+        "info@communityfiber.net"
+      ],
+      "subjectPrefix": "New Builder Inquiry"
+    }
+  }
+}
