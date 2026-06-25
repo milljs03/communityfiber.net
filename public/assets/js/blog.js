@@ -8,12 +8,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadNews() {
     const grid = document.getElementById('news-grid');
-    
+
     try {
         const newsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'news');
         const q = query(newsRef, orderBy('date', 'desc'), limit(20)); // Limit to last 20 posts
         const snapshot = await getDocs(q);
-        
+
         if (snapshot.empty) {
             grid.innerHTML = `
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
@@ -69,7 +69,7 @@ async function loadNews() {
                 }
             });
         });
-        
+
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
     } catch (err) {

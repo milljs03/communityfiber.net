@@ -6,7 +6,8 @@
   },
   "main": "index.js",
   "scripts": {
-    "lint": "node --check index.js"
+    "lint": "node --check index.js",
+    "test": "node --test abuse-controls.test.js"
   },
   "dependencies": {
     "firebase-admin": "^13.6.0",

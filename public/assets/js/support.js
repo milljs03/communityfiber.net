@@ -16,14 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Form Topic Logic
     const topicSelect = document.getElementById('topic-select');
     const dynamicFields = document.querySelectorAll('.dynamic-field');
-    
+
     if (topicSelect) {
         topicSelect.addEventListener('change', () => {
             const topic = topicSelect.value;
-    
+
             // Hide all dynamic fields first
             dynamicFields.forEach(field => field.classList.add('hidden'));
-    
+
             // Show fields based on selected topic
             if (topic === 'billing') {
                 document.getElementById('field-billing')?.classList.remove('hidden');
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             // --- SPAM PROTECTION ---
             const honeypot = document.getElementById('website-check');
             const isTooFast = (Date.now() - pageLoadTime) < 2000; // Block if submitted in < 2 seconds
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 await postJson('/api/submitLead', formData);
-                
+
                 document.querySelector('.form-container').style.display = 'none';
                 const successMsg = document.getElementById('success-message');
                 if (successMsg) {

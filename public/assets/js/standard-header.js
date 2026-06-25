@@ -137,7 +137,7 @@ const headerStyles = `
         left: 0;
         width: 100%;
         background-color: var(--npt-white);
-        border-top: 4px solid var(--cfn-green); 
+        border-top: 4px solid var(--cfn-green);
         box-shadow: 0 15px 40px rgba(0,0,0,0.1);
         opacity: 0;
         visibility: hidden;
@@ -176,7 +176,7 @@ const headerStyles = `
         border-bottom: 2px solid #f0f0f0;
         display: inline-block;
     }
-    
+
     .nav-column h3 a {
         text-decoration: none;
         color: inherit;
@@ -304,7 +304,7 @@ const headerStyles = `
             z-index: 10000;
             overflow-y: auto;
         }
-        
+
         .nav-menu.active {
             left: 0; /* Slide in */
         }
@@ -322,16 +322,16 @@ const headerStyles = `
             font-size: 1.1rem;
             justify-content: flex-start;
         }
-        
+
         .nav-link::after {
             display: none; /* No hover underline on mobile */
         }
 
         /* Hide Mega Menu on Mobile default hover */
         .mega-menu-wrapper {
-            display: none; 
+            display: none;
         }
-        
+
         /* Mobile Overlay */
         .mobile-overlay {
             position: fixed;
@@ -345,7 +345,7 @@ const headerStyles = `
             visibility: hidden;
             transition: all 0.3s;
         }
-        
+
         .mobile-overlay.active {
             opacity: 1;
             visibility: visible;
@@ -382,7 +382,7 @@ ${headerStyles}
         <!-- MEGA MENU OVERLAY (Desktop Only for now) -->
         <div class="mega-menu-wrapper">
             <div class="mega-menu-content">
-                
+
                 <!-- Residential Column -->
                 <div class="nav-column">
                     <h3><a href="/residential.html">Residential</a></h3>
@@ -390,7 +390,7 @@ ${headerStyles}
                         <li><a href="/residential.html#plans-pricing" class="section-link">Plans & Pricing</a></li>
                         <li><a href="/residential.html#installation-process" class="section-link">The Installation Process</a></li>
                         <li><a href="/residential.html#customer-reviews" class="section-link">Customer Reviews</a></li>
-                        <li><a href="/residential.html#neighborhood-highlights" class="section-link">Neighborhood Highlights</a></li>
+                        <li><a href="/residential.html#availability-check" class="section-link">Check Availability</a></li>
                     </ul>
                 </div>
 
@@ -479,11 +479,11 @@ function initializeStandardHeader() {
             navMenu.classList.toggle('active');
             mobileOverlay.classList.toggle('active');
             toggleBtn.innerHTML = navMenu.classList.contains('active') ? '✕' : '☰';
-            
+
             // Prevent scrolling when menu is open
             document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
         });
-        
+
         // Close menu when clicking overlay
         if (mobileOverlay) {
             mobileOverlay.addEventListener('click', () => {
@@ -496,9 +496,9 @@ function initializeStandardHeader() {
     }
 
     // 4. Highlight Active Page
-    const currentPath = window.location.pathname; 
+    const currentPath = window.location.pathname;
     const links = document.querySelectorAll('.nav-link, .section-link');
-    
+
     links.forEach(link => {
         const href = link.getAttribute('href');
         if (href === currentPath || (currentPath === '/' && href === '/index.html')) {
@@ -521,7 +521,7 @@ function initializeStandardHeader() {
             </div>
         `;
         document.body.appendChild(banner);
-        
+
         // Slight delay for animation
         setTimeout(() => {
             banner.classList.add('show');

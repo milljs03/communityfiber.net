@@ -26,6 +26,18 @@
 /* --- Support Contact Section --- */
 .support-contact-section {
     padding: 60px 0;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+#support-contact[data-animate],
+#support-contact [data-animate] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition: none !important;
 }
 
 .support-grid {
@@ -175,8 +187,8 @@
     font-size: 0.9rem;
 }
 
-.form-group input, 
-.form-group select, 
+.form-group input,
+.form-group select,
 .form-group textarea {
     width: 100%;
     padding: 12px;
@@ -188,8 +200,8 @@
     color: #334155;
 }
 
-.form-group input:focus, 
-.form-group select:focus, 
+.form-group input:focus,
+.form-group select:focus,
 .form-group textarea:focus {
     outline: none;
     border-color: var(--cfn-green);
@@ -283,13 +295,48 @@ select { -webkit-appearance: none; appearance: none; }
 
 /* --- Responsive Helpers --- */
 @media (max-width: 600px) {
-    .form-grid { grid-template-columns: 1fr; }    
+    .form-grid { grid-template-columns: 1fr; }
     .hero-content h1 { font-size: 2.5rem; }
 }
 
 @media (max-width: 900px) {
     .support-grid { grid-template-columns: 1fr; }
     .contact-info-card { position: static; }
+}
+
+@media (max-width: 640px) {
+    .support-hero {
+        clip-path: none;
+        margin-bottom: 0;
+        padding: 66px 16px 48px;
+    }
+
+    .support-contact-section,
+    .comparison-section,
+    .faq-section {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .contact-info-card,
+    .form-container {
+        border-radius: 12px;
+        padding: 24px;
+    }
+
+    .contact-list li {
+        gap: 14px;
+    }
+
+    .table-wrapper {
+        margin-left: -10px;
+        margin-right: -10px;
+        padding: 10px 0;
+    }
+
+    .comparison-table {
+        min-width: 680px;
+    }
 }
 
 /* --- Comparison Table Section (UPDATED) --- */
@@ -316,7 +363,7 @@ select { -webkit-appearance: none; appearance: none; }
 .comparison-table {
     width: 100%;
     /* Changed to separate to allow border-radius on columns */
-    border-collapse: separate; 
+    border-collapse: separate;
     border-spacing: 0;
     font-size: 1rem;
 }

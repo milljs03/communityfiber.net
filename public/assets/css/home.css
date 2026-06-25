@@ -3,32 +3,48 @@
 /* --- Hero Section --- */
 .hero {
     position: relative;
-    background: linear-gradient(135deg, #141414 0%, #082e18 100%);
+    background: #ffffff;
     min-height: 80vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 120px 20px 60px;
+    padding: 120px 20px 80px;
     overflow: hidden;
-    color: white;
-    text-align: center;
+    color: var(--npt-black);
 }
 
-/* Background Pattern */
-.hero::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
-    background-size: 30px 30px;
-    pointer-events: none;
+/* Two-column layout: copy on the left, square image on the right */
+.hero-inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 60px;
 }
 
 .hero-content {
-    max-width: 800px;
-    z-index: 2;
-    padding: 0 20px;
+    flex: 1;
+    text-align: left;
+}
+
+/* Square, rounded hero image (drops in at assets/images/hero-home.png) */
+.hero-image {
+    flex: 0 0 auto;
+    width: 560px;
+    max-width: 48%;
+}
+
+.hero-image img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06);
+    /* Branded placeholder so the square looks intentional before the photo is imported */
+    background: linear-gradient(135deg, #0B8C38, #03A63C);
 }
 
 .hero-title {
@@ -42,17 +58,19 @@
 
 .highlight-text {
     color: var(--cfn-green);
-    background: -webkit-linear-gradient(45deg, var(--cfn-green), #a8e063);
+    background: -webkit-linear-gradient(45deg, var(--cfn-green), #73bf4b, #bdd63a);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
     font-family: var(--font-body, 'Open Sans', sans-serif);
     font-size: 1.25rem;
-    color: #e2e8f0;
+    color: #475569;
     margin-bottom: 2.5rem;
     line-height: 1.6;
+    font-weight: 600;
 }
 
 /* --- Search Container --- */
@@ -105,6 +123,56 @@
     font-weight: 600;
 }
 
+/* --- Availability Search Section (its own premium panel) --- */
+.availability-section {
+    background-color: #ffffff;
+    padding: 70px 24px 90px;
+}
+
+.availability-inner {
+    max-width: 1800px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 32px;
+    padding: 64px 40px;
+    text-align: center;
+    color: #ffffff;
+    /* Same gradient as the "We Call Home" hero lettering */
+    background: linear-gradient(45deg, var(--cfn-green), #a8e063);
+    box-shadow: 0 30px 60px rgba(3, 166, 60, 0.28);
+}
+
+/* Subtle dot texture inside the panel */
+.availability-inner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.10) 1px, transparent 1px);
+    background-size: 26px 26px;
+    pointer-events: none;
+}
+
+.availability-section h2 {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(2.4rem, 4.5vw, 3.5rem);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 14px;
+}
+
+.availability-section p {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(1.2rem, 1.6vw, 1.4rem);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 34px;
+}
+
+
 /* --- Residential Promo Section --- */
 .res-promo-section {
     padding: 80px 20px;
@@ -116,7 +184,7 @@
     display: flex;
     align-items: center;
     gap: 60px;
-    max-width: 1100px;
+    max-width: 1240px;
     margin: 0 auto;
 }
 
@@ -155,15 +223,16 @@
 }
 
 .res-promo-image {
-    flex: 1;
+    flex: 1.5;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .res-promo-image img {
-    max-width: 100%;
-    max-height: 350px;
+    width: 100%;
+    max-width: 760px;
+    height: auto;
     object-fit: contain;
     filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
 }
@@ -202,8 +271,8 @@
     content: "";
     position: absolute;
     bottom: -1px; /* Pull down slightly to cover any sub-pixel background bleed */
-    left: 0; 
-    width: 100%; 
+    left: 0;
+    width: 100%;
     height: 41px; /* Increased slightly to maintain shape with negative bottom */
     background: white;
     clip-path: polygon(0 100%, 100% 100%, 100% 0); /* Angled cut at bottom */
@@ -213,25 +282,18 @@
 
 /* --- Other Services Section --- */
 .other-services-section {
-    padding: 80px 20px 96px;
+    padding: 96px 20px 130px;
+    /* Soft green "sunset" glow rising from the bottom-center into the footer */
     background:
-        radial-gradient(circle at 12% 18%, rgba(3, 166, 60, 0.14), transparent 28%),
-        linear-gradient(135deg, #f8fafc 0%, #eef7f1 100%);
+        radial-gradient(130% 65% at 50% 128%, rgba(3, 166, 60, 0.32) 0%, rgba(139, 217, 173, 0.18) 40%, transparent 72%),
+        linear-gradient(180deg, #ffffff 0%, #f5faf6 100%);
     overflow: hidden;
     position: relative;
 }
 
-.other-services-section::before {
-    content: "";
-    position: absolute;
-    inset: 30px 0 auto;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(3, 166, 60, 0.35), transparent);
-}
-
 .explore-header {
-    max-width: 720px;
-    margin: 0 auto 42px;
+    max-width: 680px;
+    margin: 0 auto 56px;
     text-align: center;
 }
 
@@ -256,132 +318,110 @@
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 22px;
+    max-width: 1140px;
     margin: 0 auto;
 }
 
+/* Professional media card: photo banner + overlapping icon badge */
 .service-card {
-    background:
-        linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.96)),
-        radial-gradient(circle at top right, rgba(3, 166, 60, 0.16), transparent 34%);
+    background: #ffffff;
+    border: 1px solid #e8edf2;
     border-radius: 16px;
     text-decoration: none;
     color: inherit;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(148, 163, 184, 0.35);
-    overflow: hidden;
     display: flex;
-    gap: 20px;
     flex-direction: column;
     position: relative;
-    min-height: 300px;
-    padding: 28px;
-    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    transition: transform 0.3s var(--transition-smooth),
+                box-shadow 0.3s var(--transition-smooth),
+                border-color 0.3s var(--transition-smooth);
 }
 
-.service-card::before {
+/* One confident hover state: a gentle lift */
+.service-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(3, 166, 60, 0.35);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+
+/* Photo banner */
+.service-media {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: #f1f5f9;
+}
+
+.service-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s var(--transition-smooth);
+}
+
+.service-card:hover .service-media img {
+    transform: scale(1.06);
+}
+
+/* Branded placeholder for cards without a photo yet */
+.service-media.placeholder {
+    background:
+        radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.20), transparent 45%),
+        linear-gradient(135deg, #0B8C38, #03A63C);
+}
+
+.service-media.placeholder::after {
     content: "";
     position: absolute;
     inset: 0;
-    background-image:
-        linear-gradient(rgba(3, 166, 60, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(3, 166, 60, 0.08) 1px, transparent 1px);
-    background-size: 34px 34px;
-    opacity: 0.38;
-    pointer-events: none;
-}
-
-.service-card::after {
-    content: "";
-    position: absolute;
-    right: -34px;
-    top: -34px;
-    width: 118px;
-    height: 118px;
-    border: 18px solid rgba(3, 166, 60, 0.1);
-    border-radius: 50%;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-.service-card:hover {
-    transform: translateY(-8px);
-    box-shadow:
-        0 24px 48px rgba(3, 166, 60, 0.16),
-        0 10px 22px rgba(15, 23, 42, 0.08);
-    border-color: rgba(3, 166, 60, 0.45);
-}
-
-.service-card:hover::after {
-    border-color: rgba(3, 166, 60, 0.22);
-    transform: scale(1.08);
-}
-
-.service-icon {
-    align-items: center;
-    background: linear-gradient(135deg, var(--cfn-green) 0%, var(--cfn-dark-green) 100%);
-    border-radius: 14px;
-    box-shadow: 0 10px 22px rgba(3, 166, 60, 0.26);
-    color: #ffffff;
-    display: flex;
-    font-size: 1.5rem;
-    height: 54px;
-    justify-content: center;
-    position: relative;
-    width: 54px;
-    z-index: 1;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+    background-size: 18px 18px;
 }
 
 .service-content {
     display: flex;
     flex: 1;
     flex-direction: column;
-    position: relative;
-    z-index: 1;
-}
-
-.service-kicker {
-    color: var(--cfn-dark-green);
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    margin-bottom: 10px;
-    text-transform: uppercase;
+    padding: 20px 20px 24px;
 }
 
 .service-content h3 {
-    font-size: 1.55rem;
-    font-weight: 800;
-    margin-bottom: 12px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 10px;
     color: #1e293b;
     font-family: var(--font-heading);
-    line-height: 1.2;
+    line-height: 1.25;
 }
 
 .service-content p {
     color: #64748b;
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.6;
-    margin-bottom: 25px;
+    margin-bottom: 22px;
     flex: 1;
 }
 
 .service-link {
     font-weight: 700;
     color: var(--cfn-green);
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
+    letter-spacing: 0.04em;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    transition: gap 0.2s ease;
+    transition: gap 0.25s ease;
     margin-top: auto;
 }
 
 .service-card:hover .service-link {
     gap: 12px;
-    color: var(--cfn-dark-green);
 }
 
 /* Responsive */
@@ -389,22 +429,99 @@
     .hero {
         padding-top: 100px;
     }
-    
+
     .hero-title {
         font-size: 2.5rem;
     }
-    
+
+    .hero-inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+    }
+
+    .hero-content {
+        text-align: center;
+    }
+
+    .hero-image {
+        order: -1;        /* image on top on mobile */
+        width: 100%;
+        max-width: 440px;
+    }
+
     .res-promo-content {
         flex-direction: column;
         text-align: center;
         gap: 40px;
     }
-    
+
     .res-promo-text {
         text-align: center;
     }
 
     .res-promo-image {
         order: -1; /* Image on top for mobile? Or keep bottom? Default is bottom if not set. */
+    }
+}
+
+@media (max-width: 640px) {
+    .hero {
+        min-height: auto;
+        padding: 92px 16px 56px;
+    }
+
+    .hero-inner {
+        gap: 28px;
+    }
+
+    .hero-title {
+        font-size: clamp(2rem, 11vw, 2.65rem);
+        letter-spacing: -0.03em;
+    }
+
+    .hero-subtitle {
+        font-size: 1.05rem;
+        margin-bottom: 1.8rem;
+    }
+
+    .hero-image {
+        max-width: 340px;
+    }
+
+    .availability-section {
+        padding: 42px 14px 58px;
+    }
+
+    .availability-inner {
+        border-radius: 20px;
+        padding: 42px 18px;
+    }
+
+    .search-input-wrapper {
+        border-radius: 18px;
+    }
+
+    #cfn-address-input {
+        font-size: 1rem;
+        min-width: 0;
+    }
+
+    .res-promo-section,
+    .other-services-section {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .res-promo-text h2 {
+        font-size: clamp(1.85rem, 9vw, 2.35rem);
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-media {
+        height: 170px;
     }
 }

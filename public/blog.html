@@ -17,44 +17,70 @@
     <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
     <link rel="canonical" href="https://communityfiber.net/blog.html">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Blog",
-      "@id": "https://communityfiber.net/blog.html#blog",
-      "name": "Community Fiber News and Guides",
-      "url": "https://communityfiber.net/blog.html",
-      "description": "Local fiber internet guides, Community Fiber updates, and practical resources for homes, businesses, builders, and neighborhoods.",
-      "publisher": {
-        "@type": "Organization",
-        "@id": "https://communityfiber.net/#organization",
-        "name": "Community Fiber",
-        "url": "https://communityfiber.net/",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://communityfiber.net/assets/images/community-fiber-logo.png"
-        }
-      },
-      "blogPost": [
-        {
-          "@type": "BlogPosting",
-          "headline": "Fiber vs Cable Internet",
-          "url": "https://communityfiber.net/fiber-vs-cable.html",
-          "description": "Compare fiber internet and cable internet for speed, reliability, latency, pricing, and data caps."
-        }
-      ]
+    <script type="application/ld+json" id="blog-jsonld">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "@id": "https://communityfiber.net/blog.html#blog",
+  "name": "Community Fiber News and Guides",
+  "url": "https://communityfiber.net/blog.html",
+  "description": "Local fiber internet guides, Community Fiber updates, and practical resources for homes, businesses, builders, and neighborhoods.",
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://communityfiber.net/#organization",
+    "name": "Community Fiber",
+    "url": "https://communityfiber.net/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://communityfiber.net/assets/images/community-fiber-logo.png"
     }
+  },
+  "blogPost": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Fiber vs Cable Internet in Elkhart County",
+      "url": "https://communityfiber.net/blog/fiber-vs-cable-elkhart-county.html",
+      "description": "Compare fiber and cable internet for speed, upload performance, latency, reliability, and long-term value for Elkhart County homes.",
+      "datePublished": "2026-06-25",
+      "dateModified": "2026-06-25"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "How Fiber Internet Installation Works",
+      "url": "https://communityfiber.net/blog/how-fiber-installation-works.html",
+      "description": "Learn what to expect before, during, and after a residential fiber internet installation with Community Fiber.",
+      "datePublished": "2026-06-25",
+      "dateModified": "2026-06-25"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "What Businesses Should Look for in Fiber Internet",
+      "url": "https://communityfiber.net/blog/business-fiber-internet-guide.html",
+      "description": "A practical guide for businesses comparing fiber internet, support, reliability, upload speed, and network needs.",
+      "datePublished": "2026-06-25",
+      "dateModified": "2026-06-25"
+    },
+    {
+      "@type": "BlogPosting",
+      "headline": "What Internet Speed Do I Need?",
+      "url": "https://communityfiber.net/blog/what-internet-speed-do-i-need.html",
+      "description": "A practical guide to choosing the right fiber internet speed for streaming, gaming, work, school, smart homes, and everyday browsing.",
+      "datePublished": "2026-06-25",
+      "dateModified": "2026-06-25"
+    }
+  ]
+}
     </script>
-    
+
     <!-- CSP -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
-                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com;">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
+                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,7 +98,7 @@
 
     <!-- Standard Header Placeholder -->
     <div id="master-header"></div>
-    
+
     <main>
         <section class="blog-hero" data-animate="fade-up">
             <h1>Community News</h1>
@@ -93,26 +119,52 @@
                 </div>
 
                 <div class="guide-grid">
-                    <article class="guide-card">
-                        <span class="guide-kicker">Internet comparison</span>
-                        <h3><a href="fiber-vs-cable.html">Fiber vs cable internet</a></h3>
-                        <p>Compare fiber and cable service for speed, upload performance, latency, reliability, data caps, contracts, and long-term value.</p>
-                        <a class="guide-link" href="fiber-vs-cable.html">Read the comparison <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    <!-- GENERATED_POSTS_START -->
+
+                    <article class="guide-card post-card">
+                        <span class="guide-kicker">Internet Comparison</span>
+                        <h3><a href="blog/fiber-vs-cable-elkhart-county.html">Fiber vs Cable Internet in Elkhart County</a></h3>
+                        <p>See how fiber and cable internet differ for speed, uploads, latency, reliability, and home use in Elkhart County.</p>
+                        <div class="post-card-meta">
+                            <span>6 min read</span>
+                            <span>Updated 2026-06-25</span>
+                        </div>
+                        <a class="guide-link" href="blog/fiber-vs-cable-elkhart-county.html">Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
                     </article>
 
-                    <article class="guide-card">
-                        <span class="guide-kicker">Home internet</span>
-                        <h3><a href="residential.html">Residential fiber internet plans</a></h3>
-                        <p>Check local availability, review no-contract home internet options, and see how symmetrical fiber speeds support streaming, gaming, work, and smart homes.</p>
-                        <a class="guide-link" href="residential.html">View residential service <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    <article class="guide-card post-card">
+                        <span class="guide-kicker">Installation</span>
+                        <h3><a href="blog/how-fiber-installation-works.html">How Fiber Internet Installation Works</a></h3>
+                        <p>Understand the basic steps of a fiber installation, from checking availability to equipment setup and testing.</p>
+                        <div class="post-card-meta">
+                            <span>5 min read</span>
+                            <span>Updated 2026-06-25</span>
+                        </div>
+                        <a class="guide-link" href="blog/how-fiber-installation-works.html">Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
                     </article>
 
-                    <article class="guide-card">
-                        <span class="guide-kicker">Support</span>
-                        <h3><a href="support.html#support-faq">Fiber internet FAQ</a></h3>
-                        <p>Find answers about installation, billing, equipment, speed, data caps, and local support from the Community Fiber team.</p>
-                        <a class="guide-link" href="support.html#support-faq">Browse FAQs <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    <article class="guide-card post-card">
+                        <span class="guide-kicker">Business Fiber</span>
+                        <h3><a href="blog/business-fiber-internet-guide.html">What Businesses Should Look for in Fiber Internet</a></h3>
+                        <p>Know what to compare when choosing business fiber internet: uptime, upload speed, support, scalability, and installation planning.</p>
+                        <div class="post-card-meta">
+                            <span>6 min read</span>
+                            <span>Updated 2026-06-25</span>
+                        </div>
+                        <a class="guide-link" href="blog/business-fiber-internet-guide.html">Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
                     </article>
+
+                    <article class="guide-card post-card">
+                        <span class="guide-kicker">Residential Fiber</span>
+                        <h3><a href="blog/what-internet-speed-do-i-need.html">What Internet Speed Do I Need?</a></h3>
+                        <p>Match your household&#39;s streaming, gaming, work, school, and smart home needs to the right fiber internet speed.</p>
+                        <div class="post-card-meta">
+                            <span>5 min read</span>
+                            <span>Updated 2026-06-25</span>
+                        </div>
+                        <a class="guide-link" href="blog/what-internet-speed-do-i-need.html">Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    </article>
+                <!-- GENERATED_POSTS_END -->
                 </div>
             </div>
         </section>
@@ -141,13 +193,19 @@
                 <a href="footer/privacy-policy.html">Privacy Policy</a>
                 <a href="footer/terms-of-service.html">Terms of Service</a>
                 <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy.html">Open Internet Policy</a>
             </div>
+            <address class="footer-address">
+                <strong>NPTech</strong>
+                Physical: 19066 Market ST, New Paris, IN 46553<br>
+                Mailing: PO Box 47, New Paris, IN 46553
+            </address>
             <p>&copy; 2026 Community Fiber. All rights reserved.</p>
         </div>
     </footer>
 
     <!-- Scripts -->
-    <script type="module" src="assets/js/main.js"></script> 
+    <script type="module" src="assets/js/main.js"></script>
     <script type="module" src="assets/js/blog.js"></script>
     <script src="assets/js/standard-header.js"></script>
 

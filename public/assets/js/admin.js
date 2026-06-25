@@ -70,12 +70,12 @@ onAuthStateChanged(auth, (user) => {
 function checkAccess(user) {
     currentUser = user;
     isAdmin = (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
-    
+
     document.getElementById('user-name').textContent = user.displayName || user.email || 'User';
     document.getElementById('user-avatar').src = safeUrl(user.photoURL, imageFallback);
     document.getElementById('user-role').textContent = isAdmin ? 'Admin' : 'Viewer';
     document.getElementById('user-role').className = `badge ${isAdmin ? 'bg-green' : 'bg-gray'}`;
-    
+
     document.querySelectorAll('.user-name-display').forEach(el => el.textContent = user.displayName ? user.displayName.split(' ')[0] : 'User');
 
     if (isAdmin) {
@@ -106,13 +106,13 @@ document.querySelectorAll('.nav-item').forEach(btn => {
         if (tab === 'leads') loadLeads();
         if (tab === 'promotions') loadPromotions(); // NEW
         if (tab === 'plans') loadPlans();
-        if (tab === 'install') loadInstallSteps(); 
+        if (tab === 'install') loadInstallSteps();
         if (tab === 'neighborhoods') loadNeighborhoods();
         if (tab === 'business') loadBusinessLogos();
         if (tab === 'employees') loadEmployees();
         if (tab === 'announcements') loadAnnouncementSettings();
         if (tab === 'testimonials') loadTestimonials();
-        if (tab === 'news') loadNews(); 
+        if (tab === 'news') loadNews();
     });
 });
 
@@ -143,7 +143,7 @@ async function loadDashboard() {
         // Load and process analytics data
         const analyticsRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'analytics_pageviews');
         const analyticsSnap = await getDocs(query(analyticsRef, orderBy('timestamp', 'desc'), limit(500))); // Increased limit for better data
-        
+
         let totalViews = analyticsSnap.size;
         let deviceStats = { mobile: 0, desktop: 0, tablet: 0 };
         let pageStats = {};
@@ -152,10 +152,10 @@ async function loadDashboard() {
 
         analyticsSnap.forEach(doc => {
             const data = doc.data();
-            
+
             // Device stats
             deviceStats[data.deviceType || 'desktop']++;
-            
+
             // Page stats
             const p = data.page || 'unknown';
             pageStats[p] = (pageStats[p] || 0) + 1;
@@ -202,7 +202,7 @@ async function loadDashboard() {
                 <span style="background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:10px; font-size:0.85rem; font-weight:700;">${escapeHtml(count)}</span>
             </div>
         `).join('');
-        
+
         document.getElementById('top-pages-list').innerHTML = listHtml || '<p>No data yet.</p>';
 
     } catch (err) {
@@ -286,14 +286,14 @@ function renderTrafficSourceChart(referrerData) {
 async function loadLeads() {
     const tbody = document.getElementById('leads-table-body');
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loading...</td></tr>';
-    
+
     const filter = document.getElementById('lead-filter').value;
     let q = collection(db, 'artifacts', '162296779236', 'public', 'data', 'leads');
-    
+
     if (filter !== 'all') {
         q = query(q, where('type', '==', filter));
     }
-    
+
     try {
         const snapshot = await getDocs(q);
         const leads = [];
@@ -344,13 +344,13 @@ async function loadPromotions() {
     try {
         const docRef = doc(db, 'artifacts', '162296779236', 'public', 'data', 'site_content', 'promotions');
         const docSnap = await getDoc(docRef);
-        
+
         if (docSnap.exists()) {
             const data = docSnap.data();
             document.getElementById('promo-title').value = data.title || '';
             document.getElementById('promo-description').value = data.description || '';
             document.getElementById('promo-finePrint').value = data.finePrint || '';
-            
+
             // Convert array back to newline separated string for textarea
             if (data.items && Array.isArray(data.items)) {
                 document.getElementById('promo-items').value = data.items.join('\n');
@@ -398,29 +398,34 @@ if(promotionsForm) {
 async function loadPlans() {
     const container = document.getElementById('plans-list');
     container.innerHTML = '<p>Loading...</p>';
-    
+
     try {
         const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'plans');
         const snapshot = await getDocs(ref);
-        
+
         container.innerHTML = '';
-        snapshot.forEach(doc => {
-            const plan = doc.data();
+
+        const plans = [];
+        snapshot.forEach(doc => plans.push({ id: doc.id, data: doc.data() }));
+        plans.sort((a, b) => ((Number(a.data.order) || 0) - (Number(b.data.order) || 0))
+            || ((Number(a.data.price) || 0) - (Number(b.data.price) || 0)));
+
+        plans.forEach(({ id, data: plan }) => {
             const card = document.createElement('div');
             card.className = 'admin-card';
             card.innerHTML = `
-                <h3>${escapeHtml(plan.name || '')} <span style="font-size:0.8rem; color:green;">$${escapeHtml(plan.price || '')}</span></h3>
+                <h3>${escapeHtml(String(plan.order ?? '–'))}. ${escapeHtml(plan.name || '')} <span style="font-size:0.8rem; color:green;">$${escapeHtml(plan.price || '')}</span></h3>
                 <p>${escapeHtml(plan.speed || '')} - ${escapeHtml(plan.description?.substring(0, 50) || '')}...</p>
                 <div class="card-actions">
-                    ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="plan">Edit</button>` : ''}
-                    ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="plan">Delete</button>` : ''}
+                    ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${id}" data-type="plan">Edit</button>` : ''}
+                    ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${id}" data-type="plan">Delete</button>` : ''}
                 </div>
             `;
             container.appendChild(card);
-            
+
             if(isAdmin) {
-                card.querySelector('.btn-edit').addEventListener('click', () => openEditModal('plan', doc.id, plan));
-                card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('plan', doc.id));
+                card.querySelector('.btn-edit').addEventListener('click', () => openEditModal('plan', id, plan));
+                card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('plan', id));
             }
         });
 
@@ -485,11 +490,11 @@ async function loadInstallSteps() {
 async function loadNeighborhoods() {
     const container = document.getElementById('hoods-list');
     container.innerHTML = '<p>Loading...</p>';
-    
+
     try {
         const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'neighborhoods');
         const snapshot = await getDocs(ref);
-        
+
         container.innerHTML = '';
         snapshot.forEach(doc => {
             const hood = doc.data();
@@ -510,7 +515,7 @@ async function loadNeighborhoods() {
                 card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('neighborhoods', doc.id));
             }
         });
-        
+
          if (snapshot.empty) container.innerHTML = '<p>No neighborhoods found. Add one!</p>';
 
     } catch (err) {
@@ -522,11 +527,11 @@ async function loadNeighborhoods() {
 async function loadEmployees() {
     const container = document.getElementById('employees-list');
     container.innerHTML = '<p>Loading...</p>';
-    
+
     try {
         const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'employees');
         const snapshot = await getDocs(ref);
-        
+
         container.innerHTML = '';
         snapshot.forEach(doc => {
             const emp = doc.data();
@@ -559,7 +564,7 @@ async function loadEmployees() {
                 card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('employees', doc.id));
             }
         });
-        
+
          if (snapshot.empty) container.innerHTML = '<p>No employees found. Add one!</p>';
 
     } catch (err) {
@@ -574,7 +579,7 @@ async function loadAnnouncementSettings() {
     try {
         const docRef = doc(db, 'artifacts', '162296779236', 'public', 'data', 'settings', 'banner');
         const docSnap = await getDoc(docRef);
-        
+
         if (docSnap.exists()) {
             const data = docSnap.data();
             document.getElementById('banner-active').checked = data.active || false;
@@ -612,11 +617,11 @@ if(bannerForm) {
 async function loadTestimonials() {
     const container = document.getElementById('testimonials-list');
     container.innerHTML = '<p>Loading...</p>';
-    
+
     try {
         const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'testimonials');
         const snapshot = await getDocs(ref);
-        
+
         container.innerHTML = '';
         snapshot.forEach(doc => {
             const t = doc.data();
@@ -637,7 +642,7 @@ async function loadTestimonials() {
                 card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('testimonials', doc.id));
             }
         });
-        
+
          if (snapshot.empty) container.innerHTML = '<p>No testimonials found. Add one!</p>';
 
     } catch (err) {
@@ -650,18 +655,18 @@ async function loadTestimonials() {
 async function loadNews() {
     const container = document.getElementById('news-list');
     container.innerHTML = '<p>Loading...</p>';
-    
+
     try {
         const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'news');
         const q = query(ref, orderBy('date', 'desc'));
         const snapshot = await getDocs(q);
-        
+
         container.innerHTML = '';
         snapshot.forEach(doc => {
             const item = doc.data();
             const date = item.date ? (item.date.toDate ? item.date.toDate().toLocaleDateString() : new Date(item.date).toLocaleDateString()) : 'No Date';
             const itemImageUrl = safeUrl(item.imageUrl, '', { allowDataImage: true });
-            
+
             const card = document.createElement('div');
             card.className = 'admin-card';
             card.innerHTML = `
@@ -672,7 +677,7 @@ async function loadNews() {
                 <p style="font-size:0.9rem; color:#475569; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(item.excerpt || '')}</p>
                 ${itemImageUrl ? `<img src="${itemImageUrl}" alt="" style="width:100%; height:120px; object-fit:cover; border-radius:8px; margin:10px 0;">` : ''}
                 <p style="font-size:0.8rem; color:#0369a1;">Link: ${escapeHtml(item.linkText || '')} (${escapeHtml(safeUrl(item.linkUrl, '#'))})</p>
-                
+
                 <div class="card-actions">
                     ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="news">Edit</button>` : ''}
                     ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${doc.id}" data-type="news">Delete</button>` : ''}
@@ -685,7 +690,7 @@ async function loadNews() {
                 card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('news', doc.id));
             }
         });
-        
+
          if (snapshot.empty) container.innerHTML = '<p>No news posts found. Add one!</p>';
 
     } catch (err) {
@@ -698,12 +703,12 @@ async function loadNews() {
 async function loadBusinessLogos() {
     const container = document.getElementById('business-logos-list');
     container.innerHTML = '<p>Loading...</p>';
-    
+
     try {
         const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'business_logos');
         const q = query(ref, orderBy('name', 'asc'));
         const snapshot = await getDocs(q);
-        
+
         container.innerHTML = '';
         snapshot.forEach(doc => {
             const item = doc.data();
@@ -725,7 +730,7 @@ async function loadBusinessLogos() {
                 card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('business_logo', doc.id));
             }
         });
-        
+
          if (snapshot.empty) container.innerHTML = '<p>No business logos found. Add one!</p>';
 
     } catch (err) {
@@ -741,12 +746,12 @@ const modalFields = document.getElementById('modal-fields');
 function openEditModal(type, id, data = null) {
     if (!isAdmin) return;
     const field = (value) => escapeHtml(value || '');
-    
+
     document.getElementById('edit-id').value = id || '';
     document.getElementById('edit-type').value = type;
     document.getElementById('modal-title').textContent = id ? `Edit ${type}` : `Add ${type}`;
-    
-    modalFields.innerHTML = ''; 
+
+    modalFields.innerHTML = '';
 
     if (type === 'plan') {
         modalFields.innerHTML = `
@@ -755,8 +760,20 @@ function openEditModal(type, id, data = null) {
                 <input type="text" name="name" class="form-control" value="${field(data?.name)}" required>
             </div>
             <div>
+                <label class="form-label">Display Order</label>
+                <input type="number" name="order" class="form-control" value="${field(data?.order)}" placeholder="1 = first, 2 = second, ...">
+            </div>
+            <div>
                 <label class="form-label">Price</label>
                 <input type="number" name="price" class="form-control" value="${field(data?.price)}" required>
+            </div>
+            <div>
+                <label class="form-label">Promo: Original Price (optional)</label>
+                <input type="number" name="originalPrice" class="form-control" value="${field(data?.originalPrice)}" placeholder="Crossed-out 'was' price — leave blank for none">
+            </div>
+            <div>
+                <label class="form-label">Promo Label (optional)</label>
+                <input type="text" name="promoLabel" class="form-control" value="${field(data?.promoLabel)}" placeholder="e.g. Limited time only · New customers only">
             </div>
             <div>
                 <label class="form-label">Speed</label>
@@ -769,6 +786,10 @@ function openEditModal(type, id, data = null) {
             <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
                 <input type="checkbox" id="plan-popular" name="isPopular" ${data?.isPopular ? 'checked' : ''} style="width: auto;">
                 <label for="plan-popular" class="form-label" style="margin-bottom: 0; cursor: pointer;">Best Value (Gold Highlight)</label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                <input type="checkbox" id="plan-autopay" name="requiresAutopay" ${data?.requiresAutopay ? 'checked' : ''} style="width: auto;">
+                <label for="plan-autopay" class="form-label" style="margin-bottom: 0; cursor: pointer;">Requires E-Bill &amp; Auto Pay</label>
             </div>
         `;
     } else if (type === 'hood') {
@@ -915,10 +936,10 @@ function openViewLeadModal(lead) {
     if (!viewLeadModal || !content) return;
 
     let html = '<div class="detail-grid">';
-    
+
     // Define field priority for display order
     const priority = ['type', 'status', 'submittedAt', 'name', 'businessName', 'company', 'contactName', 'email', 'phone', 'address', 'message', 'details', 'requirements', 'topic', 'projectType'];
-    
+
     const formatVal = (key, val) => {
         if (key === 'submittedAt' && val && val.toDate) return val.toDate().toLocaleString();
         if (typeof val === 'object') return JSON.stringify(val);
@@ -963,20 +984,74 @@ document.querySelectorAll('.view-lead-close').forEach(btn => {
 });
 
 
+// Downscale + compress an image file into a small data URL so the Firestore
+// document stays well under the size limit. Prefers WebP (keeps transparency
+// for logos and compresses photos well), falling back to JPEG.
+function compressImageFile(file, { maxDim = 1280, quality = 0.85, maxBytes = 900 * 1024 } = {}) {
+    return new Promise((resolve, reject) => {
+        // Read as a data: URL (allowed by the admin page CSP; blob: URLs are not).
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('Could not read file'));
+        reader.onload = () => {
+            const img = new Image();
+            img.onload = () => {
+                let { width, height } = img;
+                if (Math.max(width, height) > maxDim) {
+                    const scale = maxDim / Math.max(width, height);
+                    width = Math.round(width * scale);
+                    height = Math.round(height * scale);
+                }
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+                let type = 'image/webp';
+                let out = canvas.toDataURL(type, quality);
+                if (!out.startsWith('data:image/webp')) {
+                    type = 'image/jpeg'; // browser doesn't support WebP export
+                    out = canvas.toDataURL(type, quality);
+                }
+
+                // Estimate bytes from base64 length; step quality down until it fits.
+                let q = quality;
+                while (out.length * 0.75 > maxBytes && q > 0.4) {
+                    q -= 0.15;
+                    out = canvas.toDataURL(type, q);
+                }
+                resolve(out);
+            };
+            img.onerror = () => reject(new Error('Could not read image'));
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
 function setupFileUploadListener() {
     setTimeout(() => {
         const fileInput = document.getElementById('photo-upload');
         if (fileInput) {
-            fileInput.addEventListener('change', function(e) {
+            fileInput.addEventListener('change', async function(e) {
                 const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = function() {
-                        document.getElementById('photo-url-input').value = reader.result;
-                        document.getElementById('upload-status').textContent = "Photo ready to save!";
-                        document.getElementById('upload-status').style.color = "green";
+                if (!file) return;
+                const status = document.getElementById('upload-status');
+                const urlInput = document.getElementById('photo-url-input');
+                if (status) { status.textContent = "Optimizing photo…"; status.style.color = "#64748b"; }
+                try {
+                    const dataUrl = await compressImageFile(file);
+                    urlInput.value = dataUrl;
+                    if (status) {
+                        const kb = Math.round((dataUrl.length * 0.75) / 1024);
+                        status.textContent = `Photo ready to save (${kb} KB)`;
+                        status.style.color = "green";
                     }
-                    reader.readAsDataURL(file);
+                } catch (err) {
+                    console.error("Image processing failed", err);
+                    if (status) {
+                        status.textContent = "Could not process this image. Try a different file.";
+                        status.style.color = "red";
+                    }
                 }
             });
         }
@@ -995,7 +1070,7 @@ editForm.addEventListener('submit', async (e) => {
     const type = document.getElementById('edit-type').value;
     const formData = new FormData(editForm);
     const data = Object.fromEntries(formData.entries());
-    
+
     if (data.price) data.price = Number(data.price);
     if (data.stepNumber) data.stepNumber = Number(data.stepNumber);
     if (data.date) data.date = new Date(data.date); // Convert date string to Date object
@@ -1006,6 +1081,11 @@ editForm.addEventListener('submit', async (e) => {
 
     if (type === 'plan') {
         data.isPopular = !!editForm.querySelector('[name="isPopular"]').checked;
+        data.requiresAutopay = !!editForm.querySelector('[name="requiresAutopay"]').checked;
+        data.order = data.order ? Number(data.order) : 0;
+        // Promo: original (crossed-out) price + label. Blank original = no promo.
+        data.originalPrice = data.originalPrice ? Number(data.originalPrice) : null;
+        data.promoLabel = (data.promoLabel || '').trim();
     }
 
     let collectionName;
@@ -1025,9 +1105,9 @@ editForm.addEventListener('submit', async (e) => {
         } else {
             await addDoc(collRef, data);
         }
-        
+
         editModal.style.display = 'none';
-        
+
         if (type === 'plan') loadPlans();
         if (type === 'hood') loadNeighborhoods();
         if (type === 'testimonial') loadTestimonials();
@@ -1035,7 +1115,7 @@ editForm.addEventListener('submit', async (e) => {
         if (type === 'install_step') loadInstallSteps();
         if (type === 'news') loadNews(); // NEW
         if (type === 'business_logo') loadBusinessLogos();
-        
+
     } catch (err) {
         console.error("Save failed", err);
         alert("Error saving data: " + err.message);
@@ -1048,7 +1128,7 @@ async function deleteItem(type, id) {
 
     let collectionName;
     if (type === 'plan') collectionName = 'plans';
-    else if (type === 'neighborhoods') collectionName = 'neighborhoods'; 
+    else if (type === 'neighborhoods') collectionName = 'neighborhoods';
     else if (type === 'hood') collectionName = 'neighborhoods';
     else if (type === 'testimonial') collectionName = 'testimonials';
     else if (type === 'testimonials') collectionName = 'testimonials';
@@ -1056,10 +1136,10 @@ async function deleteItem(type, id) {
     else if (type === 'install_step') collectionName = 'install_steps';
     else if (type === 'news') collectionName = 'news'; // NEW
     else if (type === 'business_logo') collectionName = 'business_logos';
-    
+
     try {
         await deleteDoc(doc(db, 'artifacts', '162296779236', 'public', 'data', collectionName, id));
-        
+
         if (type === 'plan') loadPlans();
         if (type === 'neighborhoods' || type === 'hood') loadNeighborhoods();
         if (type === 'testimonial' || type === 'testimonials') loadTestimonials();

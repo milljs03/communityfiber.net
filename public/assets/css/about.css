@@ -45,91 +45,229 @@
 
 /* Mission Section */
 .mission-section {
-    margin: -40px auto 60px;
+    margin: 70px auto 80px;
     position: relative;
     z-index: 10;
     padding: 0 20px;
 }
 
-.mission-card {
-    background: white;
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    text-align: center;
-    max-width: 900px;
+.mission-layout {
+    align-items: center;
+    display: grid;
+    gap: 48px;
+    grid-template-columns: minmax(0, 0.9fr) minmax(460px, 1.25fr);
     margin: 0 auto;
-    border-top: 5px solid var(--cfn-green);
+    max-width: 1280px;
 }
 
-.mission-card h2 {
-    font-size: 2rem;
+.mission-copy {
+    text-align: left;
+}
+
+.mission-eyebrow {
+    display: inline-block;
+    background: #dcfce7;
+    color: var(--cfn-dark-green);
+    font-weight: 800;
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+}
+
+.mission-copy h2 {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
     color: var(--npt-black);
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+    line-height: 1.05;
 }
 
-.mission-card p {
-    font-size: 1.1rem;
+.mission-copy p {
+    font-size: 1.12rem;
     color: #475569;
     line-height: 1.8;
+    max-width: 680px;
+    margin: 0;
 }
 
-/* History Grid */
+.mission-photo-wrap {
+    align-self: center;
+    position: relative;
+}
+
+.mission-photo {
+    display: block;
+    height: auto;
+    width: 100%;
+}
+
+.mission-photo-wrap::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 28%;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff);
+}
+
+/* Credibility stat strip */
+.mission-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 38px;
+    padding-top: 34px;
+    border-top: 1px solid #dbe7df;
+}
+
+.mission-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.stat-num {
+    font-family: var(--font-heading);
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--cfn-green);
+    line-height: 1;
+}
+
+.stat-suffix {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.stat-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* History: past -> future */
+.history-section {
+    margin-bottom: 80px;
+}
+
+.history-header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 44px;
+}
+
+.history-eyebrow {
+    display: inline-block;
+    color: var(--cfn-dark-green);
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.history-header h2 {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--npt-black);
+    line-height: 1.15;
+    margin: 0;
+}
+
 .history-grid {
     display: flex;
-    gap: 40px;
-    margin-bottom: 80px;
+    gap: 28px;
+    align-items: stretch;
     position: relative;
-    align-items: flex-start;
 }
 
 .history-col {
     flex: 1;
-    background: #f8fafc;
-    padding: 40px;
-    border-radius: 16px;
-    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    padding: 36px;
+    border-radius: 20px;
+    border: 1px solid #eef2f6;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.history-col.glass-card {
-    background: rgba(248, 250, 252, 0.8);
-    border-color: rgba(226, 232, 240, 0.6);
-}
-
-.history-col.glass-card:hover {
-    box-shadow: var(--glow-green-hover),
-                0 2px 0 0 rgba(255,255,255,0.9) inset;
+.history-col:hover {
     transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.09);
+    border-color: rgba(3, 166, 60, 0.25);
 }
 
-/* Updated .col-icon to remove circle styling */
-.col-icon {
-    /* Removed background, border-radius, box-shadow, width, height */
-    background: transparent;
+.history-col.is-future {
+    background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 55%);
+    border-color: rgba(3, 166, 60, 0.22);
+}
+
+/* Top row: logo + era badge */
+.history-col-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.col-logo img {
+    height: 52px;
     width: auto;
-    height: auto;
-    margin-bottom: 25px;
-    display: block; /* Allows simple image placement */
-}
-
-/* Ensure logos look good */
-.col-icon img {
-    height: 70px; /* Consistent height for both logos */
-    width: auto;  /* Maintain aspect ratio */
     object-fit: contain;
     display: block;
 }
 
-/* Hover effect specifically for the NPTech logo link */
-.col-icon a {
+.col-logo a {
     display: inline-block;
     transition: transform 0.2s ease;
 }
 
-.col-icon a:hover {
+.col-logo a:hover {
     transform: scale(1.05);
+}
+
+.era-badge {
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 6px 12px;
+    border-radius: 50px;
+    background: #f1f5f9;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.era-badge-green {
+    background: #dcfce7;
+    color: var(--cfn-dark-green);
+}
+
+/* Circular connector showing the progression between eras */
+.history-connector {
+    flex: 0 0 auto;
+    align-self: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cfn-green);
+    font-size: 1.15rem;
+    z-index: 2;
 }
 
 .history-col h3 {
@@ -286,7 +424,7 @@
 .mirror-card {
     background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
     border: 1px solid #e2e8f0;
-    overflow: hidden; 
+    overflow: hidden;
     position: relative;
 }
 
@@ -305,14 +443,14 @@
 .mirror-effect::before {
     content: "";
     position: absolute;
-    top: 0; 
+    top: 0;
     /* Use the CSS variable set by JS, default to off-screen */
-    left: var(--shine-pos, -100%); 
-    width: 60%; 
+    left: var(--shine-pos, -100%);
+    width: 60%;
     height: 100%;
-    background: linear-gradient(to right, 
-        rgba(255,255,255,0) 0%, 
-        rgba(255,255,255,0.8) 50%, 
+    background: linear-gradient(to right,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.8) 50%,
         rgba(255,255,255,0) 100%
     );
     transform: skewX(-25deg);
@@ -335,24 +473,24 @@
     font-weight: 800;
     color: #94a3b8;
     text-shadow: 1px 1px 0 white;
-    z-index: 2; 
+    z-index: 2;
 }
 
 /* Team Toggle Button */
 .team-toggle-btn {
-    display: block; 
-    margin: 0 auto 40px; 
-    padding: 16px 40px; 
-    background: white; 
-    border: 2px solid var(--npt-black); 
-    border-radius: 50px; 
-    font-weight: 800; 
-    font-size: 1.1rem; 
-    color: var(--npt-black); 
-    cursor: pointer; 
+    display: block;
+    margin: 0 auto 40px;
+    padding: 16px 40px;
+    background: white;
+    border: 2px solid var(--npt-black);
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--npt-black);
+    cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    font-family: var(--font-heading); 
+    font-family: var(--font-heading);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -374,8 +512,54 @@
 
 /* Responsive */
 @media (max-width: 800px) {
+    .mission-section { margin: 48px auto 64px; }
+    .mission-layout { grid-template-columns: 1fr; gap: 34px; }
+    .mission-copy { text-align: center; }
+    .mission-copy p { margin: 0 auto; }
+    .mission-photo-wrap { order: -1; }
     .history-grid { flex-direction: column; }
+    .history-connector { transform: rotate(90deg); }
+    .mission-stats { grid-template-columns: repeat(2, 1fr); gap: 24px; }
     .hero-content h1 { font-size: 2.2rem; }
+}
+
+@media (max-width: 560px) {
+    .about-hero {
+        padding: 82px 16px 56px;
+    }
+
+    .mission-section,
+    .heritage-gallery-section,
+    .team-section {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .mission-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .history-col {
+        padding: 24px;
+    }
+
+    .history-col-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .slideshow-container {
+        border-radius: 10px;
+    }
+
+    .mySlides {
+        height: 280px;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 

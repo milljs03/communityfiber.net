@@ -1,0 +1,57 @@
+{
+  "slug": "business-fiber-internet-guide",
+  "title": "What Businesses Should Look for in Fiber Internet",
+  "description": "A practical guide for businesses comparing fiber internet, support, reliability, upload speed, and network needs.",
+  "summary": "Know what to compare when choosing business fiber internet: uptime, upload speed, support, scalability, and installation planning.",
+  "category": "Business Fiber",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
+  "readTime": "6 min read",
+  "image": "https://communityfiber.net/assets/images/community-fiber-logo.png",
+  "body": [
+    {
+      "type": "paragraph",
+      "text": "Business internet has to do more than load web pages. It supports phones, cloud software, payment systems, video meetings, file transfers, security systems, guest WiFi, and daily operations. That makes reliability, support, and upload performance just as important as the advertised download speed."
+    },
+    {
+      "type": "heading",
+      "text": "Look beyond the headline speed"
+    },
+    {
+      "type": "paragraph",
+      "text": "A fast download number is useful, but businesses should also ask how the connection performs during uploads, video calls, cloud backups, and multiple users working at the same time. Fiber can be a strong fit because it is built for modern two-way internet use."
+    },
+    {
+      "type": "heading",
+      "text": "Support matters when the internet is operational"
+    },
+    {
+      "type": "paragraph",
+      "text": "When a business depends on internet access, support is part of the product. Local support can make planning, installation, troubleshooting, and follow-up easier because the provider understands the service area and the network."
+    },
+    {
+      "type": "heading",
+      "text": "Plan for growth"
+    },
+    {
+      "type": "paragraph",
+      "text": "A business may add cloud tools, cameras, phones, WiFi users, or new locations over time. Choosing fiber service with room to grow can reduce the chance that the connection becomes a bottleneck later."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Ask how many employees and devices the connection needs to support.",
+        "Consider upload-heavy tasks like backups, video, design files, and cloud software.",
+        "Plan WiFi coverage for staff, customers, offices, and work areas.",
+        "Make sure installation timing works with business operations."
+      ]
+    },
+    {
+      "type": "cta",
+      "title": "Talk through your business needs",
+      "text": "Community Fiber can review your location, expected usage, and installation needs.",
+      "href": "../business.html",
+      "label": "Request a business quote"
+    }
+  ]
+}

@@ -37,7 +37,7 @@ async function loadBusinessLogos() {
         // Recalculate animation
         const singleSetCount = halfwayPoint + snapshot.size;
         const totalSlides = singleSetCount * 2;
-        
+
         track.style.width = `${totalSlides * 200}px`;
 
         const styleElement = document.createElement('style');
@@ -71,7 +71,7 @@ const successMsg = document.getElementById('success-message');
 if (form) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         // --- SPAM PROTECTION ---
         const honeypot = document.getElementById('website-check');
         const isTooFast = (Date.now() - pageLoadTime) < 2000; // Block if submitted in < 2 seconds
@@ -104,7 +104,7 @@ if (form) {
 
         try {
             await postJson('/api/submitLead', formData);
-            
+
             form.style.display = 'none';
             successMsg.classList.remove('hidden');
             successMsg.style.display = 'block';

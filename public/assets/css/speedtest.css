@@ -75,3 +75,27 @@
     left: 5px;
     top: -2px;
 }
+
+@media (max-width: 640px) {
+    .speedtest-wrapper {
+        padding: 0 16px 44px;
+    }
+
+    .speedtest-container {
+        padding-top: 28px;
+    }
+
+    .speedtest-header h1 {
+        font-size: clamp(2rem, 10vw, 2.6rem);
+    }
+
+    .speedtest-iframe-wrapper {
+        border-radius: 12px;
+        margin-left: -6px;
+        margin-right: -6px;
+    }
+
+    .speed-tips {
+        padding: 22px;
+    }
+}

@@ -1,0 +1,65 @@
+{
+  "slug": "what-internet-speed-do-i-need",
+  "title": "What Internet Speed Do I Need?",
+  "description": "A practical guide to choosing the right fiber internet speed for streaming, gaming, work, school, smart homes, and everyday browsing.",
+  "summary": "Match your household's streaming, gaming, work, school, and smart home needs to the right fiber internet speed.",
+  "category": "Residential Fiber",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
+  "readTime": "5 min read",
+  "image": "https://communityfiber.net/assets/images/community-fiber-logo.png",
+  "body": [
+    {
+      "type": "paragraph",
+      "text": "Choosing an internet plan is easier when you think about how your home actually uses the connection. A small household that streams shows and checks email needs something different than a busy home with remote work, online classes, gaming, security cameras, and large downloads happening at the same time."
+    },
+    {
+      "type": "heading",
+      "text": "Quick answer"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Around 200 Mbps is a solid fit for everyday browsing, streaming, schoolwork, and smaller households.",
+        "Around 500 Mbps gives families more room for video calls, streaming, smart TVs, tablets, and connected devices.",
+        "1 Gig is best for heavy-use homes, gaming, large downloads, 4K streaming, creators, and households where many devices are active at once."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Why fiber speed feels different"
+    },
+    {
+      "type": "paragraph",
+      "text": "Fiber internet is not only about download speed. A fiber connection can also support stronger upload performance, which matters for video calls, sending files, cloud backups, security cameras, and working from home. That upload side is one reason fiber often feels smoother than older cable connections."
+    },
+    {
+      "type": "heading",
+      "text": "Think about simultaneous use"
+    },
+    {
+      "type": "paragraph",
+      "text": "The right plan depends less on one device and more on how many things are happening at the same time. One 4K stream may not be a problem, but a 4K stream, a video call, online gaming, phone updates, and cloud backups can stack up quickly."
+    },
+    {
+      "type": "callout",
+      "title": "Local tip",
+      "text": "If your household has grown into more streaming, remote work, or smart home devices over the last few years, choose the plan that gives you room to grow instead of only matching today's minimum need."
+    },
+    {
+      "type": "heading",
+      "text": "When to choose the fastest plan"
+    },
+    {
+      "type": "paragraph",
+      "text": "The top speed tier makes the most sense when the internet is central to daily life. If multiple people are streaming, gaming, working, uploading files, and using smart devices at the same time, the extra room can reduce bottlenecks and make the connection feel more consistent."
+    },
+    {
+      "type": "cta",
+      "title": "Check your address",
+      "text": "See whether Community Fiber service is available at your home and compare current residential speed tiers.",
+      "href": "../residential.html",
+      "label": "View residential plans"
+    }
+  ]
+}

@@ -59,16 +59,16 @@
       ]
     }
     </script>
-    
+
     <!-- UPDATED CSP -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
-                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com;">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
+                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -94,24 +94,38 @@
 
     <!-- Hero Section -->
     <header class="hero">
-        <div class="hero-content fade-in-section">
-            <h1 class="hero-title">Investing in Local Communities <br><span class="highlight-text">We Call Home.</span></h1>
-            <p class="hero-subtitle">Enter your address to see if <span class="text-accent" style="color:var(--cfn-light-green)">fiber internet</span> is available at your home.</p>
-            
+        <div class="hero-inner">
+            <div class="hero-content fade-in-section">
+                <h1 class="hero-title">Investing in Local Communities <br><span class="highlight-text">We Call Home.</span></h1>
+                <p class="hero-subtitle">Locally owned, gigabit <span class="text-accent" style="color:var(--cfn-green)">fiber internet</span> — built for the towns we live in.</p>
+                <a href="https://search.communityfiber.net/community-fiber-site-hero" class="btn-primary-action">Check Availability <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="hero-image fade-in-section">
+                <img src="assets/images/family.png" alt="A family enjoying fast, reliable fiber internet together at home">
+            </div>
+        </div>
+    </header>
+
+    <!-- Availability Search Section -->
+    <section class="availability-section" id="availability" data-animate="fade-up">
+        <div class="availability-inner">
+            <h2>Is fiber available at your home?</h2>
+            <p>Enter your address to see if Community Fiber is live in your area.</p>
+
             <!-- Address Autocomplete Search Widget -->
             <div class="availability-search-container">
                 <div class="search-input-wrapper">
                     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
-                    
+
                     <input type="text" id="cfn-address-input" placeholder="Start entering your address..." autocomplete="off">
                 </div>
             </div>
-            
+
             <p id="redirect-message" class="hidden">Redirecting to service check...</p>
         </div>
-    </header>
+    </section>
 
     <!-- Residential Fiber Promo Section -->
     <section class="res-promo-section" data-animate="fade-up">
@@ -135,16 +149,15 @@
         <div class="container">
             <div class="explore-header">
                 <span class="section-tag">Explore Community Fiber</span>
-                <h2 class="section-title-small">Find the right path</h2>
-                <p>Start with service, support, local updates, or the team building fiber across our communities.</p>
+                <h2 class="section-title-small">How can we help you?</h2>
+                <p>Residential and business fiber, local support, and everything in between.</p>
             </div>
             <div class="services-grid" data-animate="stagger">
 
                 <!--Residential-->
-                <a href="residential.html" class="service-card glass-card">
-                    <div class="service-icon"><i class="fa-solid fa-house-signal"></i></div>
+                <a href="residential.html" class="service-card">
+                    <div class="service-media"><img src="assets/images/residential.jpeg" alt="Modern fiber-connected home"></div>
                     <div class="service-content">
-                        <span class="service-kicker">For homes</span>
                         <h3>Residential Internet</h3>
                         <p>Fast, reliable fiber internet for your home. No contracts, no data caps.</p>
                         <span class="service-link">Learn More <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -153,10 +166,9 @@
 
 
                 <!-- Business -->
-                <a href="business.html" class="service-card glass-card">
-                    <div class="service-icon"><i class="fa-solid fa-briefcase"></i></div>
+                <a href="business.html" class="service-card">
+                    <div class="service-media"><img src="assets/images/business.png" alt="Local business powered by fiber"></div>
                     <div class="service-content">
-                        <span class="service-kicker">For work</span>
                         <h3>Business Internet</h3>
                         <p>Enterprise-grade reliability and dedicated support to keep your business running smoothly.</p>
                         <span class="service-link">Get a Quote <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -164,10 +176,9 @@
                 </a>
 
                 <!-- Builders -->
-                <a href="builders.html" class="service-card glass-card">
-                    <div class="service-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+                <a href="builders.html" class="service-card">
+                    <div class="service-media"><img src="assets/images/construction.jpg" alt="New home under construction in a local development"></div>
                     <div class="service-content">
-                        <span class="service-kicker">For projects</span>
                         <h3>Builders & Developers</h3>
                         <p>Partner with us to install utility-grade fiber infrastructure in your new developments.</p>
                         <span class="service-link">Partner Program <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -175,10 +186,9 @@
                 </a>
 
                 <!-- Support -->
-                <a href="support.html" class="service-card glass-card">
-                    <div class="service-icon"><i class="fa-solid fa-headset"></i></div>
+                <a href="support.html" class="service-card">
+                    <div class="service-media placeholder"></div>
                     <div class="service-content">
-                        <span class="service-kicker">Local help</span>
                         <h3>Support Center</h3>
                         <p>Have a question or issue? Visit our help center to submit a ticket or find answers.</p>
                         <span class="service-link">Get Help <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -186,10 +196,9 @@
                 </a>
 
                 <!-- About Us -->
-                <a href="about.html" class="service-card glass-card">
-                    <div class="service-icon"><i class="fa-solid fa-people-group"></i></div>
+                <a href="about.html" class="service-card">
+                    <div class="service-media"><img src="assets/images/building.jpg" alt="Community Fiber local office"></div>
                     <div class="service-content">
-                        <span class="service-kicker">Local roots</span>
                         <h3>About Us</h3>
                         <p>Learn about our history, our mission, and the local team dedicated to serving you.</p>
                         <span class="service-link">Meet the Team <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -197,10 +206,9 @@
                 </a>
 
                 <!-- News -->
-                <a href="blog.html" class="service-card glass-card">
-                    <div class="service-icon"><i class="fa-solid fa-newspaper"></i></div>
+                <a href="blog.html" class="service-card">
+                    <div class="service-media"><img src="assets/images/mail.png" alt="Community Fiber news and updates"></div>
                     <div class="service-content">
-                        <span class="service-kicker">Stay current</span>
                         <h3>News & Updates</h3>
                         <p>Stay informed about our network expansion, community events, and latest announcements.</p>
                         <span class="service-link">Read More <i class="fa-solid fa-arrow-right-long"></i></span>
@@ -217,7 +225,13 @@
                 <a href="footer/privacy-policy.html">Privacy Policy</a>
                 <a href="footer/terms-of-service.html">Terms of Service</a>
                 <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy.html">Open Internet Policy</a>
             </div>
+            <address class="footer-address">
+                <strong>NPTech</strong>
+                Physical: 19066 Market ST, New Paris, IN 46553<br>
+                Mailing: PO Box 47, New Paris, IN 46553
+            </address>
             <p>&copy; 2026 Community Fiber. All rights reserved.</p>
         </div>
     </footer>

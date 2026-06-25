@@ -1,6 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+import { getAnalytics, isSupported as isAnalyticsSupported } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js";
+import { appCheckConfig } from './app-check-config.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAkgQq1AziwIGCiviYuuxEwAEKunYLweeA",
@@ -15,6 +17,20 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const analytics = getAnalytics(app);
+let analytics = null;
+const appCheck = appCheckConfig.recaptchaV3SiteKey
+  ? initializeAppCheck(app, {
+      provider: new ReCaptchaV3Provider(appCheckConfig.recaptchaV3SiteKey),
+      isTokenAutoRefreshEnabled: true
+    })
+  : null;
 
-export { app, db, analytics };
+isAnalyticsSupported()
+  .then((supported) => {
+    if (supported) analytics = getAnalytics(app);
+  })
+  .catch((error) => {
+    console.warn('Firebase Analytics unavailable in this browser.', error);
+  });
+
+export { app, db, analytics, appCheck };

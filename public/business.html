@@ -17,16 +17,16 @@
     <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
     <link rel="canonical" href="https://communityfiber.net/business.html">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
-    
+
     <!-- UPDATED CSP -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
-                   frame-src https://www.google.com https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
-                   connect-src 'self' https://www.gstatic.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com;">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
+                   frame-src https://www.google.com https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
+                   connect-src 'self' https://www.gstatic.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,7 +60,7 @@
                 <h2 class="section-title" style="margin-bottom:0.5rem; font-size: 1.8rem; color: var(--npt-black);">Trusted by Local Businesses</h2>
                 <p style="color:#64748b;">Powering the connectivity of our community's best enterprises.</p>
             </div>
-            
+
             <div class="logo-ribbon">
                 <div class="logo-track" id="logo-track">
                     <!-- Original Set of 10 -->
@@ -74,7 +74,7 @@
                     <div class="logo-slide"><img src="assets/images/8.png" alt="Partner 8"></div>
                     <div class="logo-slide"><img src="assets/images/9.png" alt="Partner 9"></div>
                     <div class="logo-slide"><img src="assets/images/10.png" alt="Partner 10"></div>
-                    
+
                     <!-- Duplicate Set of 10 (For seamless loop) -->
                     <div class="logo-slide"><img src="assets/images/1.png" alt="Partner 1"></div>
                     <div class="logo-slide"><img src="assets/images/2.png" alt="Partner 2"></div>
@@ -91,7 +91,7 @@
         </section>
 
         <div class="container">
-            
+
             <!-- Map Section -->
             <section id="service-territory" class="map-section" data-animate="fade-up">
                 <div class="section-header">
@@ -104,7 +104,7 @@
                     <div class="map-container">
                         <iframe src="https://www.google.com/maps/d/embed?mid=16mma39raMyatbdMcF42v598h3FuWFg4&ehbc=2E312F" width="640" height="480"></iframe>
                     </div>
-                    
+
                     <!-- Custom Legend -->
                     <div class="map-legend">
                         <h3>Map Legend</h3>
@@ -219,14 +219,20 @@
                 <a href="footer/privacy-policy.html">Privacy Policy</a>
                 <a href="footer/terms-of-service.html">Terms of Service</a>
                 <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy.html">Open Internet Policy</a>
             </div>
+            <address class="footer-address">
+                <strong>NPTech</strong>
+                Physical: 19066 Market ST, New Paris, IN 46553<br>
+                Mailing: PO Box 47, New Paris, IN 46553
+            </address>
             <p>&copy; 2026 Community Fiber. All rights reserved.</p>
         </div>
     </footer>
 
     <!-- Scripts -->
     <script src="assets/js/standard-header.js"></script>
-    <script type="module" src="assets/js/main.js"></script> 
+    <script type="module" src="assets/js/main.js"></script>
     <script type="module" src="assets/js/business.js"></script>
     <script type="module" src="assets/js/traffic-logger.js"></script>
 </body>

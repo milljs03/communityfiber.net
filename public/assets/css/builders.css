@@ -67,7 +67,7 @@
 .logo-track {
     display: flex;
     /* Adjust width based on repeated sets */
-    width: calc(200px * 20); 
+    width: calc(200px * 20);
     animation: scroll 30s linear infinite;
 }
 
@@ -335,6 +335,40 @@ select { -webkit-appearance: none; appearance: none; }
 @media (max-width: 900px) {
     .form-wrapper { grid-template-columns: 1fr; gap: 2rem; }
     .form-row { flex-direction: column; gap: 0; }
+}
+
+@media (max-width: 640px) {
+    .builders-hero {
+        clip-path: none;
+        padding: 4.5rem 1rem 3.25rem;
+    }
+
+    .builders-hero h1 {
+        font-size: clamp(2rem, 10vw, 2.65rem);
+    }
+
+    .builder-partners,
+    .benefits-section {
+        margin-bottom: 2.5rem;
+    }
+
+    .logo-ribbon::before,
+    .logo-ribbon::after {
+        width: 48px;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .benefit-card,
+    .form-card {
+        padding: 1.5rem;
+    }
+
+    .benefit-card::before {
+        font-size: 5.5rem;
+    }
 }
 
 /* Anti-Spam Honeypot (Visually Hidden) */

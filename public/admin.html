@@ -6,14 +6,14 @@
     <title>Admin Dashboard | Community Fiber</title>
     <meta name="robots" content="noindex, nofollow">
     <!-- UPDATED CSP -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://cdn.jsdelivr.net; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
-                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://communityfiber-net.firebaseapp.com;
-                   connect-src 'self' https://www.gstatic.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com;">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
+                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://communityfiber-net.firebaseapp.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
+                   connect-src 'self' https://www.gstatic.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,7 +43,7 @@
 
     <!-- Admin App (Hidden until logged in) -->
     <div id="admin-app" class="admin-layout hidden">
-        
+
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -98,7 +98,7 @@
 
         <!-- Main Content -->
         <main class="content-area">
-            
+
             <!-- Dashboard View -->
             <section id="view-dashboard" class="view-section active">
                 <div class="page-header">

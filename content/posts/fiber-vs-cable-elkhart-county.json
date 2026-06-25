@@ -1,0 +1,61 @@
+{
+  "slug": "fiber-vs-cable-elkhart-county",
+  "title": "Fiber vs Cable Internet in Elkhart County",
+  "description": "Compare fiber and cable internet for speed, upload performance, latency, reliability, and long-term value for Elkhart County homes.",
+  "summary": "See how fiber and cable internet differ for speed, uploads, latency, reliability, and home use in Elkhart County.",
+  "category": "Internet Comparison",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
+  "readTime": "6 min read",
+  "image": "https://communityfiber.net/assets/images/community-fiber-logo.png",
+  "body": [
+    {
+      "type": "paragraph",
+      "text": "Cable internet and fiber internet can both get a home online, but they are built on different network technology. That difference matters most when a household needs reliable performance for streaming, gaming, work, video calls, uploads, and connected devices."
+    },
+    {
+      "type": "heading",
+      "text": "The short version"
+    },
+    {
+      "type": "paragraph",
+      "text": "Fiber is built to move data using light over glass fiber. Cable internet usually runs over coaxial cable that was originally designed around television service. For modern households, fiber can offer stronger upload performance, lower latency, and a connection that is better suited for many devices working at the same time."
+    },
+    {
+      "type": "heading",
+      "text": "Uploads matter more than people think"
+    },
+    {
+      "type": "paragraph",
+      "text": "Download speed gets most of the attention, but upload speed affects real daily tasks: video meetings, sending photos and files, cloud backups, security cameras, online classes, and livestreaming. Fiber service is often designed around more balanced performance, which helps those tasks feel smoother."
+    },
+    {
+      "type": "heading",
+      "text": "Latency affects calls and gaming"
+    },
+    {
+      "type": "paragraph",
+      "text": "Latency is the time it takes data to move from your device to a server and back. Lower latency helps online games, voice calls, video meetings, and interactive apps feel more responsive. A strong fiber connection can help reduce that lag compared with older network types."
+    },
+    {
+      "type": "heading",
+      "text": "Reliability is part of the value"
+    },
+    {
+      "type": "paragraph",
+      "text": "A home internet plan should be judged by more than a headline speed. Local support, consistent performance, equipment setup, installation quality, and clear pricing all affect the real experience after the service is installed."
+    },
+    {
+      "type": "callout",
+      "title": "Good fit for fiber",
+      "text": "Fiber is especially useful for households with remote workers, students, gamers, streaming TVs, smart home devices, or anyone who sends large files and depends on stable video calls."
+    },
+    {
+      "type": "cta",
+      "title": "Compare your options",
+      "text": "Community Fiber is expanding local fiber service for homes and businesses. Start by checking whether service is available at your address.",
+      "href": "../index.html",
+      "label": "Check availability"
+    }
+  ]
+}

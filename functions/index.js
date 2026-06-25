@@ -11,7 +11,11 @@ const db = getFirestore();
 const RESEND_API_KEY = defineSecret('RESEND_API_KEY');
 const DATA_ROOT = 'artifacts/162296779236/public/data';
 const RATE_LIMIT_ROOT = 'serverControls/rateLimits/entries';
-const REQUIRE_APP_CHECK = process.env.REQUIRE_APP_CHECK === 'true';
+const DUPLICATE_ROOT = 'serverControls/leadDuplicates/entries';
+const DUPLICATE_WINDOW_MS = 24 * 60 * 60 * 1000;
+const IS_TEST = process.env.NODE_ENV === 'test';
+const IS_EMULATOR = process.env.FUNCTIONS_EMULATOR === 'true';
+const REQUIRE_APP_CHECK = !IS_TEST && (!IS_EMULATOR || process.env.REQUIRE_APP_CHECK === 'true');
 const RESEND_API_URL = 'https://api.resend.com/emails';
 
 const LEAD_TYPES = new Set(['support_ticket', 'business_quote', 'builder_inquiry']);
@@ -37,9 +41,22 @@ function parseBody(req) {
   return req.body;
 }
 
+function normalizeIp(value) {
+  const raw = String(value || '').replace(/^::ffff:/, '');
+  const ipLikePrefix = raw.match(/^[a-fA-F0-9:.,\s-]+/);
+  return String(ipLikePrefix ? ipLikePrefix[0] : '')
+    .trim()
+    .slice(0, 120);
+}
+
 function getClientIp(req) {
-  const forwarded = String(req.get('x-forwarded-for') || '').split(',')[0].trim();
-  return forwarded || req.ip || 'unknown';
+  const platformIp = normalizeIp(req.ip || req.socket?.remoteAddress || req.connection?.remoteAddress);
+  if (platformIp) return platformIp;
+
+  // Fallback only. Do not prefer caller-controllable forwarding headers over
+  // the platform-populated remote address.
+  const forwarded = normalizeIp(String(req.get('x-forwarded-for') || '').split(',').pop());
+  return forwarded || 'unknown';
 }
 
 function getSessionKey(req, body) {
@@ -137,6 +154,51 @@ async function enforceRateLimit({ key, bucket, limit, windowMs }) {
       keyHash,
       startedAt: inWindow ? startedAt : now,
       count: nextCount,
+      updatedAt: FieldValue.serverTimestamp()
+    }, { merge: true });
+  });
+}
+
+function canonicalFingerprintPart(value) {
+  return String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function buildLeadFingerprint(lead) {
+  const parts = [
+    lead.type,
+    lead.email,
+    lead.phone,
+    lead.name,
+    lead.businessName,
+    lead.company,
+    lead.contactName,
+    lead.address,
+    lead.message,
+    lead.requirements,
+    lead.details
+  ];
+  return hashValue(parts.map(canonicalFingerprintPart).join('|'));
+}
+
+async function enforceLeadDuplicateSuppression(fingerprint) {
+  const now = Date.now();
+  const id = fingerprint.slice(0, 180);
+  const ref = db.doc(`${DUPLICATE_ROOT}/${id}`);
+
+  await db.runTransaction(async (transaction) => {
+    const snap = await transaction.get(ref);
+    const current = snap.exists ? snap.data() : null;
+    const firstSeenAtMs = Number(current?.firstSeenAtMs || 0);
+    const isDuplicate = firstSeenAtMs && now - firstSeenAtMs < DUPLICATE_WINDOW_MS;
+
+    if (isDuplicate) {
+      throw new Error('duplicate_submission');
+    }
+
+    transaction.set(ref, {
+      fingerprint,
+      firstSeenAtMs: now,
+      expiresAtMs: now + DUPLICATE_WINDOW_MS,
       updatedAt: FieldValue.serverTimestamp()
     }, { merge: true });
   });
@@ -267,6 +329,43 @@ function buildLeadEmail(route, lead, leadId) {
   return { subject, text, html };
 }
 
+function buildResendError(status, bodyText) {
+  let providerMessage = String(bodyText || '').slice(0, 500);
+  try {
+    const parsed = JSON.parse(bodyText);
+    providerMessage = cleanText(parsed.message || parsed.error || providerMessage, 300);
+  } catch (error) {
+    providerMessage = providerMessage.replace(/\s+/g, ' ').trim().slice(0, 300);
+  }
+
+  let reason = 'resend_request_failed';
+  if (/domain is not verified/i.test(providerMessage)) {
+    reason = 'resend_domain_not_verified';
+  } else if (status === 401 || status === 403) {
+    reason = 'resend_auth_or_permission_failed';
+  } else if (status === 429) {
+    reason = 'resend_rate_limited';
+  }
+
+  const error = new Error(`Resend failed with ${status}: ${providerMessage}`);
+  error.provider = 'resend';
+  error.providerStatus = status;
+  error.reason = reason;
+  error.safeMessage = providerMessage;
+  return error;
+}
+
+function buildEmailFailureRecord(error) {
+  return {
+    status: 'failed',
+    provider: error.provider || 'resend',
+    reason: error.reason || 'email_send_failed',
+    providerStatus: error.providerStatus || null,
+    message: cleanText(error.safeMessage || error.message || 'Email delivery failed.', 300),
+    updatedAt: FieldValue.serverTimestamp()
+  };
+}
+
 async function sendLeadNotification(lead, leadId) {
   const route = emailRouting.routes?.[lead.type];
   if (!route) {
@@ -313,7 +412,7 @@ async function sendLeadNotification(lead, leadId) {
 
   const resultText = await response.text();
   if (!response.ok) {
-    throw new Error(`Resend failed with ${response.status}: ${resultText.slice(0, 500)}`);
+    throw buildResendError(response.status, resultText);
   }
 
   let result = {};
@@ -347,6 +446,11 @@ async function handleJsonPost(req, res, handler) {
       return;
     }
 
+    if (error.message === 'duplicate_submission') {
+      res.status(200).json({ ok: true });
+      return;
+    }
+
     console.error('Request rejected', error);
     sendError(res, 400, 'invalid_request', error.message || 'Invalid request.');
   }
@@ -370,7 +474,11 @@ exports.submitLead = onRequest({
     await enforceRateLimit({ key: sessionKey, bucket: 'lead_session', limit: 3, windowMs: 15 * 60 * 1000 });
 
     const lead = buildLead(body);
+    const fingerprint = buildLeadFingerprint(lead);
+    await enforceLeadDuplicateSuppression(fingerprint);
+
     lead.ipHash = hashValue(ip).slice(0, 32);
+    lead.fingerprintHash = fingerprint.slice(0, 32);
 
     const leadRef = await db.collection(`${DATA_ROOT}/leads`).add(lead);
     try {
@@ -384,16 +492,24 @@ exports.submitLead = onRequest({
     } catch (error) {
       console.error('Lead email notification failed', error);
       await leadRef.set({
-        emailNotification: {
-          status: 'failed',
-          updatedAt: FieldValue.serverTimestamp()
-        }
+        emailNotification: buildEmailFailureRecord(error)
       }, { merge: true });
     }
 
     response.status(200).json({ ok: true });
   });
 });
+
+if (process.env.NODE_ENV === 'test') {
+  exports._test = {
+    buildLead,
+    buildLeadFingerprint,
+    canonicalFingerprintPart,
+    getClientIp,
+    hashValue,
+    normalizeIp
+  };
+}
 
 exports.logPageView = onRequest({
   cors: false,

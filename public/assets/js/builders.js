@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, observerOptions);
 
     document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
-    
+
 });
 
 // Form Handling
@@ -28,7 +28,7 @@ const successMsg = document.getElementById('success-message');
 if(form) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         // --- SPAM PROTECTION ---
         const honeypot = document.getElementById('website-check');
         const isTooFast = (Date.now() - pageLoadTime) < 2000; // Block if submitted in < 2 seconds

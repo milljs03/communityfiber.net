@@ -91,7 +91,7 @@
     display: flex;
     /* (Slide Width + Gap) * Total Items */
     /* Approx 200px per slide * 20 items (10 original + 10 dupe) */
-    width: calc(200px * 20); 
+    width: calc(200px * 20);
     animation: scroll 40s linear infinite;
 }
 
@@ -123,7 +123,7 @@
 @keyframes scroll {
     0% { transform: translateX(0); }
     /* Move left by width of Original 10 items (200px * 10) */
-    100% { transform: translateX(calc(-200px * 10)); } 
+    100% { transform: translateX(calc(-200px * 10)); }
 }
 
 .logo-track:hover {
@@ -383,5 +383,43 @@ label {
     .form-row {
         flex-direction: column;
         gap: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .business-hero {
+        clip-path: none;
+        padding: 4.5rem 1rem 3.25rem;
+    }
+
+    .business-hero h1 {
+        font-size: clamp(2rem, 10vw, 2.65rem);
+    }
+
+    .trusted-partners {
+        margin-bottom: 2.5rem;
+    }
+
+    .logo-ribbon::before,
+    .logo-ribbon::after {
+        width: 48px;
+    }
+
+    .map-wrapper-card,
+    .form-card {
+        border-radius: 12px;
+        padding: 1rem;
+    }
+
+    .map-container {
+        padding-bottom: 78%;
+    }
+
+    .legend-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-wrapper {
+        gap: 1.5rem;
     }
 }

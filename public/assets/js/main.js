@@ -3,7 +3,7 @@
 // --- Global Scope for Google Maps Callback ---
 window.initAutocomplete = function() {
     console.log("Google Maps API Loaded");
-    
+
     const input = document.getElementById('cfn-address-input');
     if (!input) return;
 
@@ -28,10 +28,10 @@ window.initAutocomplete = function() {
     // 2. Handle 'Enter' Key manually
     input.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
-            e.preventDefault(); 
+            e.preventDefault();
             setTimeout(function() {
                 redirectToApp(input.value);
-            }, 300); 
+            }, 300);
         }
     });
 };
@@ -56,7 +56,7 @@ function redirectToApp(address, siteSource) {
 
 // --- Standard Site Logic ---
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // --- Mobile Menu Toggle Logic ---
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
@@ -65,14 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileMenuBtn.addEventListener('click', (e) => {
             e.stopPropagation(); // Prevent immediate closing if listener is on document
             navLinks.classList.toggle('active');
-            
+
             // Sync the icon text
             const isOpen = navLinks.classList.contains('active');
             mobileMenuBtn.textContent = isOpen ? '✕' : '☰';
-            
+
             // Accessibility: toggling expanded state
             mobileMenuBtn.setAttribute('aria-expanded', isOpen);
-            
+
             console.log('Mobile menu toggled. Active class present:', isOpen);
         });
 
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     // --- Scroll Animations ---
     const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
     const observer = new IntersectionObserver((entries, obs) => {

@@ -22,53 +22,61 @@ document.addEventListener('DOMContentLoaded', async () => {
     const plansGrid = document.getElementById('plans-grid');
     const loadingEl = document.getElementById('loading-indicator');
     const errorEl = document.getElementById('error-message');
-    
+
     updatePageHeader();
 
     try {
         const plansRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'plans');
         const snapshot = await getDocs(plansRef);
-        
+
         let plans = [];
         snapshot.forEach(doc => {
             const data = doc.data();
-            data.price = Number(data.price); 
+            data.price = Number(data.price);
             plans.push(data);
         });
 
         if (plans.length === 0) {
             console.warn("No plans in DB, using fallback defaults.");
              plans = [
-                { 
-                    name: "Standard", speed: "200 Mbps", price: 65, 
+                {
+                    name: "Basic", speed: "100 Mbps", price: 45,
+                    description: "Reliable fiber internet for everyday browsing and streaming.",
+                    features: [], isPopular: false, requiresAutopay: true, order: 1
+                },
+                {
+                    name: "Standard", speed: "200 Mbps", price: 65,
                     description: "Great for small households. Stream HD video, browse the web.",
-                    features: ["Local Service", "No Contracts"], isPopular: false
+                    features: [], isPopular: false, order: 2
                 },
-                { 
-                    name: "Advanced", speed: "500 Mbps", price: 80, 
+                {
+                    name: "Advanced", speed: "500 Mbps", price: 80,
                     description: "Ideal for families. Support multiple streams & video calls.",
-                    features: ["Local Service", "No Contracts"], isPopular: false 
+                    features: [], isPopular: false, order: 3
                 },
-                { 
-                    name: "Premium", speed: "1 Gbps", price: 89, 
+                {
+                    name: "Premium", speed: "1 Gbps", price: 70, originalPrice: 89,
                     description: "The ultimate experience. Perfect for 4K streaming & smart homes.",
-                    features: ["Local Service", "No Contracts"], isPopular: true
+                    features: [], isPopular: true, requiresAutopay: true,
+                    promoLabel: "Limited time only | New customers only", order: 4
                 }
             ];
         }
 
-        plans.sort((a, b) => a.price - b.price);
+        // Sort by the admin-designated display order (price as a tiebreaker)
+        plans.sort((a, b) => ((Number(a.order) || 0) - (Number(b.order) || 0))
+            || ((Number(a.price) || 0) - (Number(b.price) || 0)));
 
         loadingEl.classList.add('hidden');
         plansGrid.classList.remove('hidden');
 
         plansGrid.innerHTML = plans.map((plan, index) => generatePlanCard(plan, index)).join('');
-        
-        // Inject dynamic addons section
-        await injectAddonsSection(plansGrid);
 
-        // NEW: Add Parallax Effect to pricing cards
-        setupPricingCardParallax();
+        // Enable the mobile swipe/chevron carousel now that cards exist
+        setupPricingCarousel();
+
+        // Inject dynamic addons section (after the whole pricing section)
+        await injectAddonsSection(document.getElementById('plans-pricing'));
 
     } catch (error) {
         console.error("Error rendering plans:", error);
@@ -82,11 +90,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const tRef = collection(db, 'artifacts', '162296779236', 'public', 'data', 'testimonials');
             const tSnap = await getDocs(tRef);
-            
+
             if (!tSnap.empty) {
                 let items = [];
                 tSnap.forEach(doc => items.push(doc.data()));
-                
+
                 testimonialContainer.innerHTML = items.map(t => `
                     <div class="testimonial-card fade-in-section">
                         <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
@@ -97,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                     </div>
                 `).join('');
-                
+
                 // Observe new items
                 document.querySelectorAll('.testimonial-card').forEach(el => observer.observe(el));
             }
@@ -150,7 +158,7 @@ async function loadTimeline() {
         document.getElementById('timeline-next').addEventListener('click', () => {
             if (currentStepIndex < installSteps.length - 1) updateTimelineView(currentStepIndex + 1);
         });
-        
+
         document.getElementById('timeline-prev').addEventListener('click', () => {
             if (currentStepIndex > 0) updateTimelineView(currentStepIndex - 1);
         });
@@ -188,14 +196,20 @@ function updateTimelineView(index) {
         document.getElementById('step-badge').textContent = `Step ${step.stepNumber}`;
         document.getElementById('step-title').textContent = step.title;
         document.getElementById('step-desc').textContent = step.description;
-        
+
         const imgEl = document.getElementById('step-image');
-        if (step.imageUrl) {
-            imgEl.src = safeUrl(step.imageUrl, '', { allowDataImage: true });
-            imgEl.parentElement.style.display = 'flex';
-        } else {
-            // Fallback icon if no image
-            imgEl.parentElement.innerHTML = '<i class="fa-solid fa-wrench" style="font-size: 4rem; color: #cbd5e1;"></i>';
+        if (imgEl) {
+            const wrapper = imgEl.parentElement;
+            if (step.imageUrl) {
+                imgEl.src = safeUrl(step.imageUrl, '', { allowDataImage: true });
+                imgEl.style.display = '';
+                if (wrapper) wrapper.style.display = 'flex';
+            } else {
+                // No image: hide it but keep the element in the DOM for later steps
+                imgEl.removeAttribute('src');
+                imgEl.style.display = 'none';
+                if (wrapper) wrapper.style.display = 'none';
+            }
         }
 
         // Fade In
@@ -212,7 +226,7 @@ function updatePageHeader() {
         headerContent.innerHTML = `
             <h1>Simple Pricing. Gigabit Speeds.</h1>
             <p>
-                Experience the difference with <strong>new premium WiFi equipment included</strong> in every plan. 
+                Experience the difference with <strong>new premium WiFi equipment included</strong> in every plan.
                 We provide the hardware you need to ensure the best coverage and fastest service possible.
             </p>
         `;
@@ -262,39 +276,53 @@ async function injectAddonsSection(targetElement) {
 
         /* Card Styles */
         .addons-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            background: linear-gradient(155deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 18px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
             overflow: hidden;
-            border: 1px solid #f1f5f9;
+            border: 1px solid rgba(148, 163, 184, 0.28);
             display: flex;
             flex-direction: column;
+            position: relative;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .addons-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at top right, rgba(3, 166, 60, 0.12), transparent 32%),
+                linear-gradient(rgba(3, 166, 60, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(3, 166, 60, 0.04) 1px, transparent 1px);
+            background-size: auto, 32px 32px, 32px 32px;
+            pointer-events: none;
         }
         .addons-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            box-shadow: 0 24px 48px rgba(3, 166, 60, 0.14);
         }
 
         /* Header */
         .card-header {
-            background: #fff;
-            padding: 25px 30px;
-            border-bottom: 1px solid #f1f5f9;
+            background: rgba(255,255,255,0.84);
+            padding: 26px 30px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
             display: flex;
             align-items: center;
             gap: 12px;
+            position: relative;
+            z-index: 1;
         }
         .card-header h2 {
             margin: 0;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.55rem;
             color: #1e293b;
-            font-weight: 700;
+            font-weight: 800;
         }
         .card-header i {
-            color: #64748b;
-            font-size: 1.2rem;
+            color: #03A63C;
+            font-size: 1.3rem;
         }
 
         /* Content Sections */
@@ -303,11 +331,13 @@ async function injectAddonsSection(targetElement) {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            position: relative;
+            z-index: 1;
         }
 
         .feature-block {
             padding: 30px;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.18);
         }
         .feature-block:last-child { border-bottom: none; }
 
@@ -324,15 +354,16 @@ async function injectAddonsSection(targetElement) {
             gap: 10px;
         }
         .feature-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            background: #f1f5f9;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #052e16 0%, #067a35 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #334155;
-            font-size: 1.1rem;
+            color: #ffffff;
+            font-size: 1.15rem;
+            box-shadow: 0 12px 22px rgba(3, 166, 60, 0.22);
         }
         .feature-title {
             font-family: 'Montserrat', sans-serif;
@@ -348,8 +379,8 @@ async function injectAddonsSection(targetElement) {
         .price-amount {
             font-family: 'Montserrat', sans-serif;
             font-weight: 800;
-            font-size: 1.5rem;
-            color: #0ea5e9; /* Light blue brand color */
+            font-size: 1.7rem;
+            color: #03A63C;
             line-height: 1;
         }
         .price-period {
@@ -374,7 +405,7 @@ async function injectAddonsSection(targetElement) {
             padding: 6px 12px;
             border-radius: 50px;
             font-size: 0.8rem;
-            font-weight: 600;
+            font-weight: 800;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -385,15 +416,15 @@ async function injectAddonsSection(targetElement) {
 
         /* Eero Special Styling */
         .eero-integration {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px;
             margin-top: 15px;
             display: flex;
             align-items: center;
             gap: 20px;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
         }
         .eero-logo {
             width: 90px;
@@ -434,7 +465,7 @@ async function injectAddonsSection(targetElement) {
             line-height: 1.6;
             margin-bottom: 25px;
         }
-        
+
         .check-list {
             display: flex;
             flex-direction: column;
@@ -462,7 +493,7 @@ async function injectAddonsSection(targetElement) {
             color: #334155;
             font-size: 0.95rem;
         }
-        
+
         .fine-print {
             margin-top: 20px;
             font-size: 0.75rem;
@@ -481,58 +512,125 @@ async function injectAddonsSection(targetElement) {
             letter-spacing: 0.5px;
         }
 
+        .feature-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 18px;
+        }
+        .feature-metric {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+        }
+        .feature-metric strong {
+            display: block;
+            color: #0f172a;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+        .feature-metric span {
+            color: #64748b;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Premium WiFi card (eero) */
+        .wifi-card { overflow: hidden; }
+        .wifi-image {
+            height: 340px;
+            width: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .wifi-content {
+            position: relative;
+            z-index: 1;
+            background: #ffffff;
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .wifi-content .included-badge {
+            align-self: flex-start;
+            margin-bottom: 14px;
+        }
+        .wifi-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1.2;
+            margin: 0 0 12px;
+        }
+        .wifi-text {
+            color: #475569;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0 0 22px;
+        }
+        .wifi-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .wifi-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #334155;
+        }
+        .wifi-features i {
+            color: #03A63C;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .wifi-eero {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 18px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .wifi-eero .eero-logo {
+            width: 70px;
+            height: auto;
+            object-fit: contain;
+        }
+
     </style>
-    
+
     <div class="addons-wrapper fade-in-section">
-        
-        <!-- Left Column: Addons -->
-        <div class="addons-card">
-            <div class="card-header">
-                <i class="fa-solid fa-layer-group"></i>
-                <h2>Connectivity Features</h2>
-            </div>
-            <div class="card-body">
-                
-                <!-- Home Phone -->
-                <div class="feature-block">
-                    <div class="feature-top">
-                        <div class="feature-title-group">
-                            <div class="feature-icon"><i class="fa-solid fa-phone"></i></div>
-                            <h3 class="feature-title">Home Phone</h3>
-                        </div>
-                        <div class="price-tag">
-                            <div class="price-amount">$25</div>
-                            <div class="price-period">/mo</div>
-                        </div>
-                    </div>
-                    <p class="feature-desc">Keep your current number or start fresh. Enjoy crystal clear voice quality integrated with your fiber connection.</p>
-                    <div class="pill-container">
-                        <span class="pill pill-gray"><i class="fa-solid fa-arrow-right-arrow-left"></i> Number Porting</span>
-                        <span class="pill pill-gray"><i class="fa-solid fa-check"></i> Unlimited Local</span>
-                    </div>
+
+        <!-- Left Column: Premium WiFi -->
+        <div class="addons-card wifi-card">
+            <img src="assets/images/eerohome.jpg" alt="eero mesh WiFi set up in a modern home" class="wifi-image">
+            <div class="wifi-content">
+                <span class="included-badge">Included with every plan</span>
+                <h2 class="wifi-title">Whole-Home WiFi, Included</h2>
+                <p class="wifi-text">Every Community Fiber plan comes with managed eero mesh WiFi — strong, reliable coverage in every room, set up and supported by your local team.</p>
+                <ul class="wifi-features">
+                    <li><i class="fa-solid fa-check"></i> Whole-home mesh coverage</li>
+                    <li><i class="fa-solid fa-check"></i> App control with guest &amp; parental controls</li>
+                    <li><i class="fa-solid fa-check"></i> Local installation &amp; ongoing support</li>
+                </ul>
+                <div class="wifi-eero">
+                    <img src="assets/images/eero.webp" alt="eero" class="eero-logo">
+                    <span>Powered by eero</span>
                 </div>
-
-                <!-- Premium WiFi -->
-                <div class="feature-block" style="background:#f8fafc; flex-grow:1;">
-                    <div class="feature-top">
-                        <div class="feature-title-group">
-                            <div class="feature-icon" style="background:#e0f2fe; color:#0284c7;"><i class="fa-solid fa-wifi"></i></div>
-                            <h3 class="feature-title">Premium WiFi</h3>
-                            <span class="included-badge">Included</span>
-                        </div>
-                    </div>
-                    
-                    <p class="feature-desc">Experience wall-to-wall coverage. We include advanced mesh hardware to ensure every corner of your home is connected.</p>
-
-                    <!-- Eero Integration -->
-                    <div class="eero-integration">
-                        <img src="assets/images/eero.webp" alt="eero" class="eero-logo">
-                        <div class="eero-text">
-                            <strong>Powered by eero.</strong> Advanced security, parental controls, and guest networks built-in.
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -542,7 +640,7 @@ async function injectAddonsSection(targetElement) {
             <div class="promo-content">
                 <h2 class="promo-title">${escapeHtml(promoData.title)}</h2>
                 <p class="promo-text">${escapeHtml(promoData.description)}</p>
-                
+
                 <div class="check-list">
                     ${(promoData.items || []).map(item => `
                         <div class="check-item">
@@ -559,7 +657,7 @@ async function injectAddonsSection(targetElement) {
     </div>
     `;
     targetElement.insertAdjacentHTML('afterend', addonsHTML);
-    
+
     // Animate newly injected elements
     // Note: The observer logic at the top only runs once on load. We need to observe the new elements.
     const newObserver = new IntersectionObserver((entries, obs) => {
@@ -579,53 +677,80 @@ function generatePlanCard(plan, index) {
     const isPopular = plan.isPopular === true || plan.isPopular === "true";
     const highlightClass = isPopular ? 'popular' : '';
     const badge = isPopular ? '<div class="popular-badge">Best Value</div>' : '';
-    const features = Array.isArray(plan.features) ? plan.features : ["Local Service", "No Contracts"];
-    const featuresHtml = features.map(f => `<div class="highlight-text"><i class="fa-solid fa-check"></i> ${escapeHtml(f)}</div>`).join('');
+    const requiresAutopay = plan.requiresAutopay === true || plan.requiresAutopay === "true";
+    const autopayBanner = requiresAutopay
+        ? '<div class="card-autopay-banner"><i class="fa-solid fa-circle-info"></i> E-Bill &amp; ACH Auto Pay Required</div>'
+        : '';
+
+    // Promotional pricing: show original price crossed out when it's higher than the current price.
+    const priceNum = Number(plan.price) || 0;
+    const originalNum = Number(plan.originalPrice) || 0;
+    const isPromo = originalNum > priceNum;
+    const wasPrice = isPromo ? `<span class="price-was">$${escapeHtml(String(plan.originalPrice))}</span>` : '';
+    const promoLabelText = isPromo
+        ? (plan.promoLabel && String(plan.promoLabel).trim() ? String(plan.promoLabel).trim() : 'Limited time only | New customers only')
+        : '';
+    const promoLabel = promoLabelText
+        ? `<span class="plan-promo-label">${escapeHtml(promoLabelText)}</span>`
+        : '';
+
+    // Universal perks every plan includes, plus any extras defined on the plan.
+    const universal = ['No annual contract', 'Unlimited data - no caps', 'Local support'];
+    const skip = new Set(['local service', 'no contracts', 'no contract', 'local', 'unlimited data', 'no data caps']);
+    const extras = Array.isArray(plan.features)
+        ? plan.features.map(f => String(f || '').trim()).filter(f => f && !skip.has(f.toLowerCase()))
+        : [];
+    const features = [...universal, ...extras];
+    const featuresHtml = features
+        .map(f => `<li><i class="fa-solid fa-check"></i><span>${escapeHtml(f)}</span></li>`)
+        .join('');
 
     return `
         <div class="pricing-box ${highlightClass}">
             ${badge}
             <div class="pricing-box-inner">
                 <h3 class="panel-heading">${escapeHtml(plan.name || '')}</h3>
-                <div class="price-wrapper"><span class="price">$${escapeHtml(plan.price || '')}<small>/mo</small></span></div>
-                <div class="speed-display"><div class="speed-val">${escapeHtml(plan.speed || '')}</div><div class="speed-label">Download & Upload</div></div>
-                <div class="plan-description">${escapeHtml(plan.description || "Reliable fiber internet.")}</div>
-                <div class="core-benefits">${featuresHtml}</div>
-                 <a href="https://fiber-service-query.web.app/query.html" class="sign-up-btn" style="text-align: center; text-decoration: none; display: block;">I'm Interested</a>
+                <div class="price-wrapper ${isPromo ? 'is-promo' : ''}">
+                    ${wasPrice}
+                    <span class="price">$${escapeHtml(plan.price || '')}<small>/mo</small></span>
+                </div>
+                ${promoLabel}
+                <div class="plan-speed">
+                    <span class="plan-speed-val">${escapeHtml(plan.speed || '')}</span>
+                    <span class="plan-speed-label">Symmetrical speeds</span>
+                </div>
+                <ul class="plan-features">${featuresHtml}</ul>
+                <a href="https://fiber-service-query.web.app/query.html" class="sign-up-btn">Check Availability</a>
+                ${autopayBanner}
             </div>
         </div>
     `;
 }
 
-function setupPricingCardParallax() {
-    const cards = document.querySelectorAll('.pricing-box');
-    cards.forEach(card => {
-        const isPopular = card.classList.contains('popular');
-        const initialScale = isPopular ? 'scale(1.05)' : 'scale(1)';
-        
-        // Set initial state for popular card to be scaled
-        if (isPopular) {
-            card.style.transform = initialScale;
-        }
+// Mobile pricing carousel: native swipe + chevron buttons, with disabled-state at the ends.
+function setupPricingCarousel() {
+    const track = document.getElementById('plans-grid');
+    const prev = document.getElementById('pricing-prev');
+    const next = document.getElementById('pricing-next');
+    if (!track || !prev || !next) return;
 
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+    const stepSize = () => {
+        const card = track.querySelector('.pricing-box');
+        if (!card) return track.clientWidth;
+        const styles = window.getComputedStyle(track);
+        const gap = parseFloat(styles.columnGap || styles.gap || '16') || 16;
+        return card.getBoundingClientRect().width + gap;
+    };
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+    const updateButtons = () => {
+        const maxScroll = track.scrollWidth - track.clientWidth - 2;
+        prev.disabled = track.scrollLeft <= 2;
+        next.disabled = track.scrollLeft >= maxScroll;
+    };
 
-            const rotateX = ((y - centerY) / centerY) * -4; // Reduced Max rotation
-            const rotateY = ((x - centerX) / centerX) * 4;  // Reduced Max rotation
-
-            card.style.transition = 'transform 0.1s linear'; // Smooth follow
-            card.style.transform = `${initialScale} rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-
-        card.addEventListener('mouseleave', () => {
-            card.style.transition = 'transform 0.5s ease'; // Smooth reset
-            card.style.transform = `${initialScale} rotateX(0) rotateY(0)`;
-        });
-    });
+    prev.addEventListener('click', () => track.scrollBy({ left: -stepSize(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: stepSize(), behavior: 'smooth' }));
+    track.addEventListener('scroll', updateButtons, { passive: true });
+    window.addEventListener('resize', updateButtons);
+    updateButtons();
 }

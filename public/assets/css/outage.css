@@ -363,6 +363,9 @@
     }
 
     .outage-intro__inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.8rem;
         padding-top: 1.5rem;
     }
 

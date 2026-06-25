@@ -11,14 +11,14 @@ export async function getPlans() {
         const plansRef = collection(db, 'plans');
         // Sort by price ascending so they appear in order
         const q = query(plansRef, orderBy("price", "asc"));
-        
+
         const querySnapshot = await getDocs(q);
-        
+
         const plans = [];
         querySnapshot.forEach((doc) => {
             plans.push({ id: doc.id, ...doc.data() });
         });
-        
+
         return plans;
     } catch (error) {
         console.error("Error fetching plans:", error);

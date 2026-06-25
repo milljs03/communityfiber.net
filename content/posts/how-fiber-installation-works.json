@@ -1,0 +1,61 @@
+{
+  "slug": "how-fiber-installation-works",
+  "title": "How Fiber Internet Installation Works",
+  "description": "Learn what to expect before, during, and after a residential fiber internet installation with Community Fiber.",
+  "summary": "Understand the basic steps of a fiber installation, from checking availability to equipment setup and testing.",
+  "category": "Installation",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
+  "readTime": "5 min read",
+  "image": "https://communityfiber.net/assets/images/community-fiber-logo.png",
+  "body": [
+    {
+      "type": "paragraph",
+      "text": "Fiber installation can sound complicated, but the process is usually straightforward when you know what to expect. The main goal is to bring a fiber connection to the home, place the necessary equipment, and make sure the internet and WiFi are working properly before the technician leaves."
+    },
+    {
+      "type": "heading",
+      "text": "Step 1: Check availability"
+    },
+    {
+      "type": "paragraph",
+      "text": "The first step is confirming whether fiber service is available at your address. Availability depends on where the network has already been built and whether the home can be connected from the nearby fiber infrastructure."
+    },
+    {
+      "type": "heading",
+      "text": "Step 2: Schedule the install"
+    },
+    {
+      "type": "paragraph",
+      "text": "After service is confirmed, the installation is scheduled. The appointment gives the technician time to bring the connection into the home, set up equipment, and test the service with you."
+    },
+    {
+      "type": "heading",
+      "text": "Step 3: Bring fiber to the home"
+    },
+    {
+      "type": "paragraph",
+      "text": "The fiber line needs a protected path from the network to your home. In many cases that means buried fiber, placement of exterior equipment, and a clean entry point into the home."
+    },
+    {
+      "type": "heading",
+      "text": "Step 4: Set up WiFi and test the connection"
+    },
+    {
+      "type": "paragraph",
+      "text": "Once the connection is active, the technician sets up the home equipment and confirms that the service is working. Good WiFi placement matters, so this step is also about coverage and making sure the connection works where people actually use it."
+    },
+    {
+      "type": "callout",
+      "title": "Before the appointment",
+      "text": "Think about where you use WiFi most often: home office, living room, bedrooms, basement, or outdoor spaces. That helps the installer understand the coverage you care about most."
+    },
+    {
+      "type": "cta",
+      "title": "Ready to start?",
+      "text": "Check your address and review current residential fiber plans.",
+      "href": "../residential.html#availability-check",
+      "label": "Check availability"
+    }
+  ]
+}

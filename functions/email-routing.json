@@ -1,25 +1,25 @@
 {
   "from": "Community Fiber Forms <forms@communityfiber.net>",
-  "defaultReplyTo": "info@communityfiber.net",
+  "defaultReplyTo": "jmiller@nptel.com",
   "routes": {
     "support_ticket": {
       "label": "Support Request",
       "to": [
-        "info@communityfiber.net"
+        "jmiller@nptel.com"
       ],
       "subjectPrefix": "New Support Request"
     },
     "business_quote": {
       "label": "Business Internet Quote",
       "to": [
-        "info@communityfiber.net"
+        "jmiller@nptel.com"
       ],
       "subjectPrefix": "New Business Internet Quote"
     },
     "builder_inquiry": {
       "label": "Builder Inquiry",
       "to": [
-        "info@communityfiber.net"
+        "jmiller@nptel.com"
       ],
       "subjectPrefix": "New Builder Inquiry"
     }

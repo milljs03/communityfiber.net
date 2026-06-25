@@ -1,3 +1,6 @@
+import { getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js";
+import { appCheck } from './config/firebase-config.js';
+
 export function text(value, fallback = '') {
     if (value === null || value === undefined) return fallback;
     return String(value);
@@ -55,12 +58,21 @@ export function getSessionId() {
 
 export async function postJson(url, payload) {
     const sessionId = getSessionId();
+    const headers = {
+        'Content-Type': 'application/json',
+        'X-CFN-Session': sessionId
+    };
+
+    if (appCheck) {
+        const token = await getToken(appCheck);
+        if (token?.token) {
+            headers['X-Firebase-AppCheck'] = token.token;
+        }
+    }
+
     const response = await fetch(url, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CFN-Session': sessionId
-        },
+        headers,
         credentials: 'same-origin',
         body: JSON.stringify({ ...payload, sessionId })
     });

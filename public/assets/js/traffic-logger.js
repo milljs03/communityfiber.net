@@ -25,7 +25,7 @@ async function logVisit() {
 
     // Check cooldown
     if (lastVisit && (now - parseInt(lastVisit) < LOG_COOLDOWN)) {
-        return; 
+        return;
     }
 
     try {

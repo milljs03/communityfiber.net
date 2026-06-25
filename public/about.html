@@ -15,16 +15,16 @@
     <meta name="twitter:description" content="Learn about Community Fiber's history, mission, and team.">
     <link rel="canonical" href="https://communityfiber.net/about.html">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
-    
+
     <!-- UPDATED CSP -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
-                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com;">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
+                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,63 +53,100 @@
 
     <main class="main-content">
         <div class="container">
-            
+
             <!-- Intro / Mission -->
             <section id="our-mission" class="mission-section" data-animate="fade-up">
-                <div class="mission-card glass-card">
+                <div class="mission-layout">
+                    <div class="mission-copy">
+                    <span class="mission-eyebrow">Who We Are</span>
                     <h2>More Than Just Internet</h2>
-                    <p>In an age of faceless corporate giants, we remain proudly <strong>owned by local shareholders</strong>. We live in the communities we serve, which means your connection is our connection. We don't just build networks; we build relationships that stand the test of time.</p>
+                    <p>In an age of faceless corporate giants, we remain proudly <strong>owned by local shareholders</strong>. We live in the communities we serve, which means your connection is our connection. We don't just build networks — we build relationships that stand the test of time.</p>
+                    <div class="mission-stats">
+                        <div class="mission-stat">
+                            <span class="stat-num">1901</span>
+                            <span class="stat-label">Local Roots</span>
+                        </div>
+                        <div class="mission-stat">
+                            <span class="stat-num">125<span class="stat-suffix">yrs</span></span>
+                            <span class="stat-label">Serving Indiana</span>
+                        </div>
+                        <div class="mission-stat">
+                            <span class="stat-num">100<span class="stat-suffix">%</span></span>
+                            <span class="stat-label">Fiber Network</span>
+                        </div>
+                        <div class="mission-stat">
+                            <span class="stat-num">7<span class="stat-suffix">+</span></span>
+                            <span class="stat-label">Towns Connected</span>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="mission-photo-wrap">
+                        <img src="assets/images/employees.png" alt="Community Fiber and NPTech team members" class="mission-photo">
+                    </div>
                 </div>
             </section>
 
             <!-- History Split Section -->
-            <section id="heritage-future" class="history-grid">
-                
-                <!-- Left: NPTech Heritage -->
-                <div class="history-col glass-card" data-animate="fade-right">
-                    <div class="col-icon">
-                        <a href="https://www.np-tech.com" target="_blank" title="Visit NPTech Website">
-                            <img src="assets/images/NPtech_logo.png" alt="NPTech Logo">
-                        </a>
-                    </div>
-                    <h3>Our Heritage: NPTech</h3>
-                    <div class="history-content">
-                        <p><strong>New Paris Telephone</strong> was formed in 1901 with a simple mission: to bring telephone service to our rural community. For over a century, we have adapted to the ever-changing landscape of technology.</p>
-                        <p>In 2022, we rebranded as <strong>NPTech</strong> to better reflect our evolution. While we honor our roots in traditional telephony, we are now a full-service technology provider offering:</p>
-                        <ul class="feature-list">
-                            <li><i class="fa-solid fa-check"></i> Computer Repair & IT Support</li>
-                            <li><i class="fa-solid fa-check"></i> IP Telephone Systems</li>
-                            <li><i class="fa-solid fa-check"></i> Enterprise Cabling (Cat6)</li>
-                            <li><i class="fa-solid fa-check"></i> Cable TV Services</li>
-                        </ul>
-                    </div>
+            <section id="heritage-future" class="history-section">
+                <div class="history-header" data-animate="fade-up">
+                    <span class="history-eyebrow">Our Story</span>
+                    <h2>From telephone lines to fiber</h2>
                 </div>
 
-                <!-- Divider Line (Visual) -->
-                <div class="divider-line"></div>
+                <div class="history-grid">
 
-                <!-- Right: Community Fiber Future -->
-                <div class="history-col glass-card" data-animate="fade-left">
-                    <div class="col-icon">
-                        <img src="assets/images/community-fiber-logo.png" alt="Community Fiber Logo">
-                    </div>
-                    <h3>Our Future: Community Fiber</h3>
-                    <div class="history-content">
-                        <p><strong>Community Fiber Network</strong> (formerly Goshen Fiber Network) represents our commitment to the future. As a division of New Paris Telephone, we combine 125 years of stability with cutting-edge fiber infrastructure.</p>
-                        <p>We changed our name to reflect our expansion beyond Goshen. We are actively building and connecting schools, businesses, and homes across Northern Indiana, including:</p>
-                        <div class="locations-tags">
-                            <span>Goshen</span>
-                            <span>New Paris</span>
-                            <span>Milford</span>
-                            <span>Middlebury</span>
-                            <span>Nappanee</span>
-                            <span>Wakarusa</span>
-                            <span>Elkhart</span>
+                    <!-- Left: NPTech Heritage -->
+                    <div class="history-col" data-animate="fade-right">
+                        <div class="history-col-top">
+                            <div class="col-logo">
+                                <a href="https://www.np-tech.com" target="_blank" title="Visit NPTech Website">
+                                    <img src="assets/images/NPtech_logo.png" alt="NPTech Logo">
+                                </a>
+                            </div>
+                            <span class="era-badge">Since 1901</span>
                         </div>
-                        <p style="margin-top: 15px; font-size: 0.9rem; color: #64748b;"><em>And we're just getting started.</em></p>
+                        <h3>Our Heritage: NPTech</h3>
+                        <div class="history-content">
+                            <p><strong>New Paris Telephone</strong> was formed in 1901 with a simple mission: to bring telephone service to our rural community. For over a century, we have adapted to the ever-changing landscape of technology.</p>
+                            <p>In 2022, we rebranded as <strong>NPTech</strong> to better reflect our evolution. While we honor our roots in traditional telephony, we are now a full-service technology provider offering:</p>
+                            <ul class="feature-list">
+                                <li><i class="fa-solid fa-check"></i> Computer Repair & IT Support</li>
+                                <li><i class="fa-solid fa-check"></i> IP Telephone Systems</li>
+                                <li><i class="fa-solid fa-check"></i> Enterprise Cabling (Cat6)</li>
+                                <li><i class="fa-solid fa-check"></i> Cable TV Services</li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
 
+                    <!-- Connector: past -> future -->
+                    <div class="history-connector" aria-hidden="true"><i class="fa-solid fa-arrow-right-long"></i></div>
+
+                    <!-- Right: Community Fiber Future -->
+                    <div class="history-col is-future" data-animate="fade-left">
+                        <div class="history-col-top">
+                            <div class="col-logo">
+                                <img src="assets/images/community-fiber-logo.png" alt="Community Fiber Logo">
+                            </div>
+                            <span class="era-badge era-badge-green">Today &amp; Beyond</span>
+                        </div>
+                        <h3>Our Future: Community Fiber</h3>
+                        <div class="history-content">
+                            <p><strong>Community Fiber Network</strong> (formerly Goshen Fiber Network) represents our commitment to the future. As a division of New Paris Telephone, we combine 125 years of stability with cutting-edge fiber infrastructure.</p>
+                            <p>We changed our name to reflect our expansion beyond Goshen. We are actively building and connecting schools, businesses, and homes across Northern Indiana, including:</p>
+                            <div class="locations-tags">
+                                <span>Goshen</span>
+                                <span>New Paris</span>
+                                <span>Milford</span>
+                                <span>Middlebury</span>
+                                <span>Nappanee</span>
+                                <span>Wakarusa</span>
+                                <span>Elkhart</span>
+                            </div>
+                            <p style="margin-top: 15px; font-size: 0.9rem; color: #64748b;"><em>And we're just getting started.</em></p>
+                        </div>
+                    </div>
+
+                </div>
             </section>
 
             <!-- NEW: Heritage Gallery Slideshow -->
@@ -120,7 +157,7 @@
                 </div>
 
                 <div class="slideshow-container">
-                    
+
                     <!-- Slide 1 -->
                     <div class="mySlides fade">
                         <div class="numbertext">1 / 7</div>
@@ -141,7 +178,7 @@
                         <img src="assets/images/NP3.JPG" alt="New Paris Street View 1900s">
                         <div class="caption-text">US Mail Carrier Preparing His Route</div>
                     </div>
-                    
+
                     <!-- Slide 4 -->
                     <div class="mySlides fade">
                         <div class="numbertext">4 / 7</div>
@@ -175,16 +212,16 @@
                     <a class="next" id="nextSlide">&#10095;</a>
                 </div>
                 <br>
-                
+
                 <!-- Dots -->
                 <div style="text-align:center">
-                    <span class="dot" data-slide="1"></span> 
-                    <span class="dot" data-slide="2"></span> 
-                    <span class="dot" data-slide="3"></span> 
-                    <span class="dot" data-slide="4"></span> 
-                    <span class="dot" data-slide="5"></span> 
-                    <span class="dot" data-slide="6"></span> 
-                    <span class="dot" data-slide="7"></span> 
+                    <span class="dot" data-slide="1"></span>
+                    <span class="dot" data-slide="2"></span>
+                    <span class="dot" data-slide="3"></span>
+                    <span class="dot" data-slide="4"></span>
+                    <span class="dot" data-slide="5"></span>
+                    <span class="dot" data-slide="6"></span>
+                    <span class="dot" data-slide="7"></span>
                 </div>
             </section>
 
@@ -201,7 +238,7 @@
                             <h3>You</h3>
                             <p class="employee-title">Owner / Shareholder</p>
                             <p class="employee-fact">
-                                We are locally owned to better serve the community. Interested in investing? 
+                                We are locally owned to better serve the community. Interested in investing?
                                 <br><a href="tel:5748312176" style="color:var(--cfn-green); font-weight:700;">(574) 831-7114</a>
                             </p>
                         </div>
@@ -227,7 +264,20 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 Community Fiber. All rights reserved.</p>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="footer/privacy-policy.html">Privacy Policy</a>
+                <a href="footer/terms-of-service.html">Terms of Service</a>
+                <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy.html">Open Internet Policy</a>
+            </div>
+            <address class="footer-address">
+                <strong>NPTech</strong>
+                Physical: 19066 Market ST, New Paris, IN 46553<br>
+                Mailing: PO Box 47, New Paris, IN 46553
+            </address>
+            <p>&copy; 2026 Community Fiber. All rights reserved.</p>
+        </div>
     </footer>
 
     <!-- Scripts -->

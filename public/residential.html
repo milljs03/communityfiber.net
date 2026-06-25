@@ -17,16 +17,75 @@
     <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
     <link rel="canonical" href="https://communityfiber.net/residential.html">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
-    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Community Fiber Residential Internet Plans",
+      "description": "Residential fiber internet plans with symmetrical speeds, no annual contracts, unlimited data, and local support.",
+      "url": "https://communityfiber.net/residential.html",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "Service",
+            "name": "Basic Residential Fiber Internet",
+            "description": "100 Mbps symmetrical residential fiber internet with no annual contract, unlimited data, and local support. E-Bill and ACH Auto Pay required.",
+            "provider": { "@type": "Organization", "name": "Community Fiber", "url": "https://communityfiber.net/" },
+            "areaServed": "Elkhart County, Indiana",
+            "offers": { "@type": "Offer", "price": "45", "priceCurrency": "USD", "url": "https://fiber-service-query.web.app/query.html", "availability": "https://schema.org/InStock" }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "Service",
+            "name": "Standard Residential Fiber Internet",
+            "description": "200 Mbps symmetrical residential fiber internet with no annual contract, unlimited data, and local support.",
+            "provider": { "@type": "Organization", "name": "Community Fiber", "url": "https://communityfiber.net/" },
+            "areaServed": "Elkhart County, Indiana",
+            "offers": { "@type": "Offer", "price": "65", "priceCurrency": "USD", "url": "https://fiber-service-query.web.app/query.html", "availability": "https://schema.org/InStock" }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "Service",
+            "name": "Advanced Residential Fiber Internet",
+            "description": "500 Mbps symmetrical residential fiber internet with no annual contract, unlimited data, and local support.",
+            "provider": { "@type": "Organization", "name": "Community Fiber", "url": "https://communityfiber.net/" },
+            "areaServed": "Elkhart County, Indiana",
+            "offers": { "@type": "Offer", "price": "80", "priceCurrency": "USD", "url": "https://fiber-service-query.web.app/query.html", "availability": "https://schema.org/InStock" }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "item": {
+            "@type": "Service",
+            "name": "Premium Residential Fiber Internet",
+            "description": "1 Gbps symmetrical residential fiber internet with no annual contract, unlimited data, and local support. Limited time new customer pricing. E-Bill and ACH Auto Pay required.",
+            "provider": { "@type": "Organization", "name": "Community Fiber", "url": "https://communityfiber.net/" },
+            "areaServed": "Elkhart County, Indiana",
+            "offers": { "@type": "Offer", "price": "70", "priceCurrency": "USD", "url": "https://fiber-service-query.web.app/query.html", "availability": "https://schema.org/InStock" }
+          }
+        }
+      ]
+    }
+    </script>
+
     <!-- UPDATED CSP -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; 
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com; 
-                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://search.np-tech.com;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com;">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
+                   frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://search.np-tech.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,16 +97,16 @@
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/animations.css">
-    <link rel="stylesheet" href="assets/css/residential.css"> 
+    <link rel="stylesheet" href="assets/css/residential.css">
 </head>
 <body>
 
     <!-- Standard Header Placeholder -->
     <div id="master-header"></div>
-    
+
     <!-- Main Content Wrapper -->
     <main class="plans-wrapper">
-        
+
         <!-- Header Content -->
         <div class="plans-header-content fade-in">
             <h1>Simple Pricing. Gigabit Speeds.</h1>
@@ -67,20 +126,22 @@
                 <p>Unable to load plans at the moment. Please call us for pricing.</p>
             </div>
 
-            <!-- Dynamic Pricing Grid -->
-            <div id="plans-grid" class="pricing-container hidden">
-                <!-- Cards injected via JS -->
+            <!-- Dynamic Pricing Grid (single row on desktop, swipeable carousel on mobile) -->
+            <div class="pricing-carousel">
+                <button class="pricing-nav prev" id="pricing-prev" type="button" aria-label="Previous plan"><i class="fa-solid fa-chevron-left"></i></button>
+                <div id="plans-grid" class="pricing-container hidden">
+                    <!-- Cards injected via JS -->
+                </div>
+                <button class="pricing-nav next" id="pricing-next" type="button" aria-label="Next plan"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </section>
 
         <section id="availability-check" class="availability-embed-section" data-animate="fade-up">
             <div class="container">
-                <h2 class="section-title">Check Availability</h2>
-                <p class="section-desc">Enter your address to see if service is available at your home.</p>
                 <!-- NPT site -->
                 <div style="max-width:900px;margin:0 auto;">
                   <iframe
-                    src="https://search.np-tech.com/nptembed.html?source_site=npt_embed"
+                    src="https://search.np-tech.com/cfnembeded.html?source_site=cfn_embed"
                     title="NPT fiber availability checker"
                     loading="lazy"
                     referrerpolicy="strict-origin-when-cross-origin"
@@ -106,7 +167,7 @@
                     <!-- Step Content -->
                     <div id="timeline-content-area" class="timeline-content-card">
                         <button class="nav-arrow prev-arrow" id="timeline-prev"><i class="fa-solid fa-chevron-left"></i></button>
-                        
+
                         <div class="step-content-inner">
                             <div class="step-image-wrapper">
                                 <img id="step-image" src="" alt="Step Image">
@@ -162,7 +223,13 @@
                 <a href="footer/privacy-policy.html">Privacy Policy</a>
                 <a href="footer/terms-of-service.html">Terms of Service</a>
                 <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy.html">Open Internet Policy</a>
             </div>
+            <address class="footer-address">
+                <strong>NPTech</strong>
+                Physical: 19066 Market ST, New Paris, IN 46553<br>
+                Mailing: PO Box 47, New Paris, IN 46553
+            </address>
             <p>&copy; 2026 Community Fiber. All rights reserved.</p>
         </div>
     </footer>
@@ -170,7 +237,7 @@
     <!-- Scripts -->
     <script src="assets/js/standard-header.js"></script>
     <script type="module" src="assets/js/residential.js"></script>
-    <script type="module" src="assets/js/main.js"></script> 
+    <script type="module" src="assets/js/main.js"></script>
 
     <script type="module" src="assets/js/announcement.js"></script>
     <script type="module" src="assets/js/traffic-logger.js"></script>
