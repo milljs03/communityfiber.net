@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "mode": "repository",
+  "inventoryStrategy": "repository",
+  "completeness": "complete",
+  "included": ["."],
+  "excluded": ["node_modules", "security-scans", "generated build output except shipped public HTML"],
+  "reviewedSurfaces": [
+    {"surface": "Firestore rules", "outcome": "No issue found"},
+    {"surface": "Storage rules", "outcome": "Not applicable"},
+    {"surface": "Cloud Functions public forms", "outcome": "No issue found"},
+    {"surface": "CMS public rendering", "outcome": "Reported"},
+    {"surface": "Build-time blog rendering", "outcome": "Reported"},
+    {"surface": "Hosting headers and CSP", "outcome": "Reported"},
+    {"surface": "Dependencies and secrets", "outcome": "Rejected"}
+  ],
+  "artifacts": [
+    "artifacts/01_context/threat_model.md",
+    "artifacts/01_context/seed_research.md",
+    "artifacts/02_discovery/finding_discovery_report.md",
+    "artifacts/03_coverage/repository_coverage_ledger.md",
+    "artifacts/05_findings/*/validation_report.md",
+    "artifacts/05_findings/*/attack_path_analysis_report.md"
+  ]
+}
+

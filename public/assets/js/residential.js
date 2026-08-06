@@ -1,6 +1,8 @@
 import { db, app } from './config/firebase-config.js';
-import { collection, getDocs, orderBy, query, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { escapeHtml, safeUrl } from './security.js';
+
+const SHOW_EERO_SERVICE_FEATURE = true;
 
 document.addEventListener('DOMContentLoaded', async () => {
     // --- 0. Shared Animation Observer ---
@@ -57,8 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 {
                     name: "Premium", speed: "1 Gbps", price: 70, originalPrice: 89,
                     description: "The ultimate experience. Perfect for 4K streaming & smart homes.",
-                    features: [], isPopular: true, requiresAutopay: true,
-                    promoLabel: "Limited time only | New customers only", order: 4
+                    features: [], isPopular: true, requiresAutopay: true, order: 4
                 }
             ];
         }
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Enable the mobile swipe/chevron carousel now that cards exist
         setupPricingCarousel();
+        injectPricingFooterDisclosure();
 
         // Inject dynamic addons section (after the whole pricing section)
         await injectAddonsSection(document.getElementById('plans-pricing'));
@@ -233,45 +235,32 @@ function updatePageHeader() {
     }
 }
 
+function injectPricingFooterDisclosure() {
+    const footerContent = document.querySelector('.site-footer .footer-content');
+    if (!footerContent || footerContent.querySelector('.pricing-footer-disclosure')) return;
+
+    const disclosure = document.createElement('div');
+    disclosure.className = 'pricing-footer-disclosure';
+    disclosure.innerHTML = `
+        <p>If ACH autopay or e-bill enrollment is removed, a $5 monthly surcharge applies.</p>
+        <p>* Limited-time promotional offer; subject to change. Available to new, qualified residential customers in eligible service areas. Availability, plan options, and speeds vary by location; advertised speeds are not guaranteed and may be affected by equipment, connected devices, network conditions, and other factors. Promotional pricing requires enrollment in ACH AutoPay and e-bill; removing either may result in a $5 monthly surcharge. Paper statements may add $5 per month. Additional equipment, service, and installation charges may apply.</p>
+    `;
+
+    footerContent.insertBefore(disclosure, footerContent.firstElementChild);
+}
+
 async function injectAddonsSection(targetElement) {
+    if (!SHOW_EERO_SERVICE_FEATURE) return;
     if (document.querySelector('.addons-wrapper')) return;
-
-    // Fetch dynamic content for "Save More"
-    let promoData = {
-        title: "Save More",
-        description: "We're committed to our community. Take advantage of our monthly savings programs.",
-        items: [
-            "$5/mo if you sign up for autopay",
-            "$5/mo discount for teachers*"
-        ],
-        finePrint: "*Teacher discount requires valid school ID."
-    };
-
-    try {
-        const docRef = doc(db, 'artifacts', '162296779236', 'public', 'data', 'site_content', 'promotions');
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            const fetched = docSnap.data();
-            promoData = { ...promoData, ...fetched };
-        }
-    } catch(e) {
-        console.warn("Could not load dynamic promotions, using defaults.", e);
-    }
 
     const addonsHTML = `
     <style>
         .addons-wrapper {
-            max-width: 1200px;
+            max-width: 760px;
             margin: 60px auto;
             padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            align-items: stretch;
+            display: block;
             font-family: 'Open Sans', sans-serif;
-        }
-        @media (max-width: 900px) {
-            .addons-wrapper { grid-template-columns: 1fr; }
         }
 
         /* Card Styles */
@@ -439,69 +428,7 @@ async function injectAddonsSection(targetElement) {
             padding-left: 20px;
         }
 
-        /* Promo Side */
-        .promo-image {
-            height: 240px;
-            width: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .promo-content {
-            padding: 30px;
-            background: linear-gradient(180deg, #fff 0%, #fffbf0 100%);
-            flex-grow: 1;
-        }
-        .promo-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #1e293b;
-            margin-bottom: 12px;
-            line-height: 1.2;
-        }
-        .promo-text {
-            color: #475569;
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .check-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .check-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 16px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-            transition: transform 0.2s;
-        }
-        .check-item:hover { transform: translateX(5px); }
-        .check-icon {
-            color: #f59e0b; /* Amber/Gold */
-            font-size: 1.1rem;
-            margin-top: 2px;
-        }
-        .check-text {
-            font-weight: 600;
-            color: #334155;
-            font-size: 0.95rem;
-        }
-
-        .fine-print {
-            margin-top: 20px;
-            font-size: 0.75rem;
-            color: #94a3b8;
-            font-style: italic;
-        }
-
-        .included-badge {
+        .network-badge {
             background: #22c55e;
             color: white;
             font-weight: 800;
@@ -555,7 +482,7 @@ async function injectAddonsSection(targetElement) {
             display: flex;
             flex-direction: column;
         }
-        .wifi-content .included-badge {
+        .wifi-content .network-badge {
             align-self: flex-start;
             margin-bottom: 14px;
         }
@@ -615,7 +542,6 @@ async function injectAddonsSection(targetElement) {
 
     <div class="addons-wrapper fade-in-section">
 
-        <!-- Left Column: Premium WiFi -->
         <div class="addons-card wifi-card">
             <img src="assets/images/eerohome.jpg" alt="eero mesh WiFi set up in a modern home" class="wifi-image">
             <div class="wifi-content">
@@ -631,26 +557,6 @@ async function injectAddonsSection(targetElement) {
                     <img src="assets/images/eero.webp" alt="eero" class="eero-logo">
                     <span>Powered by eero</span>
                 </div>
-            </div>
-        </div>
-
-        <!-- Right Column: Promotions -->
-        <div class="addons-card">
-            <img src="assets/images/teacher.jpg" alt="Community Support" class="promo-image">
-            <div class="promo-content">
-                <h2 class="promo-title">${escapeHtml(promoData.title)}</h2>
-                <p class="promo-text">${escapeHtml(promoData.description)}</p>
-
-                <div class="check-list">
-                    ${(promoData.items || []).map(item => `
-                        <div class="check-item">
-                            <i class="fa-solid fa-circle-check check-icon"></i>
-                            <span class="check-text">${escapeHtml(item)}</span>
-                        </div>
-                    `).join('')}
-                </div>
-
-                ${promoData.finePrint ? `<div class="fine-print">${escapeHtml(promoData.finePrint)}</div>` : ''}
             </div>
         </div>
 
@@ -687,12 +593,6 @@ function generatePlanCard(plan, index) {
     const originalNum = Number(plan.originalPrice) || 0;
     const isPromo = originalNum > priceNum;
     const wasPrice = isPromo ? `<span class="price-was">$${escapeHtml(String(plan.originalPrice))}</span>` : '';
-    const promoLabelText = isPromo
-        ? (plan.promoLabel && String(plan.promoLabel).trim() ? String(plan.promoLabel).trim() : 'Limited time only | New customers only')
-        : '';
-    const promoLabel = promoLabelText
-        ? `<span class="plan-promo-label">${escapeHtml(promoLabelText)}</span>`
-        : '';
 
     // Universal perks every plan includes, plus any extras defined on the plan.
     const universal = ['No annual contract', 'Unlimited data - no caps', 'Local support'];
@@ -714,7 +614,6 @@ function generatePlanCard(plan, index) {
                     ${wasPrice}
                     <span class="price">$${escapeHtml(plan.price || '')}<small>/mo</small></span>
                 </div>
-                ${promoLabel}
                 <div class="plan-speed">
                     <span class="plan-speed-val">${escapeHtml(plan.speed || '')}</span>
                     <span class="plan-speed-label">Symmetrical speeds</span>

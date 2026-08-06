@@ -210,6 +210,46 @@
             font-size: 16px;
         }
 
+        .cfn-address-suggestions {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 10px);
+            z-index: 10000;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 16px 34px rgba(3, 14, 34, 0.28);
+            text-align: left;
+        }
+
+        .cfn-address-suggestions[hidden] {
+            display: none;
+        }
+
+        .cfn-address-suggestion {
+            width: 100%;
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+            padding: 0.85rem 1rem;
+            background: #ffffff;
+            color: #0f172a;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-align: left;
+        }
+
+        .cfn-address-suggestion:first-child {
+            border-top: 0;
+        }
+
+        .cfn-address-suggestion:hover,
+        .cfn-address-suggestion.is-active {
+            background: #eff6ff;
+        }
+
         @media (max-width: 740px) {
             body { padding: 0; }
             .embed-shell {
@@ -271,9 +311,12 @@
         }
     })();
 
-    function initCFNWidget() {
+    function bootCFNWidget() {
         var APP_ORIGIN = 'https://search.np-tech.com';
         var DEFAULT_SOURCE_SITE = 'npt_embed';
+        var MIN_GOOGLE_SEARCH_TOKEN_COUNT = 3;
+        var SEARCH_DEBOUNCE_MS = 350;
+        var MAX_PREDICTIONS = 5;
         var PASSTHROUGH_KEYS = [
             'source_site',
             'utm_source',
@@ -287,32 +330,239 @@
         ];
         var input = document.getElementById('cfn-address-input');
         var msg = document.getElementById('redirect-message');
+        if (!input) return;
 
-        var options = {
-            fields: ["formatted_address", "geometry", "name"],
-        };
+        var container = input.closest('.availability-search-container') || input.parentElement;
+        var suggestions = document.createElement('div');
+        var placesLoadPromise = null;
+        var autocompleteService = null;
+        var sessionToken = null;
+        var debounceTimer = null;
+        var latestRequestId = 0;
+        var currentPredictions = [];
+        var activeIndex = -1;
+        var isRedirecting = false;
 
-        var autocomplete = new google.maps.places.Autocomplete(input, options);
+        suggestions.id = 'cfn-address-suggestions';
+        suggestions.className = 'cfn-address-suggestions';
+        suggestions.setAttribute('role', 'listbox');
+        suggestions.hidden = true;
+        container.appendChild(suggestions);
 
-        autocomplete.addListener('place_changed', function() {
-            var place = autocomplete.getPlace();
-            if (place.formatted_address) {
-                redirectToApp(place.formatted_address);
-            } else {
-                redirectToApp(input.value);
+        input.setAttribute('aria-autocomplete', 'list');
+        input.setAttribute('aria-controls', suggestions.id);
+
+        function countSearchTokens(value) {
+            var matches = String(value || '').match(/[A-Za-z0-9]/g);
+            return matches ? matches.length : 0;
+        }
+
+        function hasMinimumGoogleSearchInput(value) {
+            return countSearchTokens(value) >= MIN_GOOGLE_SEARCH_TOKEN_COUNT;
+        }
+
+        function escapeHtml(value) {
+            return String(value == null ? '' : value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function loadGooglePlaces() {
+            if (window.google && window.google.maps && window.google.maps.places && window.google.maps.places.AutocompleteService) {
+                return Promise.resolve(window.google.maps.places);
             }
+
+            if (placesLoadPromise) {
+                return placesLoadPromise;
+            }
+
+            placesLoadPromise = new Promise(function(resolve, reject) {
+                if (!window.loadGoogleMapsFromSecret) {
+                    reject(new Error('Google Maps loader is unavailable.'));
+                    return;
+                }
+
+                var callbackName = '__cfnEmbedGooglePlacesReady';
+                var settled = false;
+                var timeoutId = window.setTimeout(function() {
+                    finish(reject, new Error('Google Places took too long to load.'));
+                }, 12000);
+
+                function finish(handler, value) {
+                    if (settled) return;
+                    settled = true;
+                    window.clearTimeout(timeoutId);
+                    try {
+                        delete window[callbackName];
+                    } catch (_error) {
+                        window[callbackName] = undefined;
+                    }
+                    handler(value);
+                }
+
+                window[callbackName] = function() {
+                    if (window.google && window.google.maps && window.google.maps.places && window.google.maps.places.AutocompleteService) {
+                        finish(resolve, window.google.maps.places);
+                        return;
+                    }
+                    finish(reject, new Error('Google Places loaded without autocomplete support.'));
+                };
+
+                var loaderPromise = window.loadGoogleMapsFromSecret({
+                    callbackName: callbackName,
+                    libraries: ["places"]
+                });
+
+                if (loaderPromise && typeof loaderPromise.then === 'function') {
+                    loaderPromise.then(function() {
+                        if (window.google && window.google.maps && window.google.maps.places && window.google.maps.places.AutocompleteService) {
+                            finish(resolve, window.google.maps.places);
+                        }
+                    }).catch(function(error) {
+                        finish(reject, error);
+                    });
+                }
+            });
+
+            return placesLoadPromise;
+        }
+
+        function clearSuggestions() {
+            currentPredictions = [];
+            activeIndex = -1;
+            suggestions.innerHTML = '';
+            suggestions.hidden = true;
+            input.removeAttribute('aria-activedescendant');
+        }
+
+        function setActiveIndex(index) {
+            activeIndex = index;
+            if (activeIndex < 0) {
+                input.removeAttribute('aria-activedescendant');
+            }
+            Array.prototype.forEach.call(suggestions.querySelectorAll('.cfn-address-suggestion'), function(button, buttonIndex) {
+                var isActive = buttonIndex === activeIndex;
+                button.classList.toggle('is-active', isActive);
+                if (isActive) {
+                    input.setAttribute('aria-activedescendant', button.id);
+                }
+            });
+        }
+
+        function renderPredictions(predictions) {
+            currentPredictions = predictions.slice(0, MAX_PREDICTIONS);
+            if (currentPredictions.length === 0) {
+                clearSuggestions();
+                return;
+            }
+
+            suggestions.innerHTML = currentPredictions.map(function(prediction, index) {
+                return '<button type="button" id="cfn-address-suggestion-' + index + '" class="cfn-address-suggestion" role="option" data-index="' + index + '">' +
+                    escapeHtml(prediction.description) +
+                    '</button>';
+            }).join('');
+            suggestions.hidden = false;
+            setActiveIndex(-1);
+        }
+
+        function requestPredictions() {
+            var value = input.value.trim();
+            if (!hasMinimumGoogleSearchInput(value)) {
+                clearSuggestions();
+                return;
+            }
+
+            var requestId = ++latestRequestId;
+            loadGooglePlaces()
+                .then(function(places) {
+                    autocompleteService = autocompleteService || new places.AutocompleteService();
+                    sessionToken = sessionToken || new places.AutocompleteSessionToken();
+                    autocompleteService.getPlacePredictions({
+                        input: value,
+                        types: ['address'],
+                        componentRestrictions: { country: 'us' },
+                        sessionToken: sessionToken
+                    }, function(predictions, status) {
+                        if (requestId !== latestRequestId || !hasMinimumGoogleSearchInput(input.value)) {
+                            return;
+                        }
+
+                        if (status !== places.PlacesServiceStatus.OK || !Array.isArray(predictions)) {
+                            clearSuggestions();
+                            return;
+                        }
+
+                        renderPredictions(predictions);
+                    });
+                })
+                .catch(function(error) {
+                    console.error(error);
+                    clearSuggestions();
+                });
+        }
+
+        input.addEventListener('input', function() {
+            window.clearTimeout(debounceTimer);
+            if (!hasMinimumGoogleSearchInput(input.value)) {
+                latestRequestId += 1;
+                clearSuggestions();
+                return;
+            }
+            debounceTimer = window.setTimeout(requestPredictions, SEARCH_DEBOUNCE_MS);
         });
 
         input.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown' && currentPredictions.length > 0) {
+                e.preventDefault();
+                setActiveIndex(Math.min(activeIndex + 1, currentPredictions.length - 1));
+                return;
+            }
+
+            if (e.key === 'ArrowUp' && currentPredictions.length > 0) {
+                e.preventDefault();
+                setActiveIndex(Math.max(activeIndex - 1, 0));
+                return;
+            }
+
+            if (e.key === 'Escape') {
+                clearSuggestions();
+                return;
+            }
+
             if (e.key === 'Enter') {
                 e.preventDefault();
-                setTimeout(function() {
-                    if (!isRedirecting) redirectToApp(input.value);
-                }, 250);
+                if (!isRedirecting) {
+                    var selected = currentPredictions[activeIndex];
+                    redirectToApp((selected && selected.description) || input.value);
+                }
             }
         });
 
-        var isRedirecting = false;
+        suggestions.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+        });
+
+        suggestions.addEventListener('click', function(e) {
+            var button = e.target.closest('.cfn-address-suggestion');
+            if (!button) return;
+
+            var prediction = currentPredictions[Number(button.dataset.index)];
+            if (prediction && prediction.description) {
+                input.value = prediction.description;
+                clearSuggestions();
+                sessionToken = null;
+                redirectToApp(prediction.description);
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!container.contains(e.target)) {
+                clearSuggestions();
+            }
+        });
 
         function applyAttributionParams(targetUrl) {
             var pageParams = new URLSearchParams(window.location.search || '');
@@ -346,7 +596,7 @@
         function redirectToApp(address) {
             if (isRedirecting) return;
 
-            if (address && address.length > 5) {
+            if (hasMinimumGoogleSearchInput(address)) {
                 isRedirecting = true;
 
                 input.style.borderColor = "#2563eb";
@@ -372,12 +622,7 @@
 <script src="https://search.np-tech.com/maps-loader.js"></script>
 <script src="https://search.np-tech.com/utm-attribution.js"></script>
 <script>
-    window.loadGoogleMapsFromSecret({
-        callbackName: "initCFNWidget",
-        libraries: ["places"]
-    }).catch((err) => {
-        console.error(err);
-    });
+    bootCFNWidget();
 </script>
 
 </body>

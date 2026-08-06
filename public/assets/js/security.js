@@ -19,8 +19,12 @@ export function safeUrl(value, fallback = '#', { allowDataImage = false } = {}) 
     const raw = text(value).trim();
     if (!raw) return fallback;
 
-    if (raw.startsWith('/') || raw.startsWith('./') || raw.startsWith('../') || /^[a-z0-9/_-]+\.html(?:[?#].*)?$/i.test(raw)) {
-        return raw;
+    if (/[\u0000-\u001f\u007f"'<>`]/.test(raw)) {
+        return fallback;
+    }
+
+    if (raw.startsWith('//')) {
+        return fallback;
     }
 
     if (allowDataImage && /^data:image\/(?:png|jpe?g|webp|gif);base64,[a-z0-9+/=]+$/i.test(raw)) {
@@ -28,7 +32,17 @@ export function safeUrl(value, fallback = '#', { allowDataImage = false } = {}) 
     }
 
     try {
-        const parsed = new URL(raw, window.location.origin);
+        const origin = window.location.origin;
+        const parsed = new URL(raw, origin);
+        if (parsed.origin === origin && (
+            raw.startsWith('/')
+            || raw.startsWith('./')
+            || raw.startsWith('../')
+            || /^[a-z0-9/_-]+\.html(?:[?#].*)?$/i.test(raw)
+        )) {
+            return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+        }
+
         if (parsed.protocol === 'https:') {
             return parsed.href;
         }

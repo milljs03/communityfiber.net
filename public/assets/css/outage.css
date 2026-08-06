@@ -145,6 +145,18 @@
     gap: 1.5rem;
 }
 
+.outage-support-panel {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.outage-support-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem 1.25rem;
+}
+
 .panel-heading {
     display: flex;
     justify-content: space-between;
@@ -378,7 +390,15 @@
         flex-direction: column;
     }
 
+    .outage-support-actions {
+        flex-direction: column;
+    }
+
     .outage-availability-actions .btn {
+        width: 100%;
+    }
+
+    .outage-support-actions .btn {
         width: 100%;
     }
 

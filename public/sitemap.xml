@@ -33,10 +33,6 @@
     <lastmod>2026-06-24</lastmod>
   </url>
   <url>
-    <loc>https://communityfiber.net/outage.html</loc>
-    <lastmod>2026-06-24</lastmod>
-  </url>
-  <url>
     <loc>https://communityfiber.net/speedtest.html</loc>
     <lastmod>2026-06-24</lastmod>
   </url>
@@ -74,4 +70,38 @@
     <lastmod>2026-06-25</lastmod>
   </url>
   <!-- GENERATED_POSTS_SITEMAP_END -->
+  <!-- GENERATED_CITIES_SITEMAP_START -->
+  <url>
+    <loc>https://communityfiber.net/goshen.html</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://communityfiber.net/bristol.html</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://communityfiber.net/middlebury.html</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://communityfiber.net/new-paris.html</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://communityfiber.net/syracuse.html</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://communityfiber.net/nappanee.html</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://communityfiber.net/wakarusa.html</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://communityfiber.net/milford.html</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <!-- GENERATED_CITIES_SITEMAP_END -->
 </urlset>

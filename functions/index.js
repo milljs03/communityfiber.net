@@ -367,9 +367,16 @@ function buildEmailFailureRecord(error) {
 }
 
 async function sendLeadNotification(lead, leadId) {
-  const route = emailRouting.routes?.[lead.type];
+  // For support tickets, try to find topic-specific routing first
+  let route = null;
+  if (lead.type === 'support_ticket' && lead.topic && emailRouting.routes?.support_ticket?.topics?.[lead.topic]) {
+    route = emailRouting.routes.support_ticket.topics[lead.topic];
+  } else {
+    route = emailRouting.routes?.[lead.type];
+  }
+
   if (!route) {
-    console.warn('No email route configured for lead type', lead.type);
+    console.warn('No email route configured for lead type', lead.type, 'topic', lead.topic);
     return { status: 'skipped', reason: 'missing_route' };
   }
 

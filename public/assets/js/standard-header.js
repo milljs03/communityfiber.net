@@ -161,8 +161,8 @@ const headerStyles = `
         margin: 0 auto;
         padding: 0 2rem;
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 2.5rem;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 2rem;
     }
 
     .nav-column h3 {
@@ -362,7 +362,7 @@ ${headerStyles}
     <div class="nav-container">
         <!-- Logo -->
         <a href="/index.html" class="nav-logo">
-            <img src="/assets/images/community-fiber-logo.png" alt="Community Fiber">
+            <img src="/assets/images/CFN_Stripped_Logo.svg" alt="Community Fiber">
         </a>
 
         <!-- Top Level Nav -->
@@ -422,7 +422,6 @@ ${headerStyles}
                         <li><a href="/support.html#support-contact" class="section-link">Contact Us</a></li>
                         <li><a href="/support.html#fiber-comparison" class="section-link">Why Move to Fiber?</a></li>
                         <li><a href="/support.html#support-faq" class="section-link">FAQ</a></li>
-                        <li><a href="/outage.html" class="section-link">Outage Map</a></li>
                         <li><a href="https://nptel.smarthub.coop/Login.html" target="_blank" class="section-link">SmartHub Login</a></li>
                     </ul>
                 </div>
@@ -436,6 +435,21 @@ ${headerStyles}
                         <li><a href="/about.html#heritage-gallery" class="section-link">Heritage Gallery</a></li>
                         <li><a href="/about.html#team-section" class="section-link">Meet the Team</a></li>
                         <li><a href="/blog.html" class="section-link">Latest News</a></li>
+                    </ul>
+                </div>
+
+                <!-- Service Areas Column -->
+                <div class="nav-column">
+                    <h3><a href="/index.html#service-areas">Service Areas</a></h3>
+                    <ul>
+                        <li><a href="/goshen.html" class="section-link">Goshen</a></li>
+                        <li><a href="/bristol.html" class="section-link">Bristol</a></li>
+                        <li><a href="/middlebury.html" class="section-link">Middlebury</a></li>
+                        <li><a href="/new-paris.html" class="section-link">New Paris</a></li>
+                        <li><a href="/syracuse.html" class="section-link">Syracuse</a></li>
+                        <li><a href="/nappanee.html" class="section-link">Nappanee</a></li>
+                        <li><a href="/wakarusa.html" class="section-link">Wakarusa</a></li>
+                        <li><a href="/milford.html" class="section-link">Milford</a></li>
                     </ul>
                 </div>
 

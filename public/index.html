@@ -40,8 +40,15 @@
           },
           "areaServed": [
             "Elkhart County, Indiana",
+            "Kosciusko County, Indiana",
             "Goshen, Indiana",
-            "New Paris, Indiana"
+            "Bristol, Indiana",
+            "Middlebury, Indiana",
+            "New Paris, Indiana",
+            "Syracuse, Indiana",
+            "Nappanee, Indiana",
+            "Wakarusa, Indiana",
+            "Milford, Indiana"
           ],
           "sameAs": [
             "https://www.facebook.com/profile.php?id=100070795525884"
@@ -68,7 +75,7 @@
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,8 +103,8 @@
     <header class="hero">
         <div class="hero-inner">
             <div class="hero-content fade-in-section">
-                <h1 class="hero-title">Investing in Local Communities <br><span class="highlight-text">We Call Home.</span></h1>
-                <p class="hero-subtitle">Locally owned, gigabit <span class="text-accent" style="color:var(--cfn-green)">fiber internet</span> — built for the towns we live in.</p>
+                <h1 class="hero-title">Connecting communities <br><span class="highlight-text">since 1901.</span></h1>
+                <p class="hero-subtitle">Gig speed <span class="text-accent" style="color:var(--cfn-green)">fiber internet</span> built for the towns we live in.</p>
                 <a href="https://search.communityfiber.net/community-fiber-site-hero" class="btn-primary-action">Check Availability <i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="hero-image fade-in-section">
@@ -127,12 +134,11 @@
         </div>
     </section>
 
-    <!-- Residential Fiber Promo Section -->
+    <!-- Home Promo Section -->
     <section class="res-promo-section" data-animate="fade-up">
         <div class="container">
             <div class="res-promo-content">
                 <div class="res-promo-text" data-animate="fade-right">
-                    <span class="section-tag">Residential Fiber</span>
                     <h2>Experience Internet Without Limits</h2>
                     <p>Stop buffering and start living. Our 100% fiber-optic network delivers symmetrical gigabit speeds directly to your home. No contracts, no data caps, and local support you can trust.</p>
                     <a href="residential.html" class="btn-primary-action">See Our Pricing <i class="fa-solid fa-arrow-right"></i></a>
@@ -148,73 +154,95 @@
     <section class="other-services-section">
         <div class="container">
             <div class="explore-header">
-                <span class="section-tag">Explore Community Fiber</span>
                 <h2 class="section-title-small">How can we help you?</h2>
                 <p>Residential and business fiber, local support, and everything in between.</p>
             </div>
             <div class="services-grid" data-animate="stagger">
 
                 <!--Residential-->
-                <a href="residential.html" class="service-card">
-                    <div class="service-media"><img src="assets/images/residential.jpeg" alt="Modern fiber-connected home"></div>
+                <a href="residential.html" class="service-card service-card-residential">
                     <div class="service-content">
                         <h3>Residential Internet</h3>
                         <p>Fast, reliable fiber internet for your home. No contracts, no data caps.</p>
                         <span class="service-link">Learn More <i class="fa-solid fa-arrow-right-long"></i></span>
                     </div>
+                    <div class="service-media service-media-router"><img src="assets/images/eero6+.webp" alt="eero 6+ Wi-Fi router"></div>
                 </a>
 
 
                 <!-- Business -->
-                <a href="business.html" class="service-card">
-                    <div class="service-media"><img src="assets/images/business.png" alt="Local business powered by fiber"></div>
+                <a href="business.html" class="service-card service-card-business">
                     <div class="service-content">
                         <h3>Business Internet</h3>
                         <p>Enterprise-grade reliability and dedicated support to keep your business running smoothly.</p>
                         <span class="service-link">Get a Quote <i class="fa-solid fa-arrow-right-long"></i></span>
                     </div>
+                    <div class="service-media service-media-ont"><img src="assets/images/ont-cutout.png" alt="Fiber optical network terminal"></div>
                 </a>
 
                 <!-- Builders -->
-                <a href="builders.html" class="service-card">
-                    <div class="service-media"><img src="assets/images/construction.jpg" alt="New home under construction in a local development"></div>
+                <a href="builders.html" class="service-card service-card-builders">
                     <div class="service-content">
                         <h3>Builders & Developers</h3>
                         <p>Partner with us to install utility-grade fiber infrastructure in your new developments.</p>
                         <span class="service-link">Partner Program <i class="fa-solid fa-arrow-right-long"></i></span>
                     </div>
+                    <div class="service-media service-media-hat"><img src="assets/images/constructionhat-cutout.png" alt="Construction hard hat"></div>
                 </a>
 
                 <!-- Support -->
-                <a href="support.html" class="service-card">
-                    <div class="service-media placeholder"></div>
+                <a href="support.html" class="service-card service-card-support">
                     <div class="service-content">
                         <h3>Support Center</h3>
                         <p>Have a question or issue? Visit our help center to submit a ticket or find answers.</p>
                         <span class="service-link">Get Help <i class="fa-solid fa-arrow-right-long"></i></span>
                     </div>
+                    <div class="service-media service-media-headset"><img src="assets/images/headset.png" alt="Customer support headset"></div>
                 </a>
 
                 <!-- About Us -->
-                <a href="about.html" class="service-card">
-                    <div class="service-media"><img src="assets/images/building.jpg" alt="Community Fiber local office"></div>
+                <a href="about.html" class="service-card service-card-about">
                     <div class="service-content">
                         <h3>About Us</h3>
                         <p>Learn about our history, our mission, and the local team dedicated to serving you.</p>
                         <span class="service-link">Meet the Team <i class="fa-solid fa-arrow-right-long"></i></span>
                     </div>
+                    <div class="service-media service-media-building"><img src="assets/images/building.jpg" alt="Community Fiber local office"></div>
                 </a>
 
                 <!-- News -->
-                <a href="blog.html" class="service-card">
-                    <div class="service-media"><img src="assets/images/mail.png" alt="Community Fiber news and updates"></div>
+                <a href="blog.html" class="service-card service-card-news">
                     <div class="service-content">
                         <h3>News & Updates</h3>
                         <p>Stay informed about our network expansion, community events, and latest announcements.</p>
                         <span class="service-link">Read More <i class="fa-solid fa-arrow-right-long"></i></span>
                     </div>
+                    <div class="service-media service-media-mailbox"><img src="assets/images/maildropbox-cutout.png" alt="Community Fiber news and updates mailbox"></div>
                 </a>
 
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Areas Section -->
+    <section class="service-areas-section" id="service-areas" data-animate="fade-up">
+        <div class="service-areas-inner">
+            <div class="service-areas-map">
+                <img src="assets/images/indiana-green.png" alt="Map of Indiana highlighting Community Fiber's local service area">
+            </div>
+            <div class="service-areas-content">
+                <h2>Community Fiber Serves <span>these Communities:</span></h2>
+                <p>Hometown fiber, built by neighbors — bringing symmetrical gigabit internet to towns across Elkhart and Kosciusko counties.</p>
+                <ul class="service-areas-links">
+                    <li><a href="goshen.html">Goshen</a></li>
+                    <li><a href="bristol.html">Bristol</a></li>
+                    <li><a href="middlebury.html">Middlebury</a></li>
+                    <li><a href="new-paris.html">New Paris</a></li>
+                    <li><a href="syracuse.html">Syracuse</a></li>
+                    <li><a href="nappanee.html">Nappanee</a></li>
+                    <li><a href="wakarusa.html">Wakarusa</a></li>
+                    <li><a href="milford.html">Milford</a></li>
+                </ul>
             </div>
         </div>
     </section>
@@ -242,6 +270,5 @@
     <script src="assets/js/standard-header.js"></script>
 
     <script type="module" src="assets/js/traffic-logger.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBw8z2IL4dN5oldPzRW3a581mkXC7VuXe4&libraries=places&callback=initAutocomplete&loading=async" async defer></script>
 </body>
 </html>

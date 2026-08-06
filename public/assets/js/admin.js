@@ -773,7 +773,7 @@ function openEditModal(type, id, data = null) {
             </div>
             <div>
                 <label class="form-label">Promo Label (optional)</label>
-                <input type="text" name="promoLabel" class="form-control" value="${field(data?.promoLabel)}" placeholder="e.g. Limited time only · New customers only">
+                <input type="text" name="promoLabel" class="form-control" value="${field(data?.promoLabel)}" placeholder="e.g. Promotional price">
             </div>
             <div>
                 <label class="form-label">Speed</label>

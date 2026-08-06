@@ -7,7 +7,44 @@
       "to": [
         "jmiller@nptel.com"
       ],
-      "subjectPrefix": "New Support Request"
+      "subjectPrefix": "New Support Request",
+      "topics": {
+        "billing": {
+          "label": "Billing & Payments Request",
+          "to": [
+            "jmiller@nptel.com"
+          ],
+          "subjectPrefix": "New Billing Request"
+        },
+        "service": {
+          "label": "Technical Support Request",
+          "to": [
+            "jmiller@nptel.com"
+          ],
+          "subjectPrefix": "New Technical Support Request"
+        },
+        "outage": {
+          "label": "Service Outage Report",
+          "to": [
+            "jmiller@nptel.com"
+          ],
+          "subjectPrefix": "SERVICE OUTAGE ALERT"
+        },
+        "availability": {
+          "label": "Availability Check Request",
+          "to": [
+            "jmiller@nptel.com"
+          ],
+          "subjectPrefix": "New Availability Check"
+        },
+        "general": {
+          "label": "General Inquiry",
+          "to": [
+            "jmiller@nptel.com"
+          ],
+          "subjectPrefix": "New General Inquiry"
+        }
+      }
     },
     "business_quote": {
       "label": "Business Internet Quote",

@@ -34,6 +34,47 @@ function escapeAttr(value) {
   return escapeHtml(value).replace(/`/g, '&#96;');
 }
 
+function safeContentHref(value) {
+  const href = String(value ?? '').trim();
+  if (!href) {
+    throw new Error('CTA href is required.');
+  }
+
+  if (/[\u0000-\u001f\u007f"'<>`]/.test(href)) {
+    throw new Error(`CTA href contains unsafe characters: ${href}`);
+  }
+
+  if (href.startsWith('//')) {
+    throw new Error(`Protocol-relative CTA href is not allowed: ${href}`);
+  }
+
+  if (/^[a-z][a-z0-9+.-]*:/i.test(href) && !href.toLowerCase().startsWith('https://')) {
+    throw new Error(`CTA href must use HTTPS or a relative path: ${href}`);
+  }
+
+  let parsed;
+  try {
+    parsed = new URL(href, SITE_URL);
+  } catch (error) {
+    throw new Error(`CTA href is not a valid URL: ${href}`);
+  }
+
+  if (parsed.protocol !== 'https:' || parsed.origin !== SITE_URL) {
+    throw new Error(`CTA href must stay on ${SITE_URL}: ${href}`);
+  }
+
+  return href;
+}
+
+function safeJsonForHtmlScript(value) {
+  return JSON.stringify(value, null, 2)
+    .replace(/</g, '\\u003C')
+    .replace(/>/g, '\\u003E')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+}
+
 function readJson(file) {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
@@ -51,6 +92,16 @@ function validatePost(post, file) {
 
   if (!Array.isArray(post.body) || post.body.length === 0) {
     throw new Error(`${path.basename(file)} must include at least one body block.`);
+  }
+
+  for (const block of post.body) {
+    if (block?.type === 'cta') {
+      try {
+        safeContentHref(block.href);
+      } catch (error) {
+        throw new Error(`${path.basename(file)} has an invalid CTA href. ${error.message}`);
+      }
+    }
   }
 }
 
@@ -99,7 +150,7 @@ function renderBlock(block) {
           <h2>${escapeHtml(block.title)}</h2>
           <p>${escapeHtml(block.text)}</p>
         </div>
-        <a href="${escapeAttr(block.href)}">${escapeHtml(block.label)} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="${escapeAttr(safeContentHref(block.href))}">${escapeHtml(block.label)} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
       </aside>
     `;
   }
@@ -165,7 +216,7 @@ function renderArticlePage(post, posts) {
     <link rel="canonical" href="${postUrl(post)}">
     <link rel="icon" type="image/png" href="../assets/images/favicon.png">
     <script type="application/ld+json">
-${JSON.stringify(jsonLd, null, 2)}
+${safeJsonForHtmlScript(jsonLd)}
     </script>
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
@@ -174,7 +225,7 @@ ${JSON.stringify(jsonLd, null, 2)}
                    font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;
+                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
@@ -284,7 +335,7 @@ function updateBlogIndex(posts) {
 
   html = html.replace(
     /<script type="application\/ld\+json" id="blog-jsonld">[\s\S]*?<\/script>/,
-    `<script type="application/ld+json" id="blog-jsonld">\n${JSON.stringify(jsonLd, null, 2)}\n    </script>`
+    `<script type="application/ld+json" id="blog-jsonld">\n${safeJsonForHtmlScript(jsonLd)}\n    </script>`
   );
 
   fs.writeFileSync(BLOG_INDEX, html);

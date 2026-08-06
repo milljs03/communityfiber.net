@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "findings": [
+    {
+      "id": "CAND-CMS-URL-ATTR-XSS-001",
+      "title": "CMS URL sanitizer allows attribute injection into public renderers",
+      "severity": "High",
+      "confidence": "high",
+      "cwe": ["CWE-79"],
+      "owasp": "A03: Injection",
+      "affected": [
+        "public/assets/js/security.js:18-23",
+        "public/assets/js/about.js:171,176",
+        "public/assets/js/business.js:30,35",
+        "public/assets/js/blog.js:39,42,48,54,62"
+      ],
+      "status": "reportable",
+      "blocksLaunch": true
+    },
+    {
+      "id": "CAND-BUILD-JSONLD-XSS-001",
+      "title": "Generated blog JSON-LD can break out of script tags",
+      "severity": "Medium",
+      "confidence": "medium",
+      "cwe": ["CWE-79"],
+      "owasp": "A03: Injection",
+      "affected": ["scripts/build-posts.js:168", "scripts/build-posts.js:287"],
+      "status": "reportable",
+      "blocksLaunch": false
+    },
+    {
+      "id": "CAND-BUILD-CTA-HREF-001",
+      "title": "Generated blog CTA href accepts unsafe URL schemes",
+      "severity": "Low",
+      "confidence": "medium",
+      "cwe": ["CWE-79", "CWE-83"],
+      "owasp": "A03: Injection",
+      "affected": ["scripts/build-posts.js:102"],
+      "status": "reportable",
+      "blocksLaunch": false
+    },
+    {
+      "id": "CAND-HTML-CSP-MALFORMED-001",
+      "title": "Malformed meta CSP leaves page-level policy unreliable",
+      "severity": "Low",
+      "confidence": "high",
+      "cwe": ["CWE-693"],
+      "owasp": "A05: Security Misconfiguration",
+      "affected": [
+        "public/admin.html:9-16",
+        "public/about.html:20-27",
+        "public/blog.html:76-83",
+        "public/builders.html:22-29",
+        "public/business.html:22-29",
+        "public/outage.html:8-15",
+        "public/speedtest.html:9-16",
+        "public/blog/*.html:44-51"
+      ],
+      "status": "reportable",
+      "blocksLaunch": false
+    }
+  ]
+}
+

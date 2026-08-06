@@ -1,6 +1,5 @@
 import {
-    subscribeToOutageFeed,
-    OUTAGE_PAGE_PATH
+    subscribeToOutageFeed
 } from './services/outage-feed.js';
 
 const BANNER_STYLE_ID = 'cfn-outage-banner-styles';
@@ -57,29 +56,10 @@ function ensureBannerStyles() {
             font-size: 0.95rem;
             opacity: 0.96;
         }
-        .site-announcement__link {
-            color: #ffffff;
-            text-decoration: none;
-            font-family: var(--font-heading, 'Montserrat', sans-serif);
-            font-weight: 700;
-            white-space: nowrap;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 0.7rem 0.95rem;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-        }
-        .site-announcement__link:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.55);
-        }
         @media (max-width: 800px) {
             .site-announcement__inner {
                 align-items: flex-start;
                 flex-direction: column;
-            }
-            .site-announcement__link {
-                width: 100%;
-                text-align: center;
             }
         }
     `;
@@ -121,7 +101,6 @@ function renderBanner(snapshot) {
                     <span class="site-announcement__title">${escapeHtml(title)}</span>
                     <span class="site-announcement__message">${escapeHtml(message)}</span>
                 </div>
-                <a class="site-announcement__link" href="${OUTAGE_PAGE_PATH}">View outage map</a>
             </div>
         </section>
     `;

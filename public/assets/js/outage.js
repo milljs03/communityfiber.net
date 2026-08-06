@@ -355,7 +355,7 @@ function renderSummary(snapshot) {
         elements.title.textContent = isError ? 'We could not load the public outage feed.' : 'Checking network status...';
         elements.message.textContent = isError
             ? 'Please try again shortly. The outage page will keep retrying every 30 seconds.'
-            : 'Fetching the latest public outage map.';
+            : 'Fetching the latest public network status.';
         elements.meta.textContent = 'Updates every 30 seconds.';
         elements.detail.textContent = snapshot.error || '';
         elements.refreshNote.textContent = 'Refreshing every 30 seconds.';
@@ -391,7 +391,7 @@ function renderSummary(snapshot) {
         elements.detail.textContent = `Showing the last successful update. ${snapshot.error}`;
         elements.refreshNote.textContent = 'Refresh is still running every 30 seconds.';
     } else {
-        elements.detail.textContent = 'The outage banner, map, and address check refresh automatically every 30 seconds.';
+        elements.detail.textContent = 'The outage banner refreshes automatically every 30 seconds.';
         elements.refreshNote.textContent = 'Live feed refreshes every 30 seconds.';
     }
 
@@ -486,17 +486,19 @@ function initializePage() {
         renderMap(snapshot);
     });
 
-    loadGoogleMaps()
-        .then(() => {
-            mapsReady = true;
-            initMap();
-            renderMap(currentSnapshot);
-        })
-        .catch((error) => {
-            console.error(error);
-            mapsLoadFailed = true;
-            renderMap(currentSnapshot);
-        });
+    if (elements.mapRoot) {
+        loadGoogleMaps()
+            .then(() => {
+                mapsReady = true;
+                initMap();
+                renderMap(currentSnapshot);
+            })
+            .catch((error) => {
+                console.error(error);
+                mapsLoadFailed = true;
+                renderMap(currentSnapshot);
+            });
+    }
 
     refreshOutageFeed({ background: true }).catch(() => {});
 }

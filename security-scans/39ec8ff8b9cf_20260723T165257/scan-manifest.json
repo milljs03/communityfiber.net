@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "scan": {
+    "id": "39ec8ff8b9cf_20260723T165257",
+    "mode": "repository",
+    "target": "C:\\Users\\JosiahMiller\\communityfiber.net",
+    "revision": "39ec8ff8b9cf4a7623ac0a8d6e94f9324a049868",
+    "completedAt": "2026-07-23",
+    "scope": {
+      "summary": "Repository-wide Firebase website security scan covering frontend, Cloud Functions, Firestore/Storage rules, hosting config, public forms, CMS rendering, build scripts, dependencies, and secret exposure.",
+      "reviewedFiles": 77,
+      "validationMode": "static trace, local Node PoCs, npm audit, npm test",
+      "limitations": [
+        "No destructive testing and no live production probing were performed.",
+        "Firestore Emulator rule tests were recommended but not run during the audit phase.",
+        "External service configuration such as Google Maps key restrictions and Firebase App Check enforcement state in the console was not independently verified."
+      ]
+    },
+    "threatModel": {
+      "summary": "Firebase-hosted public marketing site with public lead forms, Cloud Functions, Firestore-backed CMS content, Firebase Auth admin UI, Storage disabled by rules, and Resend email integration.",
+      "assets": [
+        "Lead submissions and contact/account details",
+        "Analytics/pageview records",
+        "CMS public content and admin write capability",
+        "Firebase project/rules boundary",
+        "Cloud Functions Admin SDK privileges",
+        "Resend API secret"
+      ],
+      "trustBoundaries": [
+        "Browser/client code to Firestore security rules",
+        "Public HTTP form submissions to Cloud Functions",
+        "CMS-controlled Firestore content to browser rendering",
+        "Cloud Functions to Firestore Admin SDK and Resend",
+        "Source-controlled build content to generated public HTML"
+      ],
+      "attackerProfiles": [
+        "Anonymous public visitor",
+        "Compromised or malicious staff/admin account",
+        "Automated spam/abuse bot",
+        "Third-party service/CDN compromise"
+      ]
+    }
+  }
+}
+
