@@ -115,7 +115,7 @@
 
 .benefits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
     gap: 2rem;
     position: relative;
     z-index: 2;
@@ -300,9 +300,13 @@ label {
 
 .select-wrapper { position: relative; }
 .select-wrapper::after {
-    content: '\f078';
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
+    content: '';
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3E") center / contain no-repeat;
     position: absolute;
     right: 1rem;
     top: 50%;
@@ -340,7 +344,7 @@ select { -webkit-appearance: none; appearance: none; }
 @media (max-width: 640px) {
     .builders-hero {
         clip-path: none;
-        padding: 4.5rem 1rem 3.25rem;
+        padding: 3.5rem 1rem 3rem;
     }
 
     .builders-hero h1 {
@@ -354,20 +358,37 @@ select { -webkit-appearance: none; appearance: none; }
 
     .logo-ribbon::before,
     .logo-ribbon::after {
-        width: 48px;
+        width: 28px;
+    }
+
+    .logo-track {
+        gap: 1rem;
     }
 
     .benefits-grid {
         grid-template-columns: 1fr;
+        gap: 18px;
     }
 
     .benefit-card,
     .form-card {
-        padding: 1.5rem;
+        padding: 1.25rem;
+        border-radius: 12px;
     }
 
     .benefit-card::before {
         font-size: 5.5rem;
+    }
+
+    .development-benefits,
+    .builder-inquiry-section,
+    .builder-partners {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .form-intro h2 {
+        font-size: clamp(1.65rem, 8vw, 2.1rem);
     }
 }
 

@@ -11,8 +11,6 @@ const ALLOWED_DOMAIN = 'nptel.com';
 let currentUser = null;
 let isAdmin = false;
 let loadedLeads = [];
-let trafficSourceChart = null; // Chart instance
-let deviceTypeChart = null; // Chart instance
 
 // DOM Elements
 const loginOverlay = document.getElementById('login-overlay');
@@ -106,6 +104,7 @@ document.querySelectorAll('.nav-item').forEach(btn => {
         if (tab === 'leads') loadLeads();
         if (tab === 'promotions') loadPromotions(); // NEW
         if (tab === 'plans') loadPlans();
+        if (tab === 'mobile-plans') loadMobilePlans();
         if (tab === 'install') loadInstallSteps();
         if (tab === 'neighborhoods') loadNeighborhoods();
         if (tab === 'business') loadBusinessLogos();
@@ -211,81 +210,186 @@ async function loadDashboard() {
 }
 
 function renderDeviceChart(deviceData) {
-    const ctx = document.getElementById('device-type-chart').getContext('2d');
-    if (deviceTypeChart) {
-        deviceTypeChart.destroy();
-    }
-    deviceTypeChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Desktop', 'Mobile', 'Tablet'],
-            datasets: [{
-                label: 'Device Types',
-                data: [deviceData.desktop, deviceData.mobile, deviceData.tablet],
-                backgroundColor: [
-                    'rgba(54, 162, 235, 0.8)', // Blue
-                    'rgba(75, 192, 192, 0.8)', // Green
-                    'rgba(255, 159, 64, 0.8)'  // Orange
-                ],
-                borderColor: '#fff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                }
-            }
-        }
-    });
+    const chart = prepareCanvas('device-type-chart');
+    if (!chart) return;
+
+    const rows = [
+        { label: 'Desktop', value: Number(deviceData.desktop || 0), color: '#2563eb' },
+        { label: 'Mobile', value: Number(deviceData.mobile || 0), color: '#0f766e' },
+        { label: 'Tablet', value: Number(deviceData.tablet || 0), color: '#d97706' }
+    ];
+
+    drawDoughnutChart(chart, rows);
 }
 
 function renderTrafficSourceChart(referrerData) {
-    const ctx = document.getElementById('traffic-source-chart').getContext('2d');
-    if (trafficSourceChart) {
-        trafficSourceChart.destroy();
+    const chart = prepareCanvas('traffic-source-chart');
+    if (!chart) return;
+
+    const colors = ['#7c3aed', '#dc2626', '#2563eb', '#64748b'];
+    const rows = Object.entries(referrerData).map(([label, value], index) => ({
+        label,
+        value: Number(value || 0),
+        color: colors[index % colors.length]
+    }));
+
+    drawBarChart(chart, rows);
+}
+
+function prepareCanvas(id) {
+    const canvas = document.getElementById(id);
+    if (!canvas) return null;
+
+    const ratio = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const width = Math.max(1, Math.round((rect.width || canvas.clientWidth || 320) * ratio));
+    const height = Math.max(1, Math.round((rect.height || canvas.clientHeight || 240) * ratio));
+
+    if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
     }
-    trafficSourceChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: Object.keys(referrerData),
-            datasets: [{
-                label: 'Visits by Source',
-                data: Object.values(referrerData),
-                backgroundColor: [
-                    'rgba(153, 102, 255, 0.8)', // Purple
-                    'rgba(255, 99, 132, 0.8)',  // Red
-                    'rgba(54, 162, 235, 0.8)',  // Blue
-                    'rgba(201, 203, 207, 0.8)'  // Grey
-                ],
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 10 // Adjust based on expected traffic
-                    }
-                }
-            }
-        }
+
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    const cssWidth = width / ratio;
+    const cssHeight = height / ratio;
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
+    return { ctx, width: cssWidth, height: cssHeight };
+}
+
+function drawNoChartData(ctx, width, height) {
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 14px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('No data yet', width / 2, height / 2);
+}
+
+function drawDoughnutChart({ ctx, width, height }, rows) {
+    const total = rows.reduce((sum, row) => sum + row.value, 0);
+    if (!total) {
+        drawNoChartData(ctx, width, height);
+        return;
+    }
+
+    const radius = Math.max(42, Math.min(width, height - 40) * 0.32);
+    const centerX = width / 2;
+    const centerY = Math.max(radius + 8, height * 0.43);
+    let angle = -Math.PI / 2;
+
+    rows.forEach((row) => {
+        const slice = (row.value / total) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, angle, angle + slice);
+        ctx.closePath();
+        ctx.fillStyle = row.color;
+        ctx.fill();
+        angle += slice;
     });
+
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius * 0.58, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+
+    drawLegend(ctx, rows, 18, height - 30);
+}
+
+function drawBarChart({ ctx, width, height }, rows) {
+    const maxValue = Math.max(...rows.map((row) => row.value), 0);
+    if (!maxValue) {
+        drawNoChartData(ctx, width, height);
+        return;
+    }
+
+    const chartTop = 18;
+    const chartLeft = 32;
+    const chartRight = width - 16;
+    const chartBottom = height - 42;
+    const chartWidth = Math.max(1, chartRight - chartLeft);
+    const chartHeight = Math.max(1, chartBottom - chartTop);
+    const gap = 12;
+    const barWidth = Math.max(12, (chartWidth - gap * (rows.length - 1)) / rows.length);
+
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(chartLeft, chartBottom);
+    ctx.lineTo(chartRight, chartBottom);
+    ctx.stroke();
+
+    ctx.font = '600 11px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+
+    rows.forEach((row, index) => {
+        const x = chartLeft + index * (barWidth + gap);
+        const barHeight = Math.max(2, (row.value / maxValue) * chartHeight);
+        const y = chartBottom - barHeight;
+
+        ctx.fillStyle = row.color;
+        ctx.fillRect(x, y, barWidth, barHeight);
+        ctx.fillStyle = '#334155';
+        ctx.fillText(String(row.value), x + barWidth / 2, Math.max(chartTop, y - 16));
+        ctx.fillStyle = '#64748b';
+        ctx.fillText(row.label.slice(0, 12), x + barWidth / 2, chartBottom + 10);
+    });
+}
+
+function drawLegend(ctx, rows, x, y) {
+    ctx.font = '600 12px system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+
+    let cursor = x;
+    rows.forEach((row) => {
+        const label = `${row.label} ${row.value}`;
+        ctx.fillStyle = row.color;
+        ctx.fillRect(cursor, y - 5, 10, 10);
+        ctx.fillStyle = '#334155';
+        ctx.fillText(label, cursor + 16, y);
+        cursor += ctx.measureText(label).width + 36;
+    });
+}
+
+/**
+ * Delivery status for a lead's notification email.
+ *
+ * The lead is written to Firestore before any email is attempted, so a
+ * failure here never means a lost submission — it means someone has to
+ * follow up by hand. The table is the only place that failure surfaces;
+ * nothing else in the UI reports it.
+ */
+function renderEmailStatus(lead) {
+    const note = lead.emailNotification;
+    if (!note || !note.status) {
+        return '<span class="badge-email badge-email--unknown" title="No delivery record — predates email tracking, or the function never reported back.">&mdash;</span>';
+    }
+
+    const confirmation = note.confirmation || {};
+    const detail = [note.reason, note.message].filter(Boolean).join(': ');
+
+    if (note.status === 'sent') {
+        if (confirmation.status === 'failed') {
+            const why = [confirmation.reason, confirmation.message].filter(Boolean).join(': ');
+            return `<span class="badge-email badge-email--warn" title="Staff were notified. The customer receipt failed: ${escapeHtml(why || 'unknown')}">Sent, no receipt</span>`;
+        }
+        return '<span class="badge-email badge-email--sent" title="Staff notification delivered">Sent</span>';
+    }
+
+    if (note.status === 'skipped') {
+        return `<span class="badge-email badge-email--skipped" title="No email attempted: ${escapeHtml(note.reason || 'unknown')}">Skipped</span>`;
+    }
+
+    return `<span class="badge-email badge-email--failed" title="${escapeHtml(detail || 'Delivery failed')}">Failed &mdash; follow up</span>`;
 }
 
 async function loadLeads() {
     const tbody = document.getElementById('leads-table-body');
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loading...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Loading...</td></tr>';
 
     const filter = document.getElementById('lead-filter').value;
     let q = collection(db, 'artifacts', '162296779236', 'public', 'data', 'leads');
@@ -308,7 +412,7 @@ async function loadLeads() {
 
         tbody.innerHTML = '';
         if (leads.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No records found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No records found</td></tr>';
             return;
         }
 
@@ -323,6 +427,7 @@ async function loadLeads() {
                     <td>${escapeHtml(displayName)}</td>
                     <td>${escapeHtml(lead.email || '-')}</td>
                     <td>${escapeHtml(lead.status || 'New')}</td>
+                    <td>${renderEmailStatus(lead)}</td>
                     <td><button class="btn-sm btn-edit">View</button></td>
                 </tr>
             `;
@@ -331,7 +436,7 @@ async function loadLeads() {
 
     } catch (err) {
         console.error("Error loading leads:", err);
-        tbody.innerHTML = '<tr><td colspan="6" style="color:red; text-align:center;">Error loading data. Check Firestore Rules.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="color:red; text-align:center;">Error loading data. Check Firestore Rules.</td></tr>';
     }
 }
 
@@ -434,6 +539,54 @@ async function loadPlans() {
     } catch (err) {
         console.error(err);
         container.innerHTML = '<p style="color:red;">Error loading plans.</p>';
+    }
+}
+
+/* Mobile plans live in their own collection rather than sharing `plans`, because
+   the two card shapes have nothing in common — broadband plans key off a speed
+   and a monthly price, mobile plans off a data allowance and a per-line price
+   that may not be published yet. */
+async function loadMobilePlans() {
+    const container = document.getElementById('mobile-plans-list');
+    container.innerHTML = '<p>Loading...</p>';
+
+    try {
+        const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'mobile_plans');
+        const snapshot = await getDocs(ref);
+
+        container.innerHTML = '';
+
+        const plans = [];
+        snapshot.forEach(doc => plans.push({ id: doc.id, data: doc.data() }));
+        plans.sort((a, b) => (Number(a.data.order) || 0) - (Number(b.data.order) || 0));
+
+        plans.forEach(({ id, data: plan }) => {
+            const priceText = plan.price ? `$${plan.price}` : 'Call for pricing';
+            const featureCount = String(plan.features || '').split('\n').filter(l => l.trim()).length;
+            const card = document.createElement('div');
+            card.className = 'admin-card';
+            card.innerHTML = `
+                <h3>${escapeHtml(String(plan.order ?? '–'))}. ${escapeHtml(plan.name || '')} <span style="font-size:0.8rem; color:${plan.price ? 'green' : '#b45309'};">${escapeHtml(priceText)}</span></h3>
+                <p>${escapeHtml(plan.dataNote || '')}<br>
+                   <span style="color:#64748b;">${featureCount} feature${featureCount === 1 ? '' : 's'}${plan.isPopular ? ' · Most popular' : ''}</span></p>
+                <div class="card-actions">
+                    ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${id}" data-type="mobile_plan">Edit</button>` : ''}
+                    ${isAdmin ? `<button class="btn-sm btn-delete" data-id="${id}" data-type="mobile_plan">Delete</button>` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+            if (isAdmin) {
+                card.querySelector('.btn-edit').addEventListener('click', () => openEditModal('mobile_plan', id, plan));
+                card.querySelector('.btn-delete').addEventListener('click', () => deleteItem('mobile_plan', id));
+            }
+        });
+
+        if (snapshot.empty) container.innerHTML = '<p>No mobile plans found. Add one!</p>';
+
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = '<p style="color:red;">Error loading mobile plans.</p>';
     }
 }
 
@@ -541,7 +694,7 @@ async function loadEmployees() {
             card.innerHTML = `
                 <div style="display:flex; gap:15px; align-items:center;">
                     <div style="width:50px; height:50px; border-radius:50%; background:#eee; overflow:hidden; flex-shrink:0;">
-                        ${photoUrl ? `<img src="${photoUrl}" alt="" style="width:100%; height:100%; object-fit:cover;">` : '<i class="fa-solid fa-user" style="line-height:50px; text-align:center; display:block; color:#ccc;"></i>'}
+                        ${photoUrl ? `<img src="${photoUrl}" alt="" style="width:100%; height:100%; object-fit:cover;">` : '<svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true" style="line-height:50px; text-align:center; display:block; color:#ccc;"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>'}
                     </div>
                     <div>
                         <h3 style="margin:0; font-size:1.1rem;">${escapeHtml(emp.name || '')}</h3>
@@ -790,6 +943,37 @@ function openEditModal(type, id, data = null) {
             <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
                 <input type="checkbox" id="plan-autopay" name="requiresAutopay" ${data?.requiresAutopay ? 'checked' : ''} style="width: auto;">
                 <label for="plan-autopay" class="form-label" style="margin-bottom: 0; cursor: pointer;">Requires E-Bill &amp; Auto Pay</label>
+            </div>
+        `;
+    } else if (type === 'mobile_plan') {
+        modalFields.innerHTML = `
+            <div>
+                <label class="form-label">Plan Name &mdash; the large text on the card</label>
+                <input type="text" name="name" class="form-control" value="${field(data?.name)}" placeholder="e.g. Unlimited Max" required>
+            </div>
+            <div>
+                <label class="form-label">Display Order</label>
+                <input type="number" name="order" class="form-control" value="${field(data?.order)}" placeholder="1 = first, 2 = second, ...">
+            </div>
+            <div>
+                <label class="form-label">Caption &mdash; small text under the name</label>
+                <input type="text" name="dataNote" class="form-control" value="${field(data?.dataNote)}" placeholder="e.g. High-speed data included">
+            </div>
+            <div>
+                <label class="form-label">Price per line (leave blank for &ldquo;Call for pricing&rdquo;)</label>
+                <input type="number" name="price" class="form-control" value="${field(data?.price)}" placeholder="e.g. 30">
+            </div>
+            <div>
+                <label class="form-label">Price Caption</label>
+                <input type="text" name="priceNote" class="form-control" value="${field(data?.priceNote)}" placeholder="e.g. /mo per line">
+            </div>
+            <div>
+                <label class="form-label">Features &mdash; one per line</label>
+                <textarea name="features" class="form-control" rows="5" placeholder="Mobile hotspot included&#10;Keep your current number">${field(data?.features)}</textarea>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                <input type="checkbox" id="mobile-plan-popular" name="isPopular" ${data?.isPopular ? 'checked' : ''} style="width: auto;">
+                <label for="mobile-plan-popular" class="form-label" style="margin-bottom: 0; cursor: pointer;">Show &ldquo;Most popular&rdquo; badge</label>
             </div>
         `;
     } else if (type === 'hood') {
@@ -1088,8 +1272,19 @@ editForm.addEventListener('submit', async (e) => {
         data.promoLabel = (data.promoLabel || '').trim();
     }
 
+    if (type === 'mobile_plan') {
+        data.isPopular = !!editForm.querySelector('[name="isPopular"]').checked;
+        data.order = data.order ? Number(data.order) : 0;
+        // Blank price is meaningful here: it renders "Call for pricing" rather
+        // than $0, which is what we want while the rate card is unpublished.
+        data.price = data.price === '' || data.price == null ? null : Number(data.price);
+        data.features = String(data.features || '')
+            .split('\n').map(s => s.trim()).filter(Boolean).join('\n');
+    }
+
     let collectionName;
     if (type === 'plan') collectionName = 'plans';
+    else if (type === 'mobile_plan') collectionName = 'mobile_plans';
     else if (type === 'hood') collectionName = 'neighborhoods';
     else if (type === 'testimonial') collectionName = 'testimonials';
     else if (type === 'employee') collectionName = 'employees';
@@ -1154,6 +1349,7 @@ async function deleteItem(type, id) {
 }
 
 document.getElementById('add-plan-btn').addEventListener('click', () => openEditModal('plan'));
+document.getElementById('add-mobile-plan-btn').addEventListener('click', () => openEditModal('mobile_plan'));
 document.getElementById('add-hood-btn').addEventListener('click', () => openEditModal('hood'));
 document.getElementById('add-step-btn').addEventListener('click', () => openEditModal('install_step'));
 

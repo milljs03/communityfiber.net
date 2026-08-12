@@ -3,27 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js');
+    /* Until communityfiber.net cuts over from WordPress to this build, the
+       Firebase preview hosts are live and indexable while their canonicals
+       point at URLs that still 404. Keep the preview hosts out of the index.
+       Strictly allowlisted: only *.web.app / *.firebaseapp.com are affected,
+       so this stops applying by itself once the custom domain is attached. */
+    var h = location.hostname;
+    if (h.endsWith('.web.app') || h.endsWith('.firebaseapp.com')) {
+      var r = document.createElement('meta');
+      r.name = 'robots'; r.content = 'noindex, nofollow';
+      document.head.appendChild(r);
+    }</script>
     <title>News & Updates | Community Fiber</title>
     <meta name="description" content="Stay informed with Community Fiber's latest news, updates, network expansion announcements, and industry insights.">
     <meta name="keywords" content="news, updates, fiber internet news, network expansion, community fiber announcements">
     <meta property="og:title" content="News & Updates | Community Fiber">
     <meta property="og:description" content="Stay informed with Community Fiber's latest news, updates, and network expansion announcements.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://communityfiber.net/blog.html">
+    <meta property="og:url" content="https://communityfiber.net/blog">
     <meta property="og:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="News & Updates | Community Fiber">
     <meta name="twitter:description" content="Latest news and updates from Community Fiber.">
     <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
-    <link rel="canonical" href="https://communityfiber.net/blog.html">
+    <link rel="canonical" href="https://communityfiber.net/blog">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
     <script type="application/ld+json" id="blog-jsonld">
 {
   "@context": "https://schema.org",
   "@type": "Blog",
-  "@id": "https://communityfiber.net/blog.html#blog",
+  "@id": "https://communityfiber.net/blog#blog",
   "name": "Community Fiber News and Guides",
-  "url": "https://communityfiber.net/blog.html",
+  "url": "https://communityfiber.net/blog",
   "description": "Local fiber internet guides, Community Fiber updates, and practical resources for homes, businesses, builders, and neighborhoods.",
   "publisher": {
     "@type": "Organization",
@@ -39,7 +51,7 @@
     {
       "@type": "BlogPosting",
       "headline": "Fiber vs Cable Internet in Elkhart County",
-      "url": "https://communityfiber.net/blog/fiber-vs-cable-elkhart-county.html",
+      "url": "https://communityfiber.net/blog/fiber-vs-cable-elkhart-county",
       "description": "Compare fiber and cable internet for speed, upload performance, latency, reliability, and long-term value for Elkhart County homes.",
       "datePublished": "2026-06-25",
       "dateModified": "2026-06-25"
@@ -47,7 +59,7 @@
     {
       "@type": "BlogPosting",
       "headline": "How Fiber Internet Installation Works",
-      "url": "https://communityfiber.net/blog/how-fiber-installation-works.html",
+      "url": "https://communityfiber.net/blog/how-fiber-installation-works",
       "description": "Learn what to expect before, during, and after a residential fiber internet installation with Community Fiber.",
       "datePublished": "2026-06-25",
       "dateModified": "2026-06-25"
@@ -55,7 +67,7 @@
     {
       "@type": "BlogPosting",
       "headline": "What Businesses Should Look for in Fiber Internet",
-      "url": "https://communityfiber.net/blog/business-fiber-internet-guide.html",
+      "url": "https://communityfiber.net/blog/business-fiber-internet-guide",
       "description": "A practical guide for businesses comparing fiber internet, support, reliability, upload speed, and network needs.",
       "datePublished": "2026-06-25",
       "dateModified": "2026-06-25"
@@ -63,7 +75,7 @@
     {
       "@type": "BlogPosting",
       "headline": "What Internet Speed Do I Need?",
-      "url": "https://communityfiber.net/blog/what-internet-speed-do-i-need.html",
+      "url": "https://communityfiber.net/blog/what-internet-speed-do-i-need",
       "description": "A practical guide to choosing the right fiber internet speed for streaming, gaming, work, school, smart homes, and everyday browsing.",
       "datePublished": "2026-06-25",
       "dateModified": "2026-06-25"
@@ -75,24 +87,31 @@
     <!-- CSP -->
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.clarity.ms https://c.bing.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src https://fonts.gstatic.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com https://*.clarity.ms https://c.bing.com;
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
+                   connect-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com https://*.clarity.ms https://c.bing.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/blog.css">
+    <!-- Microsoft Clarity: heatmaps + session replay. Async, does not block render. -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "xync1c67sj");
+    </script>
 </head>
 <body>
 
@@ -100,12 +119,12 @@
     <div id="master-header"></div>
 
     <main>
-        <section class="blog-hero" data-animate="fade-up">
+        <section class="blog-hero">
             <h1>Community News</h1>
             <p>Stay up to date with the latest updates, expansion plans, and community stories from Community Fiber.</p>
             <div class="social-links-hero">
                 <a href="https://www.facebook.com/profile.php?id=100070795525884" target="_blank" class="btn btn-outline btn-white">
-                    <i class="fa-brands fa-facebook" style="margin-right: 8px;"></i> Follow us on Facebook
+                    <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true" style="margin-right: 8px;"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg> Follow us on Facebook
                 </a>
             </div>
         </section>
@@ -123,46 +142,46 @@
 
                     <article class="guide-card post-card">
                         <span class="guide-kicker">Internet Comparison</span>
-                        <h3><a href="blog/fiber-vs-cable-elkhart-county.html">Fiber vs Cable Internet in Elkhart County</a></h3>
+                        <h3><a href="blog/fiber-vs-cable-elkhart-county">Fiber vs Cable Internet in Elkhart County</a></h3>
                         <p>See how fiber and cable internet differ for speed, uploads, latency, reliability, and home use in Elkhart County.</p>
                         <div class="post-card-meta">
-                            <span>6 min read</span>
+                            <span>1 min read</span>
                             <span>Updated 2026-06-25</span>
                         </div>
-                        <a class="guide-link" href="blog/fiber-vs-cable-elkhart-county.html">Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                        <a class="guide-link" href="blog/fiber-vs-cable-elkhart-county">Read article <svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></a>
                     </article>
 
                     <article class="guide-card post-card">
                         <span class="guide-kicker">Installation</span>
-                        <h3><a href="blog/how-fiber-installation-works.html">How Fiber Internet Installation Works</a></h3>
+                        <h3><a href="blog/how-fiber-installation-works">How Fiber Internet Installation Works</a></h3>
                         <p>Understand the basic steps of a fiber installation, from checking availability to equipment setup and testing.</p>
                         <div class="post-card-meta">
-                            <span>5 min read</span>
+                            <span>1 min read</span>
                             <span>Updated 2026-06-25</span>
                         </div>
-                        <a class="guide-link" href="blog/how-fiber-installation-works.html">Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                        <a class="guide-link" href="blog/how-fiber-installation-works">Read article <svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></a>
                     </article>
 
                     <article class="guide-card post-card">
                         <span class="guide-kicker">Business Fiber</span>
-                        <h3><a href="blog/business-fiber-internet-guide.html">What Businesses Should Look for in Fiber Internet</a></h3>
+                        <h3><a href="blog/business-fiber-internet-guide">What Businesses Should Look for in Fiber Internet</a></h3>
                         <p>Know what to compare when choosing business fiber internet: uptime, upload speed, support, scalability, and installation planning.</p>
                         <div class="post-card-meta">
-                            <span>6 min read</span>
+                            <span>2 min read</span>
                             <span>Updated 2026-06-25</span>
                         </div>
-                        <a class="guide-link" href="blog/business-fiber-internet-guide.html">Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                        <a class="guide-link" href="blog/business-fiber-internet-guide">Read article <svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></a>
                     </article>
 
                     <article class="guide-card post-card">
                         <span class="guide-kicker">Residential Fiber</span>
-                        <h3><a href="blog/what-internet-speed-do-i-need.html">What Internet Speed Do I Need?</a></h3>
+                        <h3><a href="blog/what-internet-speed-do-i-need">What Internet Speed Do I Need?</a></h3>
                         <p>Match your household&#39;s streaming, gaming, work, school, and smart home needs to the right fiber internet speed.</p>
                         <div class="post-card-meta">
-                            <span>5 min read</span>
+                            <span>1 min read</span>
                             <span>Updated 2026-06-25</span>
                         </div>
-                        <a class="guide-link" href="blog/what-internet-speed-do-i-need.html">Read article <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                        <a class="guide-link" href="blog/what-internet-speed-do-i-need">Read article <svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></a>
                     </article>
                 <!-- GENERATED_POSTS_END -->
                 </div>
@@ -190,10 +209,10 @@
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-links">
-                <a href="footer/privacy-policy.html">Privacy Policy</a>
-                <a href="footer/terms-of-service.html">Terms of Service</a>
-                <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
-                <a href="footer/open-internet-policy.html">Open Internet Policy</a>
+                <a href="footer/privacy-policy">Privacy Policy</a>
+                <a href="footer/terms-of-service">Terms of Service</a>
+                <a href="footer/acceptable-user-policy">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy">Open Internet Policy</a>
             </div>
             <address class="footer-address">
                 <strong>NPTech</strong>

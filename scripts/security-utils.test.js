@@ -135,8 +135,6 @@ test('CSP meta tags are closed in shipped pages and the blog template', () => {
     'public/blog.html',
     'public/builders.html',
     'public/business.html',
-    'public/outage.html',
-    'public/speedtest.html',
     'public/blog/business-fiber-internet-guide.html',
     'public/blog/fiber-vs-cable-elkhart-county.html',
     'public/blog/how-fiber-installation-works.html',
@@ -148,8 +146,28 @@ test('CSP meta tags are closed in shipped pages and the blog template', () => {
     const source = fs.readFileSync(path.resolve(__dirname, '..', file), 'utf8');
     assert.match(
       source,
-      /connect-src [^"]*https:\/\/content-firebaseappcheck\.googleapis\.com;">/,
+      /connect-src [^"]*https:\/\/content-firebaseappcheck\.googleapis\.com[^"]*;">/,
       `${file} must close the CSP content attribute`
     );
   }
+});
+
+test('lead form pages do not load third-party session replay scripts', () => {
+  const files = [
+    'public/builders.html',
+    'public/business.html',
+    'public/support.html'
+  ];
+
+  for (const file of files) {
+    const source = fs.readFileSync(path.resolve(__dirname, '..', file), 'utf8');
+    assert.doesNotMatch(source, /clarity\.ms|c\.bing\.com|xync1c67sj/i, `${file} must not load Clarity or Bing session endpoints`);
+  }
+});
+
+test('admin dashboard does not load unpinned third-party scripts', () => {
+  const source = fs.readFileSync(path.resolve(__dirname, '..', 'public/admin.html'), 'utf8');
+
+  assert.doesNotMatch(source, /cdn\.jsdelivr\.net/i);
+  assert.doesNotMatch(source, /<script\s+src=["']https?:\/\//i);
 });

@@ -1,0 +1,778 @@
+/* mobile.css — NPTech Mobile
+ *
+ * This page carries NPTech's identity rather than Community Fiber's, because
+ * the service is provided by NPTech. The brand tokens are re-pointed on a
+ * single wrapper class so the shared components (section titles, cards, the
+ * accent rule) inherit blue here without touching any other page.
+ */
+
+.npt-page {
+    --npt-blue: #0663AF;
+    --npt-lt-blue: #64ADD9;
+    --npt-gray: #4D4D4F;
+    --npt-off-white: #F2F2F2;
+    --npt-ink: #141414;
+
+    /* Re-point the shared brand variables so global components follow suit. */
+    --cfn-green: var(--npt-blue);
+    --cfn-dark-green: #054E8A;
+    --cfn-light-green: var(--npt-lt-blue);
+    --cfn-gradient-flat: linear-gradient(90deg, var(--npt-blue), var(--npt-lt-blue));
+    --cfn-gradient: linear-gradient(45deg, var(--npt-blue), #2E86C8, var(--npt-lt-blue));
+
+    background-color: #ffffff;
+    color: var(--npt-ink);
+}
+
+/* --- Hero ---------------------------------------------------------------- */
+.npt-hero {
+    background: linear-gradient(135deg, #04365F 0%, var(--npt-blue) 55%, #1B7FC4 100%);
+    color: #ffffff;
+    padding: 84px 20px 76px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.npt-hero-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* NPTech Mobile reads as its own product, so the mark and the product word sit
+   in one lockup separated by a hairline rule, rather than the mark alone on a
+   white plate. Both sides scale together so the lockup still fits the content
+   box at 320px, where a fixed-size version would overrun it. */
+.npt-lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(12px, 3.5vw, 18px);
+    margin: 0 auto 28px;
+}
+
+.npt-lockup-mark {
+    height: clamp(30px, 9vw, 44px);
+    width: auto;
+    display: block;
+    /* Flatten every colour to black, then invert to white. Alpha is untouched,
+       so the edges stay antialiased against the gradient. */
+    filter: brightness(0) invert(1);
+}
+
+.npt-lockup-product {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    font-size: clamp(1.15rem, 4.5vw, 1.7rem);
+    letter-spacing: 0.01em;
+    color: #ffffff;
+    line-height: 1;
+    /* The vertical padding is what gives the divider its height; without it the
+       rule is only as tall as the cap height and reads as a stray tick. */
+    padding: 0.32em 0 0.32em clamp(12px, 3.5vw, 18px);
+    border-left: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.npt-hero h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(2.1rem, 6vw, 3.2rem);
+    line-height: 1.12;
+    margin: 0 0 16px;
+    color: #ffffff;
+}
+
+.npt-hero p {
+    font-size: 1.12rem;
+    line-height: 1.65;
+    color: #E4F1FB;
+    margin: 0 auto 32px;
+    max-width: 620px;
+}
+
+.npt-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+}
+
+.npt-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 13px 28px;
+    border-radius: 999px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.2s var(--transition-smooth), box-shadow 0.2s var(--transition-smooth), background-color 0.2s;
+}
+
+.npt-btn--primary {
+    background: #ffffff;
+    color: var(--npt-blue);
+}
+
+.npt-btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+}
+
+.npt-btn--ghost {
+    border: 2px solid rgba(255, 255, 255, 0.65);
+    color: #ffffff;
+}
+
+.npt-btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #ffffff;
+}
+
+/* On-brand solid button for use on light sections. */
+.npt-btn--solid {
+    background: var(--npt-blue);
+    color: #ffffff;
+}
+
+.npt-btn--solid:hover {
+    background: #054E8A;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(6, 99, 175, 0.28);
+}
+
+/* --- Eligibility notice -------------------------------------------------- */
+/* The single most important qualifier on this page: the service is only sold
+   to existing broadband subscribers. Stated up front rather than in fine print
+   so nobody works through the plans before discovering they cannot buy. */
+.npt-eligibility {
+    background: var(--npt-off-white);
+    border-top: 3px solid var(--npt-lt-blue);
+    padding: 26px 20px;
+}
+
+.npt-eligibility-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    color: var(--npt-gray);
+    font-size: 1.02rem;
+    line-height: 1.6;
+}
+
+.npt-eligibility .cfn-icon {
+    color: var(--npt-blue);
+    flex-shrink: 0;
+    width: 1.15em;
+    height: 1.15em;
+    margin-top: 0.25em;
+}
+
+.npt-eligibility strong {
+    color: var(--npt-ink);
+}
+
+/* --- Generic section ----------------------------------------------------- */
+.npt-section {
+    padding: var(--npt-section-pad, 76px) 20px;
+}
+
+.npt-section--tint {
+    background: var(--npt-off-white);
+}
+
+.npt-section-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+/* global.css gives .section-title only its gradient accent — the centring and
+   type scale live in each page's own stylesheet (see residential.css). Since
+   this page loads mobile.css instead, it has to state them itself, or the
+   headings sit left while the accent rule under them stays centred. */
+.npt-section .section-title {
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: clamp(1.65rem, 5.5vw, 2.5rem);
+    line-height: 1.2;
+    color: var(--npt-ink);
+    margin: 0 0 40px;
+}
+
+/* Where a lede follows, the title's own gap would stack on top of the lede's
+   and open a hole between the heading and its own subtitle. */
+.npt-section .section-title:has(+ .npt-lede) {
+    margin-bottom: 18px;
+}
+
+.npt-lede {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 48px;
+    color: var(--npt-gray);
+    font-size: 1.06rem;
+    line-height: 1.65;
+}
+
+/* --- Plan cards ---------------------------------------------------------- */
+.npt-plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 24px;
+    align-items: stretch;
+}
+
+.npt-plan {
+    background: #ffffff;
+    border: 1px solid #dbe3ea;
+    border-radius: 16px;
+    padding: 32px 26px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(20, 20, 20, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.npt-plan:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(20, 20, 20, 0.1);
+}
+
+.npt-plan--featured {
+    border: 2px solid var(--npt-blue);
+    box-shadow: 0 16px 36px rgba(6, 99, 175, 0.16);
+    position: relative;
+}
+
+.npt-plan-badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--npt-blue);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    /* Matches .popular-badge on the residential plan cards. */
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+/* The plan name IS the headline figure — there is no separate small title above
+   it. It stays an <h3> so the card still has a heading in the outline. */
+.npt-plan-data {
+    font-family: var(--font-heading);
+    /* "Unlimited Max" is the longest of these; a flat 2.4rem would run past a
+       card's content box on a 320px screen. */
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--npt-blue);
+    margin: 0 0 2px;
+}
+
+.npt-plan-data small {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8A9AA8;
+    margin-top: 6px;
+}
+
+.npt-plan-price {
+    margin: 18px 0 20px;
+    padding: 14px 0;
+    border-top: 1px solid #eef2f5;
+    border-bottom: 1px solid #eef2f5;
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--npt-gray);
+}
+
+.npt-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    text-align: left;
+    display: grid;
+    gap: 11px;
+}
+
+.npt-plan-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    color: var(--npt-gray);
+    font-size: 0.97rem;
+    line-height: 1.5;
+}
+
+.npt-plan-features .cfn-icon {
+    color: var(--npt-blue);
+    flex-shrink: 0;
+    width: 0.9rem;
+    height: 0.9rem;
+    margin-top: 0.32em;
+}
+
+.npt-plan .npt-btn {
+    margin-top: auto;
+    width: 100%;
+}
+
+/* --- Feature grid -------------------------------------------------------- */
+.npt-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 28px;
+}
+
+.npt-feature {
+    text-align: center;
+}
+
+.npt-feature-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #E4F1FB;
+    color: var(--npt-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.npt-feature-icon .cfn-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.npt-feature h3 {
+    font-family: var(--font-heading);
+    font-size: 1.12rem;
+    margin: 0 0 8px;
+    color: var(--npt-ink);
+}
+
+.npt-feature p {
+    color: var(--npt-gray);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* --- Switch checklist ---------------------------------------------------- */
+.npt-checklist {
+    margin: 0;
+    display: grid;
+    gap: 20px;
+}
+
+.npt-checklist > div {
+    padding-left: 18px;
+    border-left: 3px solid var(--npt-lt-blue);
+}
+
+.npt-checklist dt {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: var(--npt-blue);
+    margin-bottom: 3px;
+}
+
+.npt-checklist dd {
+    margin: 0;
+    color: var(--npt-gray);
+    font-size: 0.96rem;
+    line-height: 1.55;
+}
+
+/* --- Carrier band -------------------------------------------------------- */
+/* One quiet strip rather than a section. Which wholesale network the service
+   rides on is reassurance, not a headline, and a full section with its own
+   heading implied a carrier partnership we are not claiming. */
+.npt-netband {
+    background: #ffffff;
+    border-bottom: 1px solid #e6ebf0;
+    padding: 18px 20px;
+}
+
+.npt-netband-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 22px;
+}
+
+.npt-netband-label {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8A9AA8;
+}
+
+/* Sized individually, because neither matching heights nor matching widths gives
+   an even result. The Verizon file is pure wordmark, so its letters fill the full
+   image height. The AT&T file is a globe plus a wordmark, so at the same height
+   its letters come out roughly half the size. These two numbers set the two
+   WORDMARKS to about the same cap height, which is what the eye compares.
+   Both are dark artwork, so this band stays white while the sections around it tint. */
+.npt-netband img {
+    width: auto;
+    display: block;
+    flex-shrink: 0;
+}
+
+.npt-netband-att {
+    height: 38px;
+}
+
+.npt-netband-vz {
+    height: 20px;
+}
+
+.npt-netband-note {
+    color: var(--npt-gray);
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+/* --- Photo showcase ------------------------------------------------------ */
+/* Breaks the 1120px content rail: these two carry the page's only photography,
+   and at content width they read as illustrations rather than as the subject. */
+.npt-showcase-section {
+    padding: var(--npt-section-pad, 76px) 0;
+}
+
+.npt-section-inner-full {
+    padding: 0 clamp(16px, 2.5vw, 34px);
+}
+
+.npt-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
+    gap: clamp(14px, 1.6vw, 22px);
+}
+
+.npt-showcase-card {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    isolation: isolate;
+    /* Scales with the viewport so the pair stays substantial on a wide screen
+       instead of turning into two long letterbox slots. */
+    min-height: clamp(360px, 34vw, 560px);
+    display: flex;
+    align-items: flex-end;
+}
+
+/* The two source photos are 16:9 and 3:2. Forcing one ratio with object-fit
+   keeps the pair the same height side by side; both subjects sit near centre,
+   so the crop takes it off the edges rather than off the phone. */
+.npt-showcase-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -2;
+}
+
+/* Scrim colours are sampled from each photo — denim indigo for the pocket shot,
+   deep ocean for the pool shot — so the panel reads as part of the image
+   instead of a black bar dropped on top of it. */
+.npt-showcase-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+}
+
+.npt-showcase-card--denim::after {
+    background: linear-gradient(to top, rgba(11, 25, 51, 0.94) 0%, rgba(11, 25, 51, 0.78) 32%, rgba(11, 25, 51, 0.12) 62%, rgba(11, 25, 51, 0) 100%);
+}
+
+.npt-showcase-card--ocean::after {
+    background: linear-gradient(to top, rgba(2, 42, 58, 0.94) 0%, rgba(2, 42, 58, 0.78) 32%, rgba(2, 42, 58, 0.12) 62%, rgba(2, 42, 58, 0) 100%);
+}
+
+.npt-showcase-copy {
+    padding: clamp(26px, 3vw, 44px);
+    color: #ffffff;
+    max-width: 620px;
+}
+
+.npt-showcase-copy h3 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.35rem, 3.4vw, 1.75rem);
+    line-height: 1.2;
+    margin: 0 0 10px;
+    color: #ffffff;
+}
+
+.npt-showcase-copy p {
+    margin: 0 0 16px;
+    color: #E6EEF6;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.npt-showcase-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    transition: border-color 0.2s, gap 0.2s;
+}
+
+.npt-showcase-link:hover {
+    border-color: #ffffff;
+    gap: 0.75rem;
+}
+
+.npt-showcase-link .cfn-icon {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+/* --- Switch checklist ---------------------------------------------------- */
+.npt-checklist--row {
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 28px;
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+/* --- My Mobile app ------------------------------------------------------- */
+.npt-app {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 52px;
+    align-items: center;
+}
+
+.npt-app-copy h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.7rem, 4vw, 2.3rem);
+    margin: 0 0 16px;
+    color: var(--npt-ink);
+}
+
+.npt-app-copy p {
+    color: var(--npt-gray);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin: 0 0 26px;
+}
+
+.npt-app-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+/* Apple and Google both specify a minimum badge height; 44px also happens to be
+   the touch-target floor, so one number satisfies both. */
+.npt-badge {
+    display: inline-block;
+    line-height: 0;
+    border-radius: 8px;
+    transition: transform 0.2s var(--transition-smooth), box-shadow 0.2s var(--transition-smooth);
+}
+
+.npt-badge svg {
+    height: 48px;
+    width: auto;
+    display: block;
+}
+
+.npt-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(20, 20, 20, 0.22);
+}
+
+.npt-app-list {
+    list-style: none;
+    padding: 32px;
+    margin: 0;
+    background: linear-gradient(135deg, #E4F1FB, #F7FBFE);
+    border: 1px solid #D3E6F5;
+    border-radius: 18px;
+    display: grid;
+    gap: 14px;
+}
+
+.npt-app-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    color: var(--npt-gray);
+    font-size: 0.99rem;
+    line-height: 1.5;
+}
+
+.npt-app-list .cfn-icon {
+    color: var(--npt-blue);
+    flex-shrink: 0;
+    width: 0.95rem;
+    height: 0.95rem;
+    margin-top: 0.3em;
+}
+
+/* --- FAQ ----------------------------------------------------------------- */
+.npt-faq {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+.npt-faq-item {
+    border-bottom: 1px solid #e2e8ee;
+}
+
+.npt-faq-item summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 20px 40px 20px 0;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.03rem;
+    color: var(--npt-ink);
+    position: relative;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.npt-faq-item summary::-webkit-details-marker { display: none; }
+
+.npt-faq-item summary::after {
+    content: '';
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.85rem;
+    height: 0.85rem;
+    background-color: var(--npt-blue);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z'/%3E%3C/svg%3E") center / contain no-repeat;
+    transition: transform 0.25s ease;
+}
+
+.npt-faq-item[open] summary::after {
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.npt-faq-item .npt-faq-body {
+    padding: 0 0 22px;
+    color: var(--npt-gray);
+    line-height: 1.7;
+}
+
+/* --- Closing call to action ---------------------------------------------- */
+.npt-cta {
+    background: linear-gradient(135deg, #04365F 0%, var(--npt-blue) 100%);
+    color: #ffffff;
+    text-align: center;
+    padding: 72px 20px;
+}
+
+.npt-cta h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    margin: 0 0 14px;
+    color: #ffffff;
+}
+
+.npt-cta p {
+    color: #E4F1FB;
+    font-size: 1.06rem;
+    max-width: 560px;
+    margin: 0 auto 30px;
+    line-height: 1.65;
+}
+
+.npt-cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+}
+
+/* --- Fine print ---------------------------------------------------------- */
+.npt-fineprint {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 34px 20px 0;
+    color: #7A8792;
+    font-size: 0.84rem;
+    line-height: 1.65;
+}
+
+.npt-fineprint p { margin: 0 0 8px; }
+
+/* --- Responsive ---------------------------------------------------------- */
+@media (max-width: 900px) {
+    .npt-page { --npt-section-pad: 52px; }
+
+    .npt-app {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .npt-app-list {
+        padding: 26px;
+    }
+
+    /* A 380px card on a 360px screen is nearly square once it is full width;
+       shortening it keeps the photo readable without the copy crowding it. */
+    .npt-showcase-card {
+        min-height: 320px;
+    }
+
+    .npt-showcase-copy {
+        padding: 26px 22px 24px;
+    }
+
+    .npt-hero {
+        padding: 56px 20px 52px;
+    }
+
+    .npt-eligibility-inner {
+        font-size: 0.97rem;
+    }
+
+    .npt-hero-actions .npt-btn,
+    .npt-cta-actions .npt-btn {
+        width: 100%;
+        max-width: 320px;
+    }
+}

@@ -178,7 +178,7 @@
 
 .legend-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
     gap: 1.5rem;
 }
 
@@ -262,7 +262,7 @@
     color: var(--npt-black);
 }
 
-.benefit-list i {
+.benefit-list .cfn-icon {
     color: var(--cfn-green);
     background: #dcfce7;
     width: 28px;
@@ -389,7 +389,7 @@ label {
 @media (max-width: 640px) {
     .business-hero {
         clip-path: none;
-        padding: 4.5rem 1rem 3.25rem;
+        padding: 3.5rem 1rem 3rem;
     }
 
     .business-hero h1 {
@@ -400,9 +400,20 @@ label {
         margin-bottom: 2.5rem;
     }
 
+    .main-content,
+    .map-section,
+    .business-form-section {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
     .logo-ribbon::before,
     .logo-ribbon::after {
-        width: 48px;
+        width: 28px;
+    }
+
+    .logo-track {
+        gap: 1rem;
     }
 
     .map-wrapper-card,
@@ -421,5 +432,9 @@ label {
 
     .form-wrapper {
         gap: 1.5rem;
+    }
+
+    .form-intro h2 {
+        font-size: clamp(1.65rem, 8vw, 2.1rem);
     }
 }

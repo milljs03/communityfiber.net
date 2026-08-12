@@ -3,23 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js');
+    /* Until communityfiber.net cuts over from WordPress to this build, the
+       Firebase preview hosts are live and indexable while their canonicals
+       point at URLs that still 404. Keep the preview hosts out of the index.
+       Strictly allowlisted: only *.web.app / *.firebaseapp.com are affected,
+       so this stops applying by itself once the custom domain is attached. */
+    var h = location.hostname;
+    if (h.endsWith('.web.app') || h.endsWith('.firebaseapp.com')) {
+      var r = document.createElement('meta');
+      r.name = 'robots'; r.content = 'noindex, nofollow';
+      document.head.appendChild(r);
+    }</script>
     <title>Admin Dashboard | Community Fiber</title>
     <meta name="robots" content="noindex, nofollow">
     <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src https://fonts.gstatic.com;
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://communityfiber-net.firebaseapp.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
-                   connect-src 'self' https://www.gstatic.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
+                   connect-src 'self' https://www.google.com https://www.recaptcha.net https://www.gstatic.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
@@ -36,7 +47,7 @@
             <p>Please sign in with your corporate Google account (@nptel.com) to continue.</p>
             <div id="login-error" class="error-msg hidden"></div>
             <button id="google-login-btn" class="google-btn">
-                <i class="fa-brands fa-google"></i> Sign in with Google
+                <svg class="cfn-icon" viewBox="0 0 488 512" fill="currentColor" aria-hidden="true"><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg> Sign in with Google
             </button>
         </div>
     </div>
@@ -51,37 +62,40 @@
             </div>
             <nav class="sidebar-nav">
                 <button class="nav-item active" data-tab="dashboard">
-                    <i class="fa-solid fa-chart-line"></i> Dashboard
+                    <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></svg> Dashboard
                 </button>
                 <button class="nav-item" data-tab="leads">
-                    <i class="fa-solid fa-inbox"></i> Leads & Forms
+                    <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M121 32C91.6 32 66 52 58.9 80.5L1.9 308.4C.6 313.5 0 318.7 0 323.9V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V323.9c0-5.2-.6-10.4-1.9-15.5l-57-227.9C446 52 420.4 32 391 32H121zm0 64H391l48 192H387.8c-12.1 0-23.2 6.8-28.6 17.7l-14.3 28.6c-5.4 10.8-16.5 17.7-28.6 17.7H195.8c-12.1 0-23.2-6.8-28.6-17.7l-14.3-28.6c-5.4-10.8-16.5-17.7-28.6-17.7H73L121 96z"/></svg> Leads & Forms
                 </button>
                 <button class="nav-item" data-tab="promotions">
-                    <i class="fa-solid fa-percent"></i> Promotions
+                    <svg class="cfn-icon" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M374.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-320 320c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l320-320zM128 128A64 64 0 1 0 0 128a64 64 0 1 0 128 0zM384 384a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z"/></svg> Promotions
                 </button>
                 <button class="nav-item" data-tab="news">
-                    <i class="fa-solid fa-newspaper"></i> News & Updates
+                    <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M96 96c0-35.3 28.7-64 64-64H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H80c-44.2 0-80-35.8-80-80V128c0-17.7 14.3-32 32-32s32 14.3 32 32V400c0 8.8 7.2 16 16 16s16-7.2 16-16V96zm64 24v80c0 13.3 10.7 24 24 24H296c13.3 0 24-10.7 24-24V120c0-13.3-10.7-24-24-24H184c-13.3 0-24 10.7-24 24zm208-8c0 8.8 7.2 16 16 16h48c8.8 0 16-7.2 16-16s-7.2-16-16-16H384c-8.8 0-16 7.2-16 16zm0 96c0 8.8 7.2 16 16 16h48c8.8 0 16-7.2 16-16s-7.2-16-16-16H384c-8.8 0-16 7.2-16 16zM160 304c0 8.8 7.2 16 16 16H432c8.8 0 16-7.2 16-16s-7.2-16-16-16H176c-8.8 0-16 7.2-16 16zm0 96c0 8.8 7.2 16 16 16H432c8.8 0 16-7.2 16-16s-7.2-16-16-16H176c-8.8 0-16 7.2-16 16z"/></svg> News & Updates
                 </button>
                 <button class="nav-item" data-tab="plans">
-                    <i class="fa-solid fa-tags"></i> Pricing Plans
+                    <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M345 39.1L472.8 168.4c52.4 53 52.4 138.2 0 191.2L360.8 472.9c-9.3 9.4-24.5 9.5-33.9 .2s-9.5-24.5-.2-33.9L438.6 325.9c33.9-34.3 33.9-89.4 0-123.7L310.9 72.9c-9.3-9.4-9.2-24.6 .2-33.9s24.6-9.2 33.9 .2zM0 229.5V80C0 53.5 21.5 32 48 32H197.5c17 0 33.3 6.7 45.3 18.7l168 168c25 25 25 65.5 0 90.5L277.3 442.7c-25 25-65.5 25-90.5 0l-168-168C6.7 262.7 0 246.5 0 229.5zM144 144a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg> Pricing Plans
+                </button>
+                <button class="nav-item" data-tab="mobile-plans">
+                    <svg class="cfn-icon" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M16 64C16 28.7 44.7 0 80 0H304c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H80c-35.3 0-64-28.7-64-64V64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64H80V384H304V64z"/></svg> Mobile Plans
                 </button>
                 <button class="nav-item" data-tab="install">
-                    <i class="fa-solid fa-clipboard-list"></i> Install Process
+                    <svg class="cfn-icon" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M192 0c-41.8 0-77.4 26.7-90.5 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H282.5C269.4 26.7 233.8 0 192 0zm0 64a32 32 0 1 1 0 64 32 32 0 1 1 0-64zM72 272a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zm104-16H304c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-8.8 0-16-7.2-16-16s7.2-16 16-16zM72 368a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zm88 0c0-8.8 7.2-16 16-16H304c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-8.8 0-16-7.2-16-16z"/></svg> Install Process
                 </button>
                 <button class="nav-item" data-tab="neighborhoods">
-                    <i class="fa-solid fa-map-location-dot"></i> Neighborhoods
+                    <svg class="cfn-icon" viewBox="0 0 576 512" fill="currentColor" aria-hidden="true"><path d="M408 120c0 54.6-73.1 151.9-105.2 192c-7.7 9.6-22 9.6-29.6 0C241.1 271.9 168 174.6 168 120C168 53.7 221.7 0 288 0s120 53.7 120 120zm8 80.4c3.5-6.9 6.7-13.8 9.6-20.6c.5-1.2 1-2.5 1.5-3.7l116-46.4C558.9 123.4 576 135 576 152V422.8c0 9.8-6 18.6-15.1 22.3L416 503V200.4zM137.6 138.3c2.4 14.1 7.2 28.3 12.8 41.5c2.9 6.8 6.1 13.7 9.6 20.6V451.8L32.9 502.7C17.1 509 0 497.4 0 480.4V209.6c0-9.8 6-18.6 15.1-22.3l122.6-49zM327.8 332c13.9-17.4 35.7-45.7 56.2-77V504.3L192 449.4V255c20.5 31.3 42.3 59.6 56.2 77c20.5 25.6 59.1 25.6 79.6 0zM288 152a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/></svg> Neighborhoods
                 </button>
                 <button class="nav-item" data-tab="business">
-                    <i class="fa-solid fa-briefcase"></i> Business Logos
+                    <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M184 48H328c4.4 0 8 3.6 8 8V96H176V56c0-4.4 3.6-8 8-8zm-56 8V96H64C28.7 96 0 124.7 0 160v96H192 320 512V160c0-35.3-28.7-64-64-64H384V56c0-30.9-25.1-56-56-56H184c-30.9 0-56 25.1-56 56zM512 288H320v32c0 17.7-14.3 32-32 32H224c-17.7 0-32-14.3-32-32V288H0V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V288z"/></svg> Business Logos
                 </button>
                 <button class="nav-item" data-tab="employees">
-                    <i class="fa-solid fa-users"></i> Employees
+                    <svg class="cfn-icon" viewBox="0 0 640 512" fill="currentColor" aria-hidden="true"><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z"/></svg> Employees
                 </button>
                 <button class="nav-item" data-tab="announcements">
-                    <i class="fa-solid fa-bullhorn"></i> Announcements
+                    <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M480 32c0-12.9-7.8-24.6-19.8-29.6s-25.7-2.2-34.9 6.9L381.7 53c-48 48-113.1 75-181 75H192 160 64c-35.3 0-64 28.7-64 64v96c0 35.3 28.7 64 64 64l0 128c0 17.7 14.3 32 32 32h64c17.7 0 32-14.3 32-32V352l8.7 0c67.9 0 133 27 181 75l43.6 43.6c9.2 9.2 22.9 11.9 34.9 6.9s19.8-16.6 19.8-29.6V300.4c18.6-8.8 32-32.5 32-60.4s-13.4-51.6-32-60.4V32zm-64 76.7V240 371.3C357.2 317.8 280.5 288 200.7 288H192V192h8.7c79.8 0 156.5-29.8 215.3-83.3z"/></svg> Announcements
                 </button>
                 <button class="nav-item" data-tab="testimonials">
-                    <i class="fa-solid fa-comment-dots"></i> Testimonials
+                    <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M256 448c141.4 0 256-93.1 256-208S397.4 32 256 32S0 125.1 0 240c0 45.1 17.7 86.8 47.7 120.9c-1.9 24.5-11.4 46.3-21.4 62.9c-5.5 9.2-11.1 16.6-15.2 21.6c-2.1 2.5-3.7 4.4-4.9 5.7c-.6 .6-1 1.1-1.3 1.4l-.3 .3 0 0 0 0 0 0 0 0c-4.6 4.6-5.9 11.4-3.4 17.4c2.5 6 8.3 9.9 14.8 9.9c28.7 0 57.6-8.9 81.6-19.3c22.9-10 42.4-21.9 54.3-30.6c31.8 11.5 67 17.9 104.1 17.9zM128 208a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm128 0a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm96 32a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg> Testimonials
                 </button>
             </nav>
             <div class="sidebar-footer">
@@ -92,7 +106,7 @@
                         <span id="user-role" class="badge">Viewer</span>
                     </div>
                 </div>
-                <button id="logout-btn" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i></button>
+                <button id="logout-btn" class="logout-btn"><svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg></button>
             </div>
         </aside>
 
@@ -191,6 +205,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Status</th>
+                                <th>Notified</th>
                                 <th>Details</th>
                             </tr>
                         </thead>
@@ -205,7 +220,7 @@
             <section id="view-news" class="view-section">
                 <div class="page-header">
                     <h1>News & Blog Posts</h1>
-                    <button id="add-news-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add News Post</button>
+                    <button id="add-news-btn" class="btn btn-primary admin-only hidden"><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg> Add News Post</button>
                 </div>
                 <div id="news-list" class="cards-grid">
                     <!-- Populated via JS -->
@@ -216,16 +231,26 @@
             <section id="view-plans" class="view-section">
                 <div class="page-header">
                     <h1>Pricing Plans</h1>
-                    <button id="add-plan-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Plan</button>
+                    <button id="add-plan-btn" class="btn btn-primary admin-only hidden"><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg> Add Plan</button>
                 </div>
                 <div id="plans-list" class="cards-grid"></div>
+            </section>
+
+            <!-- Mobile Plans View -->
+            <section id="view-mobile-plans" class="view-section">
+                <div class="page-header">
+                    <h1>Mobile Plans</h1>
+                    <button id="add-mobile-plan-btn" class="btn btn-primary admin-only hidden"><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg> Add Mobile Plan</button>
+                </div>
+                <p class="view-hint">These drive the plan cards on <a href="/mobile" target="_blank" rel="noopener">the Mobile page</a>. Leave the price blank and the card shows &ldquo;Call for pricing&rdquo; instead of a figure.</p>
+                <div id="mobile-plans-list" class="cards-grid"></div>
             </section>
 
             <!-- Install Process View -->
             <section id="view-install" class="view-section">
                 <div class="page-header">
                     <h1>Fiber Installation Process</h1>
-                    <button id="add-step-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Step</button>
+                    <button id="add-step-btn" class="btn btn-primary admin-only hidden"><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg> Add Step</button>
                 </div>
                 <p style="margin-bottom: 20px; color: #64748b;">Manage the steps shown on the residential timeline. Lower step numbers appear first.</p>
                 <div id="install-steps-list" class="cards-grid"></div>
@@ -235,7 +260,7 @@
             <section id="view-neighborhoods" class="view-section">
                 <div class="page-header">
                     <h1>Neighborhood Status</h1>
-                    <button id="add-hood-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Neighborhood</button>
+                    <button id="add-hood-btn" class="btn btn-primary admin-only hidden"><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg> Add Neighborhood</button>
                 </div>
                 <div id="hoods-list" class="cards-grid"></div>
             </section>
@@ -244,7 +269,7 @@
             <section id="view-business" class="view-section">
                 <div class="page-header">
                     <h1>Business Page Logos</h1>
-                    <button id="add-business-logo-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Logo</button>
+                    <button id="add-business-logo-btn" class="btn btn-primary admin-only hidden"><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg> Add Logo</button>
                 </div>
                 <p style="margin-bottom: 20px; color: #64748b;">Manage the partner logos displayed in the carousel on the Business page.</p>
                 <div id="business-logos-list" class="cards-grid">
@@ -256,7 +281,7 @@
             <section id="view-employees" class="view-section">
                 <div class="page-header">
                     <h1>Our Team</h1>
-                    <button id="add-employee-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Employee</button>
+                    <button id="add-employee-btn" class="btn btn-primary admin-only hidden"><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg> Add Employee</button>
                 </div>
                 <div id="employees-list" class="cards-grid"></div>
             </section>
@@ -297,7 +322,7 @@
             <section id="view-testimonials" class="view-section">
                 <div class="page-header">
                     <h1>Testimonials</h1>
-                    <button id="add-testimonial-btn" class="btn btn-primary admin-only hidden"><i class="fa-solid fa-plus"></i> Add Testimonial</button>
+                    <button id="add-testimonial-btn" class="btn btn-primary admin-only hidden"><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg> Add Testimonial</button>
                 </div>
                 <div id="testimonials-list" class="cards-grid"></div>
             </section>
@@ -334,7 +359,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="assets/js/admin.js"></script>
 </body>
 </html>

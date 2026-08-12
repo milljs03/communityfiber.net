@@ -1,4 +1,4 @@
-import { postJson } from './security.js';
+import { bindFormSpamSignals, normalizeEmailInput, normalizePhoneInput, postJson } from './security.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const pageLoadTime = Date.now(); // Track when the page loaded
@@ -25,7 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
             dynamicFields.forEach(field => field.classList.add('hidden'));
 
             // Show fields based on selected topic
-            if (topic === 'billing') {
+            // Mobile is sold only to existing broadband subscribers, so the
+            // account number is the first thing the team needs to check.
+            if (topic === 'billing' || topic === 'mobile') {
                 document.getElementById('field-billing')?.classList.remove('hidden');
             } else if (topic === 'availability' || topic === 'outage') {
                 document.getElementById('field-address')?.classList.remove('hidden');
@@ -33,11 +35,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('field-service-type')?.classList.remove('hidden');
             }
         });
+
+        // Allow a page to deep-link into the form with its topic preselected,
+        // e.g. /support?topic=mobile#support-contact. Only values that already
+        // exist as options are accepted, so the param cannot inject a topic.
+        const requested = new URLSearchParams(window.location.search).get('topic');
+        if (requested && topicSelect.querySelector(`option[value="${CSS.escape(requested)}"]`)) {
+            topicSelect.value = requested;
+            topicSelect.dispatchEvent(new Event('change'));
+        }
     }
 
     // 3. Form Submit Logic
     const form = document.getElementById('support-form');
     if (form) {
+        const spamSignals = bindFormSpamSignals(form);
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -67,10 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 type: 'support_ticket',
                 topic: topicSelect ? normalize(topicSelect.value) : 'general',
                 name: normalize(document.getElementById('name').value),
-                email: normalize(document.getElementById('email').value),
-                phone: normalize(document.getElementById('phone').value),
+                email: normalizeEmailInput(document.getElementById('email').value),
+                phone: normalizePhoneInput(document.getElementById('phone').value),
                 message: normalize(document.getElementById('message').value),
-                website_check: honeypot ? honeypot.value : ''
+                website_check: honeypot ? honeypot.value : '',
+                ...spamSignals.getPayloadFields()
             };
 
             // Add dynamic fields if visible
@@ -119,3 +133,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+

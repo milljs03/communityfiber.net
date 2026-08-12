@@ -37,6 +37,7 @@ service cloud.firestore {
     function isPublicDisplayCollection(collectionId) {
       return collectionId in [
         'plans',
+        'mobile_plans',
         'neighborhoods',
         'install_steps',
         'employees',

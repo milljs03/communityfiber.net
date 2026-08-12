@@ -3,77 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js');
+    /* Until communityfiber.net cuts over from WordPress to this build, the
+       Firebase preview hosts are live and indexable while their canonicals
+       point at URLs that still 404. Keep the preview hosts out of the index.
+       Strictly allowlisted: only *.web.app / *.firebaseapp.com are affected,
+       so this stops applying by itself once the custom domain is attached. */
+    var h = location.hostname;
+    if (h.endsWith('.web.app') || h.endsWith('.firebaseapp.com')) {
+      var r = document.createElement('meta');
+      r.name = 'robots'; r.content = 'noindex, nofollow';
+      document.head.appendChild(r);
+    }</script>
     <title>Support | Community Fiber</title>
     <meta name="description" content="Get help from Community Fiber support. View FAQs, troubleshooting guides, contact information, and submit support tickets.">
     <meta name="keywords" content="support, help, FAQ, troubleshooting, technical support, customer service">
     <meta property="og:title" content="Support | Community Fiber">
     <meta property="og:description" content="Get help from Community Fiber support with FAQs, troubleshooting guides, and technical assistance.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://communityfiber.net/support.html">
+    <meta property="og:url" content="https://communityfiber.net/support">
     <meta property="og:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Support | Community Fiber">
     <meta name="twitter:description" content="Get help with our support center and FAQs.">
     <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
-    <link rel="canonical" href="https://communityfiber.net/support.html">
+    <link rel="canonical" href="https://communityfiber.net/support">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://communityfiber.net/support#faq",
+  "mainEntity": [
     {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is fiber actually available at my address yet?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "You can check your specific address on the Community Fiber home page."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do I have to sign a long-term contract?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. No contracts are required for any Community Fiber speed tier."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are there any data caps or overage fees?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. Community Fiber service includes unlimited data without caps or overage fees."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do you have local customer support, or is it a call center?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Community Fiber support is local. Customers can reach the team at 574.831.2176."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "Is fiber actually available at my address yet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can check your specific address in seconds right here: Check Availability ."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I have to sign a long-term contract?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Unlike the big providers, we don’t believe in trapping you. No contracts are required for any of our speed tiers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are there any data caps or overage fees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Never. Enjoy truly unlimited data without worrying about caps or surprise fees."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the price go up after the first year?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. We don’t do \"introductory\" or \"promo\" pricing that skyrockets after 12 months. Your rate stays steady."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is this different from the cable internet I already have?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Fiber uses light-based technology, making it up to 20x faster and far more reliable than old copper cable. You get symmetrical speeds (uploading is just as fast as downloading), lower latency for gaming/video calls, and a connection that is much more durable against the elements."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer a price-for-life guarantee?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "While we don't offer a \"for-life\" guarantee, our track record speaks for itself. If our rates ever do change, it will be to your benefit!"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will you have to dig up my yard to install the line?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, fiber lines are buried to protect them from the weather and yard work. We use a minimally invasive process, and our construction team will fully restore any area affected by the installation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does the installation take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A typical installation takes about one hour, depending on the layout of your home."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to be home for the installation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Our technician needs access to bring the fiber service into the home, activate the equipment, and confirm the connection is working properly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the technician need to enter my house?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The fiber line must enter the home, and we perform connection tests to confirm your Community Fiber service is working properly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there an installation fee?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is a one-time installation fee ranging from $25 to $150, depending on the distance from the road. If fiber has already been run to your home, the installation fee is waived, and only a $25 activation fee applies."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to rent a modem/router from you, or can I use my own?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We provide the required fiber service equipment without a monthly rental fee. Wi-Fi equipment and mesh coverage options may vary by service setup, and any applicable equipment charges will be reviewed before installation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the Wi-Fi equipment included in the monthly price?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Wi-Fi equipment is not automatically included as a standalone product with every plan. Any equipment needed for your service setup, including applicable one-time charges, will be reviewed before installation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will your router cover my whole house, or do I need extenders?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Coverage depends on the size and construction of your home. Our installation team will evaluate your layout during their visit to ensure you have the coverage you need."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens to the equipment if I move or cancel service?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "All equipment should remain at the property if you move or cancel service."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I manage my Wi-Fi network and settings?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If your service setup uses eero equipment, you can manage Wi-Fi settings, parental controls, and connected devices using the eero app . Download the eero app here or scan the QR code below to get started:"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are the upload speeds the same as the download speeds?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! This is one of the best parts of fiber. You get symmetrical speeds, meaning your uploads are just as fast as your downloads."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will my speed slow down in the evenings when everyone is online?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Unlike cable, fiber doesn't suffer from \"neighborhood slowdowns.\" You only experience a dip if your total household usage exceeds the specific Mbps plan you've chosen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this good for gaming or streaming 4K?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It’s the gold standard. Fiber offers the lowest latency for gaming and the smoothest experience for 4K streaming."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between 200 Mbps and 1 Gig plans? Which one do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on your lifestyle. 200 Mbps is great for average households streaming on a few devices. 1 Gig is ideal for large families, professional creators, or heavy gamers who want near-instant downloads."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I pay my bill? Is there an autopay discount?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can pay through our SmartHub portal . Setting up autopay there earns you a $5/month discount! You can also mail a check to PO Box 47, New Paris, IN 46553, or stop by our office at 19066 County Road 46—we’d love to see you!"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if my internet goes down? How fast do you fix it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We pride ourselves on reliability. In the rare event of an outage, downtime is typically minimized to 4–5 hours depending on the scale of the issue."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a cancellation fee if I leave?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. We believe our service speaks for itself—there are no fees for leaving."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you have local customer support, or is it a call center?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You’ll talk to real people who live right here in your community—maybe even your neighbors! You can reach us locally at 574.831.2176."
+      }
     }
+  ]
+}
     </script>
 
     <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
                    script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src https://fonts.gstatic.com;
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
+                   connect-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
@@ -103,21 +274,21 @@
                         <p>For immediate assistance or to speak with our local team, please don't hesitate to reach out.</p>
                         <ul class="contact-list">
                             <li>
-                                <i class="fa-solid fa-phone"></i>
+                                <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
                                 <div>
                                     <span>Phone</span>
                                     <a href="tel:5748312176">574.831.2176</a>
                                 </div>
                             </li>
                             <li>
-                                <i class="fa-solid fa-envelope"></i>
+                                <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
                                 <div>
                                     <span>Email</span>
                                     <a href="mailto:info@communityfiber.net">info@communityfiber.net</a>
                                 </div>
                             </li>
                             <li>
-                                <i class="fa-solid fa-location-dot"></i>
+                                <svg class="cfn-icon" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
                                 <div>
                                     <span>Office Address</span>
                                     <p>19066 Co Rd 46<br>New Paris, IN 46553</p>
@@ -141,7 +312,13 @@
                             <div class="visual-hidden">
                                 <label for="website-check">Website</label>
                                 <input type="text" id="website-check" name="website_check" tabindex="-1" autocomplete="off">
+                                <label for="company-url-check">Company URL</label>
+                                <input type="text" id="company-url-check" name="company_url" tabindex="-1" autocomplete="off">
+                                <label for="referral-source-check">Referral Source</label>
+                                <input type="text" id="referral-source-check" name="referral_source" tabindex="-1" autocomplete="off">
                             </div>
+                            <input type="hidden" name="form_started_at" value="">
+                            <input type="hidden" name="form_interaction_count" value="0">
 
                             <!-- Topic Selector -->
                             <div class="form-group">
@@ -151,6 +328,7 @@
                                         <option value="" disabled selected>Please select a topic...</option>
                                         <option value="billing">Billing & Payments</option>
                                         <option value="service">Technical Support</option>
+                                        <option value="mobile">Mobile Service</option>
                                         <option value="outage">Report an Outage</option>
                                         <option value="availability">Check Availability</option>
                                         <option value="general">General Inquiry</option>
@@ -222,7 +400,7 @@
 
             <!-- Success Message -->
             <div id="success-message" class="success-container hidden">
-                <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+                <div class="success-icon"><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg></div>
                 <h2>Request Received</h2>
                 <p>Thanks for reaching out! Our team has received your ticket and will get back to you shortly.</p>
                 <button class="btn btn-outline" onclick="location.reload()">Return to Support</button>
@@ -307,7 +485,7 @@
                     <details class="faq-item">
                         <summary>Is fiber actually available at my address yet?</summary>
                         <div class="faq-content">
-                            <p>You can check your specific address in seconds right here: <a href="index.html">Check Availability</a>.</p>
+                            <p>You can check your specific address in seconds right here: <a href="/">Check Availability</a>.</p>
                         </div>
                     </details>
                     <details class="faq-item">
@@ -359,13 +537,13 @@
                     <details class="faq-item">
                         <summary>Do I need to be home for the installation?</summary>
                         <div class="faq-content">
-                            <p>Yes. Our technician needs access to set up your eero mesh network and ensure your Wi-Fi reaches every corner of your home.</p>
+                            <p>Yes. Our technician needs access to bring the fiber service into the home, activate the equipment, and confirm the connection is working properly.</p>
                         </div>
                     </details>
                     <details class="faq-item">
                         <summary>Does the technician need to enter my house?</summary>
                         <div class="faq-content">
-                            <p>Yes. The fiber line must enter the home, and we perform speed tests in various rooms to ensure your eero network is performing perfectly.</p>
+                            <p>Yes. The fiber line must enter the home, and we perform connection tests to confirm your Community Fiber service is working properly.</p>
                         </div>
                     </details>
                     <details class="faq-item">
@@ -381,13 +559,13 @@
     <details class="faq-item">
         <summary>Do I need to rent a modem/router from you, or can I use my own?</summary>
         <div class="faq-content">
-            <p>We provide the equipment without a monthly rental fee. The hardware remains the property of Community Fiber and will be collected if you ever disconnect service.</p>
+            <p>We provide the required fiber service equipment without a monthly rental fee. Wi-Fi equipment and mesh coverage options may vary by service setup, and any applicable equipment charges will be reviewed before installation.</p>
         </div>
     </details>
     <details class="faq-item">
         <summary>Is the Wi-Fi equipment included in the monthly price?</summary>
         <div class="faq-content">
-            <p>The Wi-Fi equipment is a one-time fee included on your first bill.</p>
+            <p>Wi-Fi equipment is not automatically included as a standalone product with every plan. Any equipment needed for your service setup, including applicable one-time charges, will be reviewed before installation.</p>
         </div>
     </details>
     <details class="faq-item">
@@ -406,14 +584,14 @@
     <details class="faq-item">
         <summary>How do I manage my Wi-Fi network and settings?</summary>
         <div class="faq-content">
-            <p>You can easily manage your network, set up parental controls, and see what devices are connected using the <strong>eero app</strong>.</p>
+            <p>If your service setup uses eero equipment, you can manage Wi-Fi settings, parental controls, and connected devices using the <strong>eero app</strong>.</p>
             <p>
                 <a href="https://eero.com/app" target="_blank" style="color: #007bff; text-decoration: underline;">
                     Download the eero app here
                 </a>
                 or scan the QR code below to get started:
             </p>
-            <img src="assets/images/eero_app_qr.png" alt="Scan to download eero app" style="max-width: 150px; margin-top: 10px; display: block;">
+            <img loading="lazy" decoding="async" width="330" height="330" src="assets/images/eero_app_qr.png" alt="Scan to download eero app" style="max-width: 150px; margin-top: 10px; display: block;">
         </div>
     </details>
 </div>
@@ -478,10 +656,10 @@
     <footer>
         <div class="footer-content">
             <div class="footer-links">
-                <a href="footer/privacy-policy.html">Privacy Policy</a>
-                <a href="footer/terms-of-service.html">Terms of Service</a>
-                <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
-                <a href="footer/open-internet-policy.html">Open Internet Policy</a>
+                <a href="footer/privacy-policy">Privacy Policy</a>
+                <a href="footer/terms-of-service">Terms of Service</a>
+                <a href="footer/acceptable-user-policy">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy">Open Internet Policy</a>
             </div>
             <address class="footer-address">
                 <strong>NPTech</strong>

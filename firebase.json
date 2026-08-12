@@ -15,6 +15,8 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "cleanUrls": true,
+    "trailingSlash": false,
     "headers": [
       {
         "source": "**",
@@ -36,6 +38,135 @@
             "value": "base-uri 'self'; object-src 'none'; form-action 'self'; frame-ancestors 'self'"
           }
         ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|png|gif|webp|avif|svg|ico|woff|woff2)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(css|js)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=604800, stale-while-revalidate=86400"
+          }
+        ]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=600, stale-while-revalidate=86400"
+          }
+        ]
+      }
+    ],
+    "redirects": [
+      {
+        "source": "/home-old",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/faq",
+        "destination": "/support#support-faq",
+        "type": 301
+      },
+      {
+        "source": "/contact-us",
+        "destination": "/support#support-contact",
+        "type": 301
+      },
+      {
+        "source": "/cfn-contact",
+        "destination": "/support#support-contact",
+        "type": 301
+      },
+      {
+        "source": "/network-map",
+        "destination": "/#service-areas",
+        "type": 301
+      },
+      {
+        "source": "/fibermaps",
+        "destination": "/#service-areas",
+        "type": 301
+      },
+      {
+        "source": "/services",
+        "destination": "/residential",
+        "type": 301
+      },
+      {
+        "source": "/cfn-home-fiber",
+        "destination": "/residential",
+        "type": 301
+      },
+      {
+        "source": "/res22",
+        "destination": "/residential",
+        "type": 301
+      },
+      {
+        "source": "/signup",
+        "destination": "/residential",
+        "type": 301
+      },
+      {
+        "source": "/interest",
+        "destination": "/residential",
+        "type": 301
+      },
+      {
+        "source": "/pickwickmanor",
+        "destination": "/builders",
+        "type": 301
+      },
+      {
+        "source": "/cfn-business",
+        "destination": "/business",
+        "type": 301
+      },
+      {
+        "source": "/internet-policies",
+        "destination": "/footer/open-internet-policy",
+        "type": 301
+      },
+      {
+        "source": "/speedtest.html",
+        "destination": "/support",
+        "type": 301
+      },
+      {
+        "source": "/speedtest",
+        "destination": "/support",
+        "type": 301
+      },
+      {
+        "source": "/fiber-vs-cable.html",
+        "destination": "/support#fiber-comparison",
+        "type": 301
+      },
+      {
+        "source": "/fiber-vs-cable",
+        "destination": "/support#fiber-comparison",
+        "type": 301
+      },
+      {
+        "source": "/outage.html",
+        "destination": "/support",
+        "type": 301
+      },
+      {
+        "source": "/outage",
+        "destination": "/support",
+        "type": 301
       }
     ],
     "rewrites": [
@@ -46,10 +177,6 @@
       {
         "source": "/api/logPageView",
         "function": "logPageView"
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
       }
     ]
   }

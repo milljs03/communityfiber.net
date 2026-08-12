@@ -3,19 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js');
+    /* Until communityfiber.net cuts over from WordPress to this build, the
+       Firebase preview hosts are live and indexable while their canonicals
+       point at URLs that still 404. Keep the preview hosts out of the index.
+       Strictly allowlisted: only *.web.app / *.firebaseapp.com are affected,
+       so this stops applying by itself once the custom domain is attached. */
+    var h = location.hostname;
+    if (h.endsWith('.web.app') || h.endsWith('.firebaseapp.com')) {
+      var r = document.createElement('meta');
+      r.name = 'robots'; r.content = 'noindex, nofollow';
+      document.head.appendChild(r);
+    }</script>
     <title>Fiber Internet in Bristol, IN | Community Fiber</title>
-    <meta name="description" content="Fast fiber internet in Bristol, Indiana from Community Fiber. Symmetrical speeds up to 1 Gig, no contracts, no data caps, local Elkhart County support. Check your Bristol address.">
+    <meta name="description" content="Fiber internet in Bristol, Indiana from Community Fiber. Symmetrical speeds up to 1 Gig, no contracts, no data caps, local Elkhart County support.">
     <meta name="keywords" content="fiber internet Bristol Indiana, internet provider Bristol IN, gigabit internet 46507, high speed internet Bristol, Bristol fiber optic internet">
     <meta property="og:title" content="Fiber Internet in Bristol, IN | Community Fiber">
-    <meta property="og:description" content="Fast fiber internet in Bristol, Indiana from Community Fiber. Symmetrical speeds up to 1 Gig, no contracts, no data caps, local Elkhart County support. Check your Bristol address.">
+    <meta property="og:description" content="Fiber internet in Bristol, Indiana from Community Fiber. Symmetrical speeds up to 1 Gig, no contracts, no data caps, local Elkhart County support.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://communityfiber.net/bristol.html">
+    <meta property="og:url" content="https://communityfiber.net/bristol">
     <meta property="og:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Fiber Internet in Bristol, IN | Community Fiber">
     <meta name="twitter:description" content="Fast fiber internet in Bristol, Indiana from Community Fiber. Symmetrical speeds up to 1 Gig, no contracts, no data caps, local Elkhart County support. Check your Bristol address.">
     <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
-    <link rel="canonical" href="https://communityfiber.net/bristol.html">
+    <link rel="canonical" href="https://communityfiber.net/bristol">
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
     <script type="application/ld+json">
 {
@@ -34,13 +46,13 @@
           "@type": "ListItem",
           "position": 2,
           "name": "Fiber Internet in Bristol, IN",
-          "item": "https://communityfiber.net/bristol.html"
+          "item": "https://communityfiber.net/bristol"
         }
       ]
     },
     {
       "@type": "Service",
-      "@id": "https://communityfiber.net/bristol.html#service",
+      "@id": "https://communityfiber.net/bristol#service",
       "name": "Bristol Residential Fiber Internet",
       "serviceType": "Fiber Internet Service",
       "description": "Residential fiber internet in Bristol, Indiana with symmetrical speeds up to 1 Gbps, no annual contracts, unlimited data, and local support.",
@@ -66,9 +78,9 @@
           {
             "@type": "Offer",
             "name": "Basic — 100 Mbps symmetrical fiber internet",
-            "price": "45",
+            "price": "35",
             "priceCurrency": "USD",
-            "url": "https://communityfiber.net/bristol.html#plans-pricing",
+            "url": "https://communityfiber.net/bristol#plans-pricing",
             "availability": "https://schema.org/InStock"
           },
           {
@@ -76,7 +88,7 @@
             "name": "Standard — 200 Mbps symmetrical fiber internet",
             "price": "65",
             "priceCurrency": "USD",
-            "url": "https://communityfiber.net/bristol.html#plans-pricing",
+            "url": "https://communityfiber.net/bristol#plans-pricing",
             "availability": "https://schema.org/InStock"
           },
           {
@@ -84,7 +96,7 @@
             "name": "Advanced — 500 Mbps symmetrical fiber internet",
             "price": "80",
             "priceCurrency": "USD",
-            "url": "https://communityfiber.net/bristol.html#plans-pricing",
+            "url": "https://communityfiber.net/bristol#plans-pricing",
             "availability": "https://schema.org/InStock"
           },
           {
@@ -92,7 +104,7 @@
             "name": "Premium — 1 Gbps symmetrical fiber internet",
             "price": "70",
             "priceCurrency": "USD",
-            "url": "https://communityfiber.net/bristol.html#plans-pricing",
+            "url": "https://communityfiber.net/bristol#plans-pricing",
             "availability": "https://schema.org/InStock"
           }
         ]
@@ -122,7 +134,7 @@
           "name": "How much does fiber internet cost in Bristol?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Plans start at $45/mo for 100 Mbps, and our 1 Gig plan is currently $70/mo for new customers. Every plan includes whole-home eero mesh WiFi, unlimited data, and local support — with no contracts and no promo rates that jump after a year."
+            "text": "Plans start at $35/mo for 100 Mbps, and our 1 Gig plan is currently $70/mo for new customers. Every plan includes unlimited data and local support, with service designed to work well with modern eero mesh networks — with no contracts and no promo rates that jump after a year."
           }
         },
         {
@@ -149,18 +161,17 @@
 
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.clarity.ms https://c.bing.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src https://fonts.gstatic.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com https://*.clarity.ms https://c.bing.com;
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://search.np-tech.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
+                   connect-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com https://*.clarity.ms https://c.bing.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
@@ -168,6 +179,14 @@
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/residential.css">
     <link rel="stylesheet" href="assets/css/city.css">
+    <!-- Microsoft Clarity: heatmaps + session replay. Async, does not block render. -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "xync1c67sj");
+    </script>
 </head>
 <body>
 
@@ -179,7 +198,7 @@
         <!-- City Hero -->
         <header class="city-hero">
             <nav class="city-breadcrumb" aria-label="Breadcrumb">
-                <a href="index.html">Home</a> &rsaquo; <span>Fiber Internet in Bristol, IN</span>
+                <a href="/">Home</a> &rsaquo; <span>Fiber Internet in Bristol, IN</span>
             </nav>
             <h1>Fiber internet, built for <span class="city-hero-accent">Bristol</span>.</h1>
             <p class="city-hero-sub">True fiber-to-the-home internet on the St. Joseph River, built and supported from right here in Elkhart County.</p>
@@ -194,11 +213,11 @@
         <section id="plans-pricing" class="city-plans-section">
             <div class="pricing-intro">
                 <h2>Fiber Internet Plans in Bristol</h2>
-                <p>Every plan includes whole-home eero WiFi, unlimited data, and local support.</p>
+                <p>Every plan includes unlimited data, local support, and fiber service designed for modern eero mesh networks.</p>
             </div>
 
             <!-- Loading State -->
-            <div id="loading-indicator" class="loading-spinner">
+            <div id="loading-indicator" class="loading-spinner hidden">
                 <div class="spinner"></div>
                 <p>Loading plans...</p>
             </div>
@@ -210,11 +229,84 @@
 
             <!-- Dynamic Pricing Grid (single row on desktop, swipeable carousel on mobile) -->
             <div class="pricing-carousel">
-                <button class="pricing-nav prev" id="pricing-prev" type="button" aria-label="Previous plan"><i class="fa-solid fa-chevron-left"></i></button>
-                <div id="plans-grid" class="pricing-container hidden">
+                <button class="pricing-nav prev" id="pricing-prev" type="button" aria-label="Previous plan"><svg class="cfn-icon" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/></svg></button>
+                <div id="plans-grid" class="pricing-container">
+                <!-- PRERENDERED_PLANS_START -->
+                <div class="pricing-box ">
+                    
+                    <div class="pricing-box-inner">
+                        <h3 class="panel-heading">Basic</h3>
+                        <div class="price-wrapper ">
+                            
+                            <span class="price">$35<small>/mo</small></span>
+                        </div>
+                        <div class="plan-speed">
+                            <span class="plan-speed-val">100 Mbps</span>
+                            <span class="plan-speed-label">Symmetrical speeds</span>
+                        </div>
+                        <ul class="plan-features"><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>No annual contract</span></li><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>Unlimited data - no caps</span></li><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>Local support</span></li></ul>
+                        <a href="https://fiber-service-query.web.app/query.html" class="sign-up-btn">Check Availability</a>
+                        <div class="card-autopay-banner"><svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg> E-Bill &amp; ACH Auto Pay Required</div>
+                    </div>
+                </div>
+
+                <div class="pricing-box ">
+                    
+                    <div class="pricing-box-inner">
+                        <h3 class="panel-heading">Standard</h3>
+                        <div class="price-wrapper ">
+                            
+                            <span class="price">$65<small>/mo</small></span>
+                        </div>
+                        <div class="plan-speed">
+                            <span class="plan-speed-val">200 Mbps</span>
+                            <span class="plan-speed-label">Symmetrical speeds</span>
+                        </div>
+                        <ul class="plan-features"><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>No annual contract</span></li><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>Unlimited data - no caps</span></li><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>Local support</span></li></ul>
+                        <a href="https://fiber-service-query.web.app/query.html" class="sign-up-btn">Check Availability</a>
+                        
+                    </div>
+                </div>
+
+                <div class="pricing-box ">
+                    
+                    <div class="pricing-box-inner">
+                        <h3 class="panel-heading">Advanced</h3>
+                        <div class="price-wrapper ">
+                            
+                            <span class="price">$80<small>/mo</small></span>
+                        </div>
+                        <div class="plan-speed">
+                            <span class="plan-speed-val">500 Mbps</span>
+                            <span class="plan-speed-label">Symmetrical speeds</span>
+                        </div>
+                        <ul class="plan-features"><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>No annual contract</span></li><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>Unlimited data - no caps</span></li><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>Local support</span></li></ul>
+                        <a href="https://fiber-service-query.web.app/query.html" class="sign-up-btn">Check Availability</a>
+                        
+                    </div>
+                </div>
+
+                <div class="pricing-box popular">
+                    <div class="popular-badge">Best Value</div>
+                    <div class="pricing-box-inner">
+                        <h3 class="panel-heading">Premium</h3>
+                        <div class="price-wrapper is-promo">
+                            <span class="price-was">$89</span>
+                            <span class="price">$70<small>/mo</small></span>
+                        </div>
+                        <div class="plan-speed">
+                            <span class="plan-speed-val">1 Gbps</span>
+                            <span class="plan-speed-label">Symmetrical speeds</span>
+                        </div>
+                        <ul class="plan-features"><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>No annual contract</span></li><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>Unlimited data - no caps</span></li><li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>Local support</span></li></ul>
+                        <a href="https://fiber-service-query.web.app/query.html" class="sign-up-btn">Check Availability</a>
+                        <div class="card-autopay-banner"><svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg> E-Bill &amp; ACH Auto Pay Required</div>
+                    </div>
+                </div>
+                <!-- PRERENDERED_PLANS_END -->
                     <!-- Cards injected via JS -->
                 </div>
-                <button class="pricing-nav next" id="pricing-next" type="button" aria-label="Next plan"><i class="fa-solid fa-chevron-right"></i></button>
+                <button class="pricing-nav next" id="pricing-next" type="button" aria-label="Next plan"><svg class="cfn-icon" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></button>
             </div>
         </section>
 
@@ -246,13 +338,13 @@
                     <p>We are your neighbors, too. Community Fiber is powered by NPTech in New Paris, so installs, service calls, and support all come from people who live and work in Elkhart County.</p>
                 </div>
                 <aside class="city-highlights-card">
-                    <img src="assets/images/indiana-green.png" alt="Community Fiber serves Bristol, Indiana" class="city-highlights-map">
+                    <img loading="lazy" decoding="async" width="360" height="450" src="assets/images/indiana-green.webp" alt="Community Fiber serves Bristol, Indiana" class="city-highlights-map">
                     <h3>Why Bristol Chooses Community Fiber</h3>
                     <ul>
                         <li>Serving Bristol ZIP code 46507</li>
                         <li>Symmetrical speeds for work-from-home commuters</li>
                         <li>Reliable glass fiber that shrugs off Michiana weather</li>
-                        <li>Whole-home eero mesh WiFi included with every plan</li>
+                        <li>Service designed for modern eero mesh networks</li>
                     </ul>
                 </aside>
             </div>
@@ -336,11 +428,11 @@
 
                     <!-- Step Content -->
                     <div id="timeline-content-area" class="timeline-content-card">
-                        <button class="nav-arrow prev-arrow" id="timeline-prev"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="nav-arrow prev-arrow" id="timeline-prev" aria-label="Previous installation step"><svg class="cfn-icon" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/></svg></button>
 
                         <div class="step-content-inner">
                             <div class="step-image-wrapper">
-                                <img id="step-image" src="" alt="Step Image">
+                                <img id="step-image" alt="" decoding="async" style="display:none">
                             </div>
                             <div class="step-text-wrapper">
                                 <span class="step-badge" id="step-badge">Step 1</span>
@@ -349,7 +441,7 @@
                             </div>
                         </div>
 
-                        <button class="nav-arrow next-arrow" id="timeline-next"><i class="fa-solid fa-chevron-right"></i></button>
+                        <button class="nav-arrow next-arrow" id="timeline-next" aria-label="Next installation step"><svg class="cfn-icon" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></button>
                     </div>
                 </div>
             </div>
@@ -373,7 +465,7 @@
                 <details class="faq-item">
                     <summary>How much does fiber internet cost in Bristol?</summary>
                     <div class="faq-content">
-                        <p>Plans start at $45/mo for 100 Mbps, and our 1 Gig plan is currently $70/mo for new customers. Every plan includes whole-home eero mesh WiFi, unlimited data, and local support — with no contracts and no promo rates that jump after a year.</p>
+                        <p>Plans start at $35/mo for 100 Mbps, and our 1 Gig plan is currently $70/mo for new customers. Every plan includes unlimited data and local support, with service designed to work well with modern eero mesh networks — with no contracts and no promo rates that jump after a year.</p>
                     </div>
                 </details>
                 <details class="faq-item">
@@ -392,7 +484,7 @@
         </section>
 
         <!-- Testimonials Section (powered by assets/js/residential.js) -->
-        <section id="customer-reviews" class="testimonials-section" style="padding: 60px 20px; background-color: #f8fafc;">
+        <section id="customer-reviews" class="testimonials-section">
             <div class="container">
                 <h2 class="section-title">What Your Neighbors Say</h2>
                 <div id="testimonials-grid" class="testimonials-grid" data-animate="stagger">
@@ -412,13 +504,13 @@
             <h2>Also Serving Nearby Communities</h2>
             <p class="city-nearby-desc">Hometown fiber across Elkhart and Kosciusko counties.</p>
             <nav class="city-nearby-links" aria-label="Nearby communities">
-                <a href="goshen.html">Goshen</a>
-                <a href="middlebury.html">Middlebury</a>
-                <a href="new-paris.html">New Paris</a>
-                <a href="syracuse.html">Syracuse</a>
-                <a href="nappanee.html">Nappanee</a>
-                <a href="wakarusa.html">Wakarusa</a>
-                <a href="milford.html">Milford</a>
+                <a href="goshen">Goshen</a>
+                <a href="middlebury">Middlebury</a>
+                <a href="new-paris">New Paris</a>
+                <a href="syracuse">Syracuse</a>
+                <a href="nappanee">Nappanee</a>
+                <a href="wakarusa">Wakarusa</a>
+                <a href="milford">Milford</a>
             </nav>
         </section>
 
@@ -434,10 +526,10 @@
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-links">
-                <a href="footer/privacy-policy.html">Privacy Policy</a>
-                <a href="footer/terms-of-service.html">Terms of Service</a>
-                <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
-                <a href="footer/open-internet-policy.html">Open Internet Policy</a>
+                <a href="footer/privacy-policy">Privacy Policy</a>
+                <a href="footer/terms-of-service">Terms of Service</a>
+                <a href="footer/acceptable-user-policy">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy">Open Internet Policy</a>
             </div>
             <address class="footer-address">
                 <strong>NPTech</strong>

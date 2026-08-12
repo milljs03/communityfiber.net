@@ -22,7 +22,7 @@ const TODAY = new Date().toISOString().slice(0, 10);
 // Mirrors the fallback plan data in assets/js/residential.js and the
 // residential.html structured data. Update here if base pricing changes.
 const PLANS = [
-  { name: 'Basic', speed: '100 Mbps', price: '45' },
+  { name: 'Basic', speed: '100 Mbps', price: '35' },
   { name: 'Standard', speed: '200 Mbps', price: '65' },
   { name: 'Advanced', speed: '500 Mbps', price: '80' },
   { name: 'Premium', speed: '1 Gbps', price: '70' }
@@ -39,13 +39,13 @@ const CITIES = [
     intro: [
       'Goshen is the heart of Elkhart County — a county seat with a thriving Main Street, First Fridays that draw crowds from every corner of the county, and neighborhoods that stretch from Goshen College to the newest subdivisions on the edge of town. Life here moves quickly, and your internet connection should keep up.',
       'Community Fiber delivers 100% fiber-to-the-home internet in Goshen with symmetrical speeds up to 1 gigabit. Unlike cable, fiber uploads as fast as it downloads — so video calls from your home office, cloud backups for your business, and live streams from the ballpark all feel instant.',
-      'And we are not a faraway national conglomerate. Community Fiber is powered by NPTech, a local team headquartered just down US 33 in New Paris. When a Goshen customer calls, a neighbor answers.'
+      'And we are not a faraway national conglomerate. Community Fiber is powered by NPTech, a local team headquartered just down State Road 15 in New Paris. When a Goshen customer calls, a neighbor answers.'
     ],
     highlights: [
       'Serving Goshen ZIP codes 46526 and 46528',
       'Symmetrical gigabit speeds for remote work, streaming, and gaming',
       'Local install crews based minutes away in New Paris',
-      'Whole-home eero mesh WiFi included with every plan'
+      'Service designed for modern eero mesh networks'
     ],
     uniqueFaq: {
       q: 'Can I get fiber near downtown Goshen or Goshen College?',
@@ -68,7 +68,7 @@ const CITIES = [
       'Serving Bristol ZIP code 46507',
       'Symmetrical speeds for work-from-home commuters',
       'Reliable glass fiber that shrugs off Michiana weather',
-      'Whole-home eero mesh WiFi included with every plan'
+      'Service designed for modern eero mesh networks'
     ],
     uniqueFaq: {
       q: 'I live outside Bristol town limits — can I still get Community Fiber?',
@@ -91,7 +91,7 @@ const CITIES = [
       'Serving Middlebury ZIP code 46540',
       'Symmetrical speeds for households, farms, and home businesses',
       'Fiber reliability for work, school, and streaming',
-      'Whole-home eero mesh WiFi included with every plan'
+      'Service designed for modern eero mesh networks'
     ],
     uniqueFaq: {
       q: 'Does Community Fiber serve rural areas around Middlebury?',
@@ -114,7 +114,7 @@ const CITIES = [
       'Serving New Paris ZIP code 46553 — our hometown',
       'Headquartered at 19066 Market Street, New Paris',
       'Symmetrical gigabit speeds on 100% glass fiber',
-      'Whole-home eero mesh WiFi included with every plan'
+      'Service designed for modern eero mesh networks'
     ],
     uniqueFaq: {
       q: 'Is Community Fiber really based in New Paris?',
@@ -138,7 +138,7 @@ const CITIES = [
       'Symmetrical gigabit speeds for lake homes and year-round residents',
       'No contracts — ideal for seasonal lake residents',
       'Consistent speeds even during peak summer weekends',
-      'Whole-home eero mesh WiFi included with every plan'
+      'Service designed for modern eero mesh networks'
     ],
     uniqueFaq: {
       q: 'Can I get fiber at my lake house on Syracuse Lake or Lake Wawasee?',
@@ -155,13 +155,13 @@ const CITIES = [
     intro: [
       'Nappanee knows quality craftsmanship — from generations of Amish woodworking to the RVs rolling off local lines to the crowds at the Nappanee Apple Festival every fall. That same standard should apply to your internet, and old copper cable does not meet it.',
       'Community Fiber builds with 100% glass fiber straight to your home, delivering symmetrical speeds up to 1 gigabit. NorthWood students streaming lectures, families video-calling relatives, and home businesses moving big files all get the same instant, reliable connection — with no data caps, ever.',
-      'We are a local operation, powered by NPTech in New Paris just up State Road 19. Our installers and support team live here in Michiana, so help is a local call away, not a ticket in a national queue.'
+      'We are a local operation, powered by NPTech in New Paris just up State Road 15. Our installers and support team live here in Michiana, so help is a local call away, not a ticket in a national queue.'
     ],
     highlights: [
       'Serving Nappanee ZIP code 46550',
       'Symmetrical speeds for families, shops, and home businesses',
       'Built with weather-resistant, future-proof glass fiber',
-      'Whole-home eero mesh WiFi included with every plan'
+      'Service designed for modern eero mesh networks'
     ],
     uniqueFaq: {
       q: 'Which parts of Nappanee can get Community Fiber?',
@@ -184,7 +184,7 @@ const CITIES = [
       'Serving Wakarusa ZIP code 46573',
       'Symmetrical gigabit speeds on 100% glass fiber',
       'Local installs and support from nearby New Paris',
-      'Whole-home eero mesh WiFi included with every plan'
+      'Service designed for modern eero mesh networks'
     ],
     uniqueFaq: {
       q: 'Is fiber really worth it in a small town like Wakarusa?',
@@ -207,7 +207,7 @@ const CITIES = [
       'Serving Milford ZIP code 46542',
       'Symmetrical gigabit speeds for homes and lake properties',
       'Local install crews from nearby New Paris',
-      'Whole-home eero mesh WiFi included with every plan'
+      'Service designed for modern eero mesh networks'
     ],
     uniqueFaq: {
       q: 'Does Community Fiber serve homes around Waubee Lake?',
@@ -242,7 +242,7 @@ function buildFaqs(city) {
     },
     {
       q: `How much does fiber internet cost in ${n}?`,
-      a: `Plans start at $45/mo for 100 Mbps, and our 1 Gig plan is currently $70/mo for new customers. Every plan includes whole-home eero mesh WiFi, unlimited data, and local support — with no contracts and no promo rates that jump after a year.`
+      a: `Plans start at $35/mo for 100 Mbps, and our 1 Gig plan is currently $70/mo for new customers. Every plan includes unlimited data and local support, with service designed to work well with modern eero mesh networks. There are no contracts and no promo rates that jump after a year.`
     },
     city.uniqueFaq,
     {
@@ -429,7 +429,7 @@ ${JSON.stringify(buildJsonLd(city), null, 2)}
         <section id="plans-pricing" class="city-plans-section">
             <div class="pricing-intro">
                 <h2>Fiber Internet Plans in ${name}</h2>
-                <p>Every plan includes whole-home eero WiFi, unlimited data, and local support.</p>
+                <p>Every plan includes unlimited data, local support, and fiber service designed for modern eero mesh networks.</p>
             </div>
 
             <!-- Loading State -->

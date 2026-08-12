@@ -1,5 +1,20 @@
 /* residential.css - Cohesive Modern ISP Theme */
 
+/* --- Vertical rhythm ---------------------------------------------------- */
+/* Sections were each carrying their own padding (100/140, 60/80, 40/80, 0/0,
+   60/60), so nothing lined up and the page read as unrelated blocks stacked
+   together. One token drives them all; change it here to retune the whole
+   page's breathing room. */
+:root {
+    --section-pad-y: 80px;
+}
+
+@media (max-width: 820px) {
+    :root {
+        --section-pad-y: 52px;
+    }
+}
+
 /* --- Page Layout --- */
 .plans-wrapper {
     background-color: var(--npt-white);
@@ -324,9 +339,10 @@
     color: #475569;
 }
 
-.plan-features i {
+.plan-features .cfn-icon {
     color: var(--cfn-green);
-    font-size: 0.85rem;
+    width: 0.85rem;
+    height: 0.85rem;
     flex-shrink: 0;
 }
 
@@ -372,7 +388,7 @@
     line-height: 1.3;
 }
 
-.card-autopay-banner i {
+.card-autopay-banner .cfn-icon {
     margin-right: 5px;
 }
 
@@ -535,7 +551,7 @@
 .addon-content { padding: 30px; display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; }
 .addon-icon-title { margin-bottom: 15px; color: var(--npt-black); }
 .addon-icon-title h3 { font-size: 1.5rem; font-weight: 800; margin: 10px 0 0; }
-.addon-icon-title i { font-size: 2rem; margin-bottom: 5px; }
+.addon-icon-title .cfn-icon { font-size: 2rem; margin-bottom: 5px; }
 .addon-content p { color: #64748b; margin-bottom: 20px; line-height: 1.5; }
 .addon-price-tag { display: flex; align-items: baseline; justify-content: center; margin-bottom: 20px; color: var(--npt-black); }
 .addon-price-tag .symbol { font-size: 1.2rem; font-weight: 600; }
@@ -627,7 +643,7 @@
 /* --- Testimonials --- */
 .testimonials-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
     gap: 30px;
     max-width: 1000px;
     margin: 0 auto;
@@ -918,7 +934,7 @@
 
 .addon-icon-title { margin-bottom: 15px; }
 .addon-icon-title h3 { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; margin-top: 10px; }
-.addon-icon-title i { font-size: 2.25rem; }
+.addon-icon-title .cfn-icon { font-size: 2.25rem; }
 
 .addon-content p { color: #64748b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
 
@@ -951,7 +967,7 @@
     }
 
     .plans-header-content {
-        padding: 64px 16px 48px;
+        padding: 46px 16px 42px;
     }
 
     .plans-header-content h1 {
@@ -959,7 +975,7 @@
     }
 
     .pricing-intro {
-        margin-top: 32px;
+        margin-top: 24px;
         padding: 0 16px;
     }
 
@@ -991,8 +1007,8 @@
 
     #plans-grid .pricing-box,
     #plans-grid .pricing-box.popular {
-        flex: 0 0 86%;
-        max-width: 86%;
+        flex: 0 0 min(88%, 340px);
+        max-width: min(88%, 340px);
         min-width: 0;
         width: auto;
         margin: 0;
@@ -1001,11 +1017,11 @@
     }
 
     .pricing-box-inner {
-        padding: 28px 22px;
+        padding: 26px 20px;
     }
 
     .price {
-        font-size: 3.45rem;
+        font-size: clamp(2.8rem, 15vw, 3.35rem);
     }
 
     .availability-embed-section,
@@ -1015,12 +1031,33 @@
         padding-right: 16px !important;
     }
 
+    .availability-embed-section {
+        padding-top: 42px;
+        padding-bottom: 52px;
+    }
+
+    .availability-embed-section iframe,
+    .availability-embed-frame-wrap {
+        min-height: 500px !important;
+        height: min(680px, 82vh);
+    }
+
     .faq-cta-card {
         padding: 20px;
     }
 
     .timeline-container {
         margin-top: 28px;
+    }
+
+    .timeline-section {
+        padding-top: 34px;
+        padding-bottom: 58px;
+    }
+
+    .section-title {
+        font-size: clamp(1.65rem, 8vw, 2.15rem);
+        margin-bottom: 1.75rem;
     }
 
     .timeline-bubbles {
@@ -1034,11 +1071,6 @@
         width: 48px;
     }
 
-    .addons-wrapper {
-        grid-template-columns: 1fr !important;
-        padding: 0 16px !important;
-    }
-
     .feature-top,
     .feature-title-group,
     .eero-integration {
@@ -1048,5 +1080,141 @@
 
     .feature-metrics {
         grid-template-columns: 1fr !important;
+    }
+
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .testimonial-card {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 420px) {
+    #plans-grid .pricing-box,
+    #plans-grid .pricing-box.popular {
+        flex-basis: 92%;
+        max-width: 92%;
+    }
+
+    .pricing-nav {
+        width: 40px;
+        height: 40px;
+    }
+
+    .card-autopay-banner {
+        margin-left: -20px;
+        margin-right: -20px;
+        margin-bottom: -26px;
+    }
+
+    .timeline-content-card {
+        min-height: 0;
+    }
+
+    .step-content-inner {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+/* --- Mesh Wi-Fi section ------------------------------------------------- */
+/* Built from the page's own pieces — .section-title and the green check from
+   the plan cards — so it reads as another section of the site rather than a
+   widget bolted on. Two-column image/copy split mirrors the Installation
+   Process card, which is the page's existing pattern for this shape. */
+/* --- Page rhythm -------------------------------------------------------- */
+/* Every content section shares one vertical scale so the page reads as a
+   continuous document instead of separately-authored blocks. Declared last so
+   it wins over the per-section padding these rules replace. */
+#availability-check,
+#installation-process,
+#mesh-wifi,
+#customer-reviews,
+.faq-cta-section {
+    padding-top: var(--section-pad-y);
+    padding-bottom: var(--section-pad-y);
+}
+
+/* The pricing grid sits directly under the hero and already carries its own
+   bottom margin, so it only needs the shared spacing beneath it. */
+#plans-pricing {
+    margin-bottom: var(--section-pad-y);
+}
+
+/* The FAQ strip was the one heading on the page that wasn't a centred section
+   title — 24px and left-aligned, which is what made it read as a widget
+   dropped on top of the layout rather than part of it. Bring it in line with
+   the others while keeping the compact single-row card. */
+.faq-cta-section .faq-cta-copy h2 {
+    font-size: 1.6rem;
+    line-height: 1.25;
+}
+
+@media (max-width: 820px) {
+    .faq-cta-section .faq-cta-copy h2 {
+        font-size: 1.35rem;
+    }
+}
+
+/* Was an inline style="padding: 60px 20px; background-color: #f8fafc" on the
+   <section> in all nine pages, which meant it could never take part in the
+   shared rhythm — inline styles outrank the stylesheet. Moved here so it
+   follows --section-pad-y like every other section. */
+.testimonials-section {
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #f8fafc;
+}
+
+/* --- Installation timeline, mobile -------------------------------------- */
+/* Three things were wrong at phone width:
+   1. The active bubble used transform: scale(1.15) inside a container with
+      overflow-x: auto. A scaled child gets clipped by its scroll box, so the
+      circle rendered as a squared-off blob with colour bleeding past it.
+   2. justify-content: flex-start bunched the four bubbles to the left while
+      the progress line still spanned 100%, leaving a rail running off the
+      right edge to nothing.
+   3. min-height: 400px plus 60px of arrow padding left a large empty gap
+      under the step text.
+   Four 44px bubbles and their gaps fit inside 326px comfortably, so the
+   horizontal scroll was never needed in the first place. */
+@media (max-width: 900px) {
+    .timeline-bubbles {
+        overflow: visible;
+        justify-content: space-between;
+        gap: 6px;
+        padding-bottom: 0;
+    }
+
+    .timeline-step-bubble {
+        flex: 0 0 44px;
+        width: 44px;
+        height: 44px;
+        font-size: 1.05rem;
+        border-width: 2px;
+    }
+
+    /* A ring instead of a scale: nothing to clip, and it cannot nudge the row. */
+    .timeline-step-bubble.active {
+        transform: none;
+        box-shadow: 0 0 0 4px rgba(3, 166, 60, 0.18),
+                    0 6px 14px rgba(3, 166, 60, 0.28);
+    }
+
+    /* Centre the rail on the 44px bubbles rather than the desktop 54px ones. */
+    .timeline-progress-line {
+        top: 20px;
+    }
+
+    .timeline-nav-wrapper {
+        margin-bottom: 28px;
+    }
+
+    .timeline-content-card {
+        min-height: 0;
+        padding-bottom: 74px;
     }
 }

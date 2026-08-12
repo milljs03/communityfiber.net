@@ -3,29 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js');
+    /* Until communityfiber.net cuts over from WordPress to this build, the
+       Firebase preview hosts are live and indexable while their canonicals
+       point at URLs that still 404. Keep the preview hosts out of the index.
+       Strictly allowlisted: only *.web.app / *.firebaseapp.com are affected,
+       so this stops applying by itself once the custom domain is attached. */
+    var h = location.hostname;
+    if (h.endsWith('.web.app') || h.endsWith('.firebaseapp.com')) {
+      var r = document.createElement('meta');
+      r.name = 'robots'; r.content = 'noindex, nofollow';
+      document.head.appendChild(r);
+    }</script>
     <title>How Fiber Internet Installation Works | Community Fiber</title>
     <meta name="description" content="Learn what to expect before, during, and after a residential fiber internet installation with Community Fiber.">
     <meta property="og:title" content="How Fiber Internet Installation Works | Community Fiber">
     <meta property="og:description" content="Learn what to expect before, during, and after a residential fiber internet installation with Community Fiber.">
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://communityfiber.net/blog/how-fiber-installation-works.html">
+    <meta property="og:url" content="https://communityfiber.net/blog/how-fiber-installation-works">
     <meta property="og:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="How Fiber Internet Installation Works | Community Fiber">
     <meta name="twitter:description" content="Learn what to expect before, during, and after a residential fiber internet installation with Community Fiber.">
     <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
-    <link rel="canonical" href="https://communityfiber.net/blog/how-fiber-installation-works.html">
+    <link rel="canonical" href="https://communityfiber.net/blog/how-fiber-installation-works">
     <link rel="icon" type="image/png" href="../assets/images/favicon.png">
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "mainEntityOfPage": "https://communityfiber.net/blog/how-fiber-installation-works.html",
+  "mainEntityOfPage": "https://communityfiber.net/blog/how-fiber-installation-works",
   "headline": "How Fiber Internet Installation Works",
   "description": "Learn what to expect before, during, and after a residential fiber internet installation with Community Fiber.",
   "image": "https://communityfiber.net/assets/images/community-fiber-logo.png",
   "datePublished": "2026-06-25",
-  "dateModified": "2026-06-25",
+  "dateModified": "2026-08-11",
   "author": {
     "@type": "Organization",
     "name": "Community Fiber",
@@ -43,45 +55,56 @@
     </script>
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.clarity.ms https://c.bing.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src https://fonts.gstatic.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com https://*.clarity.ms https://c.bing.com;
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
+                   connect-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com https://*.clarity.ms https://c.bing.com;">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="stylesheet" href="../assets/css/components.css">
     <link rel="stylesheet" href="../assets/css/animations.css">
     <link rel="stylesheet" href="../assets/css/blog.css">
+    <!-- Microsoft Clarity: heatmaps + session replay. Async, does not block render. -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "xync1c67sj");
+    </script>
 </head>
 <body>
     <div id="master-header"></div>
     <main>
         <article class="article-page">
             <header class="article-hero">
-                <div class="article-breadcrumb"><a href="../blog.html">Community Fiber Blog</a> / Installation</div>
+                <div class="article-breadcrumb"><a href="../blog">Community Fiber Blog</a> / Installation</div>
                 <span class="article-category">Installation</span>
                 <h1>How Fiber Internet Installation Works</h1>
                 <p>Understand the basic steps of a fiber installation, from checking availability to equipment setup and testing.</p>
                 <div class="article-meta">
-                    <span>5 min read</span>
-                    <span>Updated 2026-06-25</span>
+                    <span>2 min read</span>
+                    <span>Updated 2026-08-11</span>
                 </div>
             </header>
             <div class="article-body">
-                <p>Fiber installation can sound complicated, but the process is usually straightforward when you know what to expect. The main goal is to bring a fiber connection to the home, place the necessary equipment, and make sure the internet and WiFi are working properly before the technician leaves.</p>
-<h2>Step 1: Check availability</h2>
-<p>The first step is confirming whether fiber service is available at your address. Availability depends on where the network has already been built and whether the home can be connected from the nearby fiber infrastructure.</p>
-<h2>Step 2: Schedule the install</h2>
-<p>After service is confirmed, the installation is scheduled. The appointment gives the technician time to bring the connection into the home, set up equipment, and test the service with you.</p>
-<h2>Step 3: Bring fiber to the home</h2>
-<p>The fiber line needs a protected path from the network to your home. In many cases that means buried fiber, placement of exterior equipment, and a clean entry point into the home.</p>
-<h2>Step 4: Set up WiFi and test the connection</h2>
-<p>Once the connection is active, the technician sets up the home equipment and confirms that the service is working. Good WiFi placement matters, so this step is also about coverage and making sure the connection works where people actually use it.</p>
+                <p>Fiber installation is more involved than swapping a modem, because a brand-new glass line has to be built to your home. Knowing the four stages ahead of time makes the whole thing straightforward. Here is exactly how a Community Fiber install works, start to finish.</p>
+<h2>Step 1: Site survey</h2>
+<p>After you request service, our installation team reaches out to schedule a site survey at your home. A technician walks the property with you to work out the best route for the fiber line, where it should enter the house, and where your equipment will live. Nothing gets built until we know how to serve your specific home.</p>
+<h2>Step 2: Construction</h2>
+<p>Our construction crew uses what the survey found and brings fiber from our network to the entry point chosen for your home. Fiber lines are buried, which protects them from weather and yard work. If we disturb your lawn, we restore it — putting the yard back the way we found it is part of the job, not an afterthought.</p>
+<h2>Step 3: Splicing</h2>
+<p>This is the step most people never hear about, and it is where fiber earns its reliability. Our splicing team fuses your dedicated fiber line strand by strand, using precision equipment to join the glass into one continuous, sealed path. A clean splice is what lets light travel to your home with no loss — and it is why a properly built fiber connection still performs years later.</p>
+<h2>Step 4: Install and activation</h2>
+<p>Our install team brings the connection to life inside the house. They set up your equipment, get whole-home Wi-Fi running, test your speeds, and walk you through everything before leaving. A typical appointment takes about an hour. Someone needs to be home, and the technician does need to come inside — the fiber has to terminate indoors and we test the connection before we call it done.</p>
+<h2>Before your appointment</h2>
+<p>Think about where you actually use Wi-Fi: home office, living room, bedrooms, basement, the porch. Telling your installer which areas matter most helps them place equipment for the coverage you care about rather than guessing.</p>
+<h2>What it costs</h2>
+<p>There is a one-time installation fee between $25 and $150, depending on how far your home sits from the road. If fiber has already been run to your home, that fee is waived and only a $25 activation charge applies.</p>
 
       <aside class="article-callout">
         <strong>Before the appointment</strong>
@@ -94,7 +117,7 @@
           <h2>Ready to start?</h2>
           <p>Check your address and review current residential fiber plans.</p>
         </div>
-        <a href="../residential.html#availability-check">Check availability <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="../residential#availability-check">Check availability <svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></a>
       </aside>
     
             </div>
@@ -102,22 +125,22 @@
                 <h2>Keep reading</h2>
                 <div class="related-grid">
                     
-    <a class="related-card" href="fiber-vs-cable-elkhart-county.html">
+    <a class="related-card" href="fiber-vs-cable-elkhart-county">
       <span>Internet Comparison</span>
       <strong>Fiber vs Cable Internet in Elkhart County</strong>
-      <small>6 min read</small>
+      <small>1 min read</small>
     </a>
   
-    <a class="related-card" href="business-fiber-internet-guide.html">
+    <a class="related-card" href="business-fiber-internet-guide">
       <span>Business Fiber</span>
       <strong>What Businesses Should Look for in Fiber Internet</strong>
-      <small>6 min read</small>
+      <small>1 min read</small>
     </a>
   
-    <a class="related-card" href="what-internet-speed-do-i-need.html">
+    <a class="related-card" href="what-internet-speed-do-i-need">
       <span>Residential Fiber</span>
       <strong>What Internet Speed Do I Need?</strong>
-      <small>5 min read</small>
+      <small>1 min read</small>
     </a>
   
                 </div>
@@ -127,10 +150,10 @@
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-links">
-                <a href="../footer/privacy-policy.html">Privacy Policy</a>
-                <a href="../footer/terms-of-service.html">Terms of Service</a>
-                <a href="../footer/acceptable-user-policy.html">Acceptable Use Policy</a>
-                <a href="../footer/open-internet-policy.html">Open Internet Policy</a>
+                <a href="../footer/privacy-policy">Privacy Policy</a>
+                <a href="../footer/terms-of-service">Terms of Service</a>
+                <a href="../footer/acceptable-user-policy">Acceptable Use Policy</a>
+                <a href="../footer/open-internet-policy">Open Internet Policy</a>
             </div>
             <address class="footer-address">
                 <strong>NPTech</strong>

@@ -1,6 +1,7 @@
 import { db, app } from './config/firebase-config.js';
 import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { escapeHtml, postJson, safeUrl } from './security.js';
+import { bindFormSpamSignals, escapeHtml, normalizeEmailInput, normalizePhoneInput, postJson, safeUrl } from './security.js';
+import { loadWhenVisible } from './services/lazy-section.js';
 
 const pageLoadTime = Date.now(); // Track when the page loaded
 
@@ -61,7 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
 
-    loadBusinessLogos();
+    // business_logos stores partner logos as base64 data URIs (~541KB). The
+    // carousel is below the fold, so defer the read off the critical path.
+    loadWhenVisible('#trusted-partners', loadBusinessLogos);
 });
 
 // Form Logic
@@ -69,6 +72,8 @@ const form = document.getElementById('business-form');
 const successMsg = document.getElementById('success-message');
 
 if (form) {
+    const spamSignals = bindFormSpamSignals(form);
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -95,11 +100,12 @@ if (form) {
             type: 'business_quote',
             businessName: normalize(document.getElementById('business-name').value),
             contactName: normalize(document.getElementById('contact-name').value),
-            phone: normalize(document.getElementById('contact-phone').value),
-            email: normalize(document.getElementById('contact-email').value),
+            phone: normalizePhoneInput(document.getElementById('contact-phone').value),
+            email: normalizeEmailInput(document.getElementById('contact-email').value),
             address: normalize(document.getElementById('business-address').value),
             requirements: normalize(document.getElementById('requirements').value),
-            website_check: honeypot ? honeypot.value : ''
+            website_check: honeypot ? honeypot.value : '',
+            ...spamSignals.getPayloadFields()
         };
 
         try {
@@ -117,3 +123,4 @@ if (form) {
         }
     });
 }
+

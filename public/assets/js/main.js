@@ -1,4 +1,5 @@
 // public/assets/js/main.js
+import { bindAllPhoneInputs } from './security.js';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBw8z2IL4dN5oldPzRW3a581mkXC7VuXe4';
 const MIN_GOOGLE_SEARCH_TOKEN_COUNT = 3;
@@ -368,3 +369,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
+// Telephone fields format as they are typed, on every page that loads this
+// file. Centralised here rather than per-form so a new form picks it up with
+// no extra wiring. Values are still normalised to bare digits on submit.
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => bindAllPhoneInputs(), { once: true });
+} else {
+    bindAllPhoneInputs();
+}

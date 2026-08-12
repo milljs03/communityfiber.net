@@ -1,6 +1,7 @@
 import { db, app } from './config/firebase-config.js';
 import { collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { escapeHtml, safeUrl } from './security.js';
+import { loadWhenVisible } from './services/lazy-section.js';
 
 const SHOW_EERO_SERVICE_FEATURE = true;
 
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.warn("No plans in DB, using fallback defaults.");
              plans = [
                 {
-                    name: "Basic", speed: "100 Mbps", price: 45,
+                    name: "Basic", speed: "100 Mbps", price: 35,
                     description: "Reliable fiber internet for everyday browsing and streaming.",
                     features: [], isPopular: false, requiresAutopay: true, order: 1
                 },
@@ -83,7 +84,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         console.error("Error rendering plans:", error);
         loadingEl.classList.add('hidden');
-        errorEl.classList.remove('hidden');
+        // scripts/sync-pricing.js pre-renders the current plans into the HTML.
+        // If those cards are on the page there is nothing to apologise for —
+        // showing "unable to load pricing" above real prices only confuses.
+        const hasPrerenderedPlans = plansGrid && plansGrid.querySelector('.pricing-box');
+        if (hasPrerenderedPlans) {
+            plansGrid.classList.remove('hidden');
+            setupPricingCarousel();
+        } else {
+            errorEl.classList.remove('hidden');
+        }
     }
 
     // --- 2. Render Testimonials ---
@@ -99,7 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 testimonialContainer.innerHTML = items.map(t => `
                     <div class="testimonial-card fade-in-section">
-                        <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                        <div class="quote-icon"><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M0 216C0 149.7 53.7 96 120 96h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-30.9 0-56 25.1-56 56v8h64c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V320 288 216zm256 0c0-66.3 53.7-120 120-120h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-30.9 0-56 25.1-56 56v8h64c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H320c-35.3 0-64-28.7-64-64V320 288 216z"/></svg></div>
                         <p class="quote-text">"${escapeHtml(t.quote || '')}"</p>
                         <div class="quote-author">
                             <strong>${escapeHtml(t.author || '')}</strong>
@@ -115,7 +125,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- 3. Install Process Timeline ---
-    loadTimeline();
+    // install_steps carries base64 step images (~1.06MB). It lives below the
+    // fold, so hold the read until the section is nearly in view rather than
+    // spending the page's initial bandwidth on it.
+    loadWhenVisible('#installation-process', loadTimeline);
 });
 
 let installSteps = [];
@@ -204,6 +217,7 @@ function updateTimelineView(index) {
             const wrapper = imgEl.parentElement;
             if (step.imageUrl) {
                 imgEl.src = safeUrl(step.imageUrl, '', { allowDataImage: true });
+                imgEl.alt = step.title ? `${step.title} — installation step illustration` : '';
                 imgEl.style.display = '';
                 if (wrapper) wrapper.style.display = 'flex';
             } else {
@@ -228,8 +242,8 @@ function updatePageHeader() {
         headerContent.innerHTML = `
             <h1>Simple Pricing. Gigabit Speeds.</h1>
             <p>
-                Experience the difference with <strong>new premium WiFi equipment included</strong> in every plan.
-                We provide the hardware you need to ensure the best coverage and fastest service possible.
+                Experience the difference with fiber service designed for modern mesh Wi-Fi.
+                Our local team helps you get the best performance from your Community Fiber connection.
             </p>
         `;
     }
@@ -254,329 +268,34 @@ async function injectAddonsSection(targetElement) {
     if (document.querySelector('.addons-wrapper')) return;
 
     const addonsHTML = `
-    <style>
-        .addons-wrapper {
-            max-width: 760px;
-            margin: 60px auto;
-            padding: 0 20px;
-            display: block;
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        /* Card Styles */
-        .addons-card {
-            background: linear-gradient(155deg, #ffffff 0%, #f8fafc 100%);
-            border-radius: 18px;
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-            overflow: hidden;
-            border: 1px solid rgba(148, 163, 184, 0.28);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .addons-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(circle at top right, rgba(3, 166, 60, 0.12), transparent 32%),
-                linear-gradient(rgba(3, 166, 60, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(3, 166, 60, 0.04) 1px, transparent 1px);
-            background-size: auto, 32px 32px, 32px 32px;
-            pointer-events: none;
-        }
-        .addons-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 24px 48px rgba(3, 166, 60, 0.14);
-        }
-
-        /* Header */
-        .card-header {
-            background: rgba(255,255,255,0.84);
-            padding: 26px 30px;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-            z-index: 1;
-        }
-        .card-header h2 {
-            margin: 0;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.55rem;
-            color: #1e293b;
-            font-weight: 800;
-        }
-        .card-header i {
-            color: #03A63C;
-            font-size: 1.3rem;
-        }
-
-        /* Content Sections */
-        .card-body {
-            padding: 0;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            z-index: 1;
-        }
-
-        .feature-block {
-            padding: 30px;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-        }
-        .feature-block:last-child { border-bottom: none; }
-
-        .feature-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .feature-title-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #052e16 0%, #067a35 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 1.15rem;
-            box-shadow: 0 12px 22px rgba(3, 166, 60, 0.22);
-        }
-        .feature-title {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #0f172a;
-            margin: 0;
-        }
-
-        .price-tag {
-            text-align: right;
-        }
-        .price-amount {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            font-size: 1.7rem;
-            color: #03A63C;
-            line-height: 1;
-        }
-        .price-period {
-            font-size: 0.8rem;
-            color: #64748b;
-            font-weight: 600;
-        }
-
-        .feature-desc {
-            color: #475569;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .pill-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .pill {
-            padding: 6px 12px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .pill-blue { background: #e0f2fe; color: #0284c7; }
-        .pill-green { background: #dcfce7; color: #166534; }
-        .pill-gray { background: #f1f5f9; color: #475569; }
-
-        /* Eero Special Styling */
-        .eero-integration {
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 18px;
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
-        }
-        .eero-logo {
-            width: 90px;
-            height: auto;
-            object-fit: contain;
-        }
-        .eero-text {
-            font-size: 0.9rem;
-            color: #475569;
-            font-weight: 500;
-            border-left: 2px solid #e2e8f0;
-            padding-left: 20px;
-        }
-
-        .network-badge {
-            background: #22c55e;
-            color: white;
-            font-weight: 800;
-            font-size: 0.7rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .feature-metrics {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 18px;
-        }
-        .feature-metric {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 12px;
-        }
-        .feature-metric strong {
-            display: block;
-            color: #0f172a;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-        }
-        .feature-metric span {
-            color: #64748b;
-            font-size: 0.78rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        /* Premium WiFi card (eero) */
-        .wifi-card { overflow: hidden; }
-        .wifi-image {
-            height: 340px;
-            width: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .wifi-content {
-            position: relative;
-            z-index: 1;
-            background: #ffffff;
-            padding: 30px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .wifi-content .network-badge {
-            align-self: flex-start;
-            margin-bottom: 14px;
-        }
-        .wifi-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #1e293b;
-            line-height: 1.2;
-            margin: 0 0 12px;
-        }
-        .wifi-text {
-            color: #475569;
-            font-size: 1rem;
-            line-height: 1.6;
-            margin: 0 0 22px;
-        }
-        .wifi-features {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .wifi-features li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #334155;
-        }
-        .wifi-features i {
-            color: #03A63C;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-        .wifi-eero {
-            margin-top: auto;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding-top: 18px;
-            border-top: 1px solid #e2e8f0;
-            color: #64748b;
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-        .wifi-eero .eero-logo {
-            width: 70px;
-            height: auto;
-            object-fit: contain;
-        }
-
-    </style>
-
-    <div class="addons-wrapper fade-in-section">
-
-        <div class="addons-card wifi-card">
-            <img src="assets/images/eerohome.jpg" alt="eero mesh WiFi set up in a modern home" class="wifi-image">
-            <div class="wifi-content">
-                <span class="included-badge">Included with every plan</span>
-                <h2 class="wifi-title">Whole-Home WiFi, Included</h2>
-                <p class="wifi-text">Every Community Fiber plan comes with managed eero mesh WiFi — strong, reliable coverage in every room, set up and supported by your local team.</p>
-                <ul class="wifi-features">
-                    <li><i class="fa-solid fa-check"></i> Whole-home mesh coverage</li>
-                    <li><i class="fa-solid fa-check"></i> App control with guest &amp; parental controls</li>
-                    <li><i class="fa-solid fa-check"></i> Local installation &amp; ongoing support</li>
-                </ul>
-                <div class="wifi-eero">
-                    <img src="assets/images/eero.webp" alt="eero" class="eero-logo">
-                    <span>Powered by eero</span>
-                </div>
+    <section id="mesh-wifi" class="addons-wrapper faq-cta-section fade-in-section">
+        <div class="container faq-cta-card">
+            <div class="faq-cta-copy">
+                <h2>Mesh-ready home Wi-Fi support</h2>
+                <p>Community Fiber is designed to work cleanly with modern mesh networking, including eero equipment when it is part of your service setup.</p>
             </div>
+            <a href="support.html#support-faq" class="faq-cta-button">
+                <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M256 48C141.1 48 48 141.1 48 256s93.1 208 208 208s208-93.1 208-208S370.9 48 256 48zM0 256C0 114.6 114.6 0 256 0s256 114.6 256 256s-114.6 256-256 256S0 397.4 0 256zm256-80a80 80 0 1 0 0 160 80 80 0 1 0 0-160z"/></svg>
+                Equipment FAQs
+            </a>
         </div>
-
-    </div>
+    </section>
     `;
     targetElement.insertAdjacentHTML('afterend', addonsHTML);
 
-    // Animate newly injected elements
-    // Note: The observer logic at the top only runs once on load. We need to observe the new elements.
-    const newObserver = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
+    // The section is injected after the page-load observer has already run, so
+    // register it or the fade-up state would leave it permanently invisible.
+    const wrapper = document.querySelector('.addons-wrapper');
+    if (wrapper) {
+        const revealer = new IntersectionObserver((entries, obs) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
                 entry.target.classList.add('is-visible');
                 obs.unobserve(entry.target);
-            }
-        });
-    }, { root: null, rootMargin: '0px', threshold: 0.1 });
-
-    const wrapper = document.querySelector('.addons-wrapper');
-    if(wrapper) newObserver.observe(wrapper);
+            });
+        }, { threshold: 0.1 });
+        revealer.observe(wrapper);
+    }
 }
 
 function generatePlanCard(plan, index) {
@@ -585,7 +304,7 @@ function generatePlanCard(plan, index) {
     const badge = isPopular ? '<div class="popular-badge">Best Value</div>' : '';
     const requiresAutopay = plan.requiresAutopay === true || plan.requiresAutopay === "true";
     const autopayBanner = requiresAutopay
-        ? '<div class="card-autopay-banner"><i class="fa-solid fa-circle-info"></i> E-Bill &amp; ACH Auto Pay Required</div>'
+        ? '<div class="card-autopay-banner"><svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg> E-Bill &amp; ACH Auto Pay Required</div>'
         : '';
 
     // Promotional pricing: show original price crossed out when it's higher than the current price.
@@ -602,7 +321,7 @@ function generatePlanCard(plan, index) {
         : [];
     const features = [...universal, ...extras];
     const featuresHtml = features
-        .map(f => `<li><i class="fa-solid fa-check"></i><span>${escapeHtml(f)}</span></li>`)
+        .map(f => `<li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg><span>${escapeHtml(f)}</span></li>`)
         .join('');
 
     return `

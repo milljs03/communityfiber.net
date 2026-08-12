@@ -40,19 +40,32 @@ async function logVisit() {
         };
 
         await postJson('/api/logPageView', visitData);
-
         localStorage.setItem(storageKey, now.toString());
-        console.log(`[Analytics] Logged visit to ${page}`);
 
     } catch (err) {
-        // Silent fail for analytics
-        console.warn("[Analytics] Logging failed", err);
+        // Start the cooldown even when the call failed. Without this the
+        // timestamp is never written, so every subsequent page load retries
+        // immediately and keeps hitting the same wall.
+        localStorage.setItem(storageKey, now.toString());
+
+        // 429 is the server's own rate limiter doing its job — expected
+        // backpressure, not a fault worth reporting. Analytics is best effort;
+        // nothing the visitor sees depends on it.
+        if (err?.status !== 429) {
+            console.debug('[Analytics] pageview not recorded:', err?.message || err);
+        }
     }
 }
 
-// Run logic
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', logVisit);
+// Run logic — analytics must never compete with rendering, so wait until the
+// page has loaded and the main thread is idle before touching the network.
+function scheduleLogVisit() {
+    const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 2000));
+    idle(() => { logVisit(); }, { timeout: 5000 });
+}
+
+if (document.readyState === 'complete') {
+    scheduleLogVisit();
 } else {
-    logVisit();
+    window.addEventListener('load', scheduleLogVisit, { once: true });
 }

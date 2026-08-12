@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js');
+    /* Until communityfiber.net cuts over from WordPress to this build, the
+       Firebase preview hosts are live and indexable while their canonicals
+       point at URLs that still 404. Keep the preview hosts out of the index.
+       Strictly allowlisted: only *.web.app / *.firebaseapp.com are affected,
+       so this stops applying by itself once the custom domain is attached. */
+    var h = location.hostname;
+    if (h.endsWith('.web.app') || h.endsWith('.firebaseapp.com')) {
+      var r = document.createElement('meta');
+      r.name = 'robots'; r.content = 'noindex, nofollow';
+      document.head.appendChild(r);
+    }</script>
+    <title>Page Not Found | Community Fiber</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    <link rel="stylesheet" href="/assets/css/global.css">
+    <style>
+        .notfound {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 6rem 1.5rem 8rem;
+            text-align: center;
+        }
+        .notfound .code {
+            font-family: var(--font-heading);
+            font-size: clamp(4rem, 18vw, 7rem);
+            line-height: 1;
+            color: var(--cfn-green);
+            margin-bottom: 0.5rem;
+        }
+        .notfound h1 {
+            font-family: var(--font-heading);
+            margin-bottom: 1rem;
+        }
+        .notfound p {
+            color: #475569;
+            margin-bottom: 2rem;
+        }
+        .notfound-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+        .notfound-links a {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 999px;
+            border: 1px solid var(--npt-grey);
+            color: var(--npt-black);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .notfound-links a.primary {
+            background: var(--cfn-green);
+            border-color: var(--cfn-green);
+            color: #fff;
+        }
+        .notfound-links a:hover { border-color: var(--cfn-green); }
+    </style>
+    <!-- Microsoft Clarity: heatmaps + session replay. Async, does not block render. -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "xync1c67sj");
+    </script>
+</head>
+<body>
+    <div id="master-header"></div>
+
+    <main class="notfound">
+        <div class="code">404</div>
+        <h1>We couldn&rsquo;t find that page</h1>
+        <p>The page you were looking for may have moved or no longer exists. Here are a few places to pick things back up.</p>
+        <div class="notfound-links">
+            <a class="primary" href="/">Home</a>
+            <a href="/residential">Residential Internet</a>
+            <a href="/business">Business Internet</a>
+            <a href="/support">Support</a>
+        </div>
+    </main>
+
+    <script src="/assets/js/standard-header.js"></script>
+</body>
+</html>

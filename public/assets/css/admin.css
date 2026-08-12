@@ -105,7 +105,7 @@ body {
 /* Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
     gap: 20px;
     margin-bottom: 30px;
 }
@@ -124,7 +124,7 @@ body {
 /* Analytics Grid */
 .analytics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
     gap: 20px;
     margin-top: 30px;
 }
@@ -132,7 +132,7 @@ body {
 .chart-container canvas { max-height: 300px; }
 
 /* Cards Grid (Plans/Hoods) */
-.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 20px; }
 .admin-card { background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; position: relative; }
 .admin-card h3 { margin-bottom: 10px; font-size: 1.2rem; }
 .admin-card p { color: #64748b; font-size: 0.9rem; margin-bottom: 15px; }
@@ -261,4 +261,31 @@ body {
         overflow-y: auto;
         padding: 22px;
     }
+}
+
+/* --- Email delivery status ---------------------------------------------- */
+/* A lead is written to Firestore before the notification is attempted, so a
+   delivery failure never loses the submission. These badges surface that
+   failure in the leads table, which is otherwise the only place it would go
+   unnoticed. */
+.badge-email { font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; display: inline-block; white-space: nowrap; font-weight: 600; }
+.badge-email--sent    { background: #dcfce7; color: #166534; }
+.badge-email--warn    { background: #fef3c7; color: #92400e; }
+.badge-email--failed  { background: #fee2e2; color: #991b1b; }
+.badge-email--skipped { background: #e2e8f0; color: #475569; }
+.badge-email--unknown { background: transparent; color: #94a3b8; }
+
+/* Short explainer under a view's page header. Used on the Mobile Plans tab to
+   say where the records surface and what a blank price means. */
+.view-hint {
+    margin: -8px 0 22px;
+    max-width: 70ch;
+    color: #64748b;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.view-hint a {
+    color: var(--cfn-green);
+    font-weight: 600;
 }

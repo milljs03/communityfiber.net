@@ -1,12 +1,13 @@
-// Google Analytics setup and conversion tracking
-
-// Initialize Google Analytics 4
+// Conversion tracking helpers.
+//
+// GA4 itself is loaded by Firebase Analytics (measurement ID G-RZ8QH0W95G, see
+// config/firebase-config.js), which is started once the page is idle. These
+// helpers only queue events onto the shared dataLayer, so they are safe to call
+// before gtag.js has finished loading — the queue is drained on arrival.
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-XXXXXXXXXX'); // Replace with your GA4 property ID
 
-// Track page views (happens automatically with gtag config)
+// Page views are tracked automatically by the GA4 config in firebase-config.js.
 
 /**
  * Track form submissions

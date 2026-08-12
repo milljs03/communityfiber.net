@@ -362,10 +362,13 @@
 }
 
 .faq-item summary::after {
-    content: '\f067';
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
-    font-size: 0.85rem;
+    content: '';
+    display: inline-block;
+    width: 0.85rem;
+    height: 0.85rem;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z'/%3E%3C/svg%3E") center / contain no-repeat;
     color: #94a3b8;
     transition: transform 0.3s ease, color 0.2s;
     margin-left: 15px;
@@ -481,17 +484,61 @@
 
 @media (max-width: 768px) {
     .city-hero {
-        padding: 80px 20px 140px;
+        padding: 56px 18px 62px;
+        clip-path: none;
+        margin-bottom: 0;
+    }
+
+    .city-breadcrumb {
+        margin-bottom: 18px;
+        overflow-wrap: anywhere;
+    }
+
+    .city-hero h1 {
+        font-size: clamp(2rem, 10vw, 2.65rem);
     }
 
     .city-hero-sub {
         font-size: 1.05rem;
+        margin-bottom: 28px;
+    }
+
+    .city-hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 24px;
+    }
+
+    .city-btn {
+        width: 100%;
+        padding: 13px 18px;
+    }
+
+    .city-plans-section {
+        padding-top: 46px;
+        margin-bottom: 38px;
     }
 
     .city-local-section,
     .comparison-section {
-        padding-top: 70px;
-        padding-bottom: 70px;
+        padding: 56px 16px;
+    }
+
+    .city-local-inner {
+        gap: 28px;
+    }
+
+    .city-local-copy h2,
+    .comparison-section h2,
+    .faq-section h2 {
+        font-size: clamp(1.6rem, 8vw, 2.05rem);
+        margin-bottom: 28px;
+    }
+
+    .city-highlights-card {
+        padding: 24px;
+        border-radius: 12px;
     }
 
     .comparison-table th,
@@ -508,5 +555,64 @@
         margin-left: -10px;
         margin-right: -10px;
         padding: 10px 0;
+    }
+
+    .faq-section {
+        padding: 58px 16px;
+        margin-top: 28px;
+    }
+
+    .faq-item summary {
+        align-items: flex-start;
+        gap: 12px;
+        padding: 18px 0;
+    }
+
+    .city-nearby-section {
+        padding: 56px 16px 28px;
+    }
+
+    .city-nearby-links {
+        gap: 10px 18px;
+    }
+
+    .city-cta-band {
+        border-radius: 12px;
+        margin: 42px 16px 0;
+        padding: 42px 20px;
+    }
+}
+
+@media (max-width: 420px) {
+    .comparison-table {
+        min-width: 620px;
+    }
+
+    .city-highlights-map {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .city-highlights-card {
+        text-align: center;
+    }
+}
+
+/* The nearby-community links are a standalone list of destinations, not
+   inline prose, so they need a real tap box. They measured 60x27. */
+.city-nearby-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 4px;
+}
+
+/* --- Touch target -------------------------------------------------------- */
+/* The breadcrumb "Home" link measured 36x18 on a phone. Vertical padding gives
+   it a tappable box without altering the line's appearance. */
+@media (max-width: 900px) {
+    .city-breadcrumb a {
+        display: inline-block;
+        padding: 6px 2px;
     }
 }

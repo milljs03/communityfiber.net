@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1080 1080">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient-5);
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient-4);
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-5 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="-325.03" y1="1144.73" x2="184.7" y2="1144.73" gradientTransform="translate(-604.73 629.79) rotate(90) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#10a44a"/>
+      <stop offset="1" stop-color="#a9d167"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-325.03" y1="1166.46" x2="141.24" y2="1166.46" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-3" x1="-325.03" y1="1188.19" x2="97.78" y2="1188.19" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-4" x1="-325.03" y1="1209.92" x2="54.29" y2="1209.92" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-5" x1="-325.03" y1="1231.65" x2="10.86" y2="1231.65" xlink:href="#linear-gradient"/>
+  </defs>
+  <path class="cls-5" d="M703.47,814.49v-36.22c-160.56-1.4-290.72-132.45-290.72-293.32v-180.19s-36.22,0-36.22,0v180.19c0,180.84,146.41,328.14,326.93,329.54Z"/>
+  <path class="cls-4" d="M703.47,771.03v-36.22c-136.58-1.4-247.26-112.95-247.26-249.87v-180.19s-36.22,0-36.22,0v180.19c0,156.89,126.92,284.68,283.47,286.08Z"/>
+  <path class="cls-3" d="M703.47,727.57v-36.22c-112.63-1.4-203.8-93.46-203.8-206.41v-180.19s-36.22,0-36.22,0v180.19c0,132.91,107.42,241.22,240.01,242.62Z"/>
+  <path class="cls-2" d="M703.47,684.09v-36.19c-88.66-1.4-160.34-73.95-160.34-162.95v-180.19s-36.22,0-36.22,0v180.19c0,108.96,87.93,197.76,196.56,199.14Z"/>
+  <path class="cls-1" d="M703.47,640.65v-36.24c-64.71-1.38-116.88-54.44-116.88-119.46v-180.19s-36.22,0-36.22,0v180.19c0,84.99,68.42,154.3,153.1,155.7Z"/>
+</svg>

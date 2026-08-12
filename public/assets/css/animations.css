@@ -1,7 +1,7 @@
 /* animations.css - Scroll-triggered animations and micro-interactions */
 
 /* --- Section A: Base Animation States --- */
-[data-animate] {
+html.animations-ready [data-animate] {
     opacity: 0;
     will-change: opacity, transform;
     transition: opacity 0.7s var(--transition-smooth),
@@ -13,7 +13,7 @@
 [data-animate="fade-right"] { transform: translateX(-28px); }
 [data-animate="zoom"]       { transform: scale(0.95); }
 [data-animate="stagger"]    { opacity: 1; transform: none; }
-[data-animate="count"]      { opacity: 0; transform: translateY(10px); }
+html.animations-ready [data-animate="count"] { opacity: 0; transform: translateY(10px); }
 
 [data-animate].is-visible {
     opacity: 1;
@@ -21,7 +21,7 @@
 }
 
 /* --- Section B: Stagger Children Animation --- */
-[data-animate="stagger"] > * {
+html.animations-ready [data-animate="stagger"] > * {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s var(--transition-smooth),
@@ -45,6 +45,19 @@
 [data-animate="stagger"].is-visible > *:nth-child(10) { transition-delay: 0.9s; }
 [data-animate="stagger"].is-visible > *:nth-child(11) { transition-delay: 1s; }
 [data-animate="stagger"].is-visible > *:nth-child(12) { transition-delay: 1.1s; }
+
+/* --- Section B2: No-JS Fallback ---
+   The reveal classes are added by an IntersectionObserver, so without scripts
+   every animated block would stay at opacity 0 forever. An inline snippet in
+   each <head> sets html.js; when it is absent, force everything visible.
+   Additive and !important on purpose, so the normal cascade is untouched. */
+html:not(.animations-ready) [data-animate],
+html:not(.animations-ready) [data-animate] > *,
+html:not(.animations-ready) .fade-in-section,
+html:not(.animations-ready) .fade-in {
+    opacity: 1 !important;
+    transform: none !important;
+}
 
 /* --- Section C: Reduced Motion Override --- */
 @media (prefers-reduced-motion: reduce) {

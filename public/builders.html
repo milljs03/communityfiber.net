@@ -3,37 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js');
+    /* Until communityfiber.net cuts over from WordPress to this build, the
+       Firebase preview hosts are live and indexable while their canonicals
+       point at URLs that still 404. Keep the preview hosts out of the index.
+       Strictly allowlisted: only *.web.app / *.firebaseapp.com are affected,
+       so this stops applying by itself once the custom domain is attached. */
+    var h = location.hostname;
+    if (h.endsWith('.web.app') || h.endsWith('.firebaseapp.com')) {
+      var r = document.createElement('meta');
+      r.name = 'robots'; r.content = 'noindex, nofollow';
+      document.head.appendChild(r);
+    }</script>
     <title>Builders & Developers | Community Fiber</title>
     <meta name="description" content="Partner with Community Fiber to install utility-grade fiber infrastructure in your developments. Explore our builder partnership program.">
     <meta name="keywords" content="builders, developers, fiber infrastructure, partnership program, fiber installation">
     <meta property="og:title" content="Builders & Developers | Community Fiber">
     <meta property="og:description" content="Partner with Community Fiber to install utility-grade fiber infrastructure in your developments.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://communityfiber.net/builders.html">
+    <meta property="og:url" content="https://communityfiber.net/builders">
     <meta property="og:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Builders & Developers | Community Fiber">
     <meta name="twitter:description" content="Partner with Community Fiber for fiber infrastructure in your developments.">
     <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
-    <link rel="canonical" href="https://communityfiber.net/builders.html">
+    <link rel="canonical" href="https://communityfiber.net/builders">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://communityfiber.net/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Builders & Developers",
+          "item": "https://communityfiber.net/builders"
+        }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://communityfiber.net/builders#service",
+      "name": "Fiber Infrastructure for Builders and Developers",
+      "serviceType": "Fiber Infrastructure Installation",
+      "description": "Community Fiber partners with builders and developers to install utility-grade fiber-to-the-home infrastructure in new residential developments across northern Indiana.",
+      "url": "https://communityfiber.net/builders",
+      "provider": {
+        "@type": "InternetServiceProvider",
+        "@id": "https://communityfiber.net/#organization",
+        "name": "Community Fiber",
+        "url": "https://communityfiber.net/",
+        "telephone": "+1-574-831-2176"
+      },
+      "areaServed": [
+        {
+          "@type": "AdministrativeArea",
+          "name": "Elkhart County, Indiana"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Kosciusko County, Indiana"
+        }
+      ],
+      "audience": {
+        "@type": "Audience",
+        "name": "Builders and property developers"
+      }
+    }
+  ]
+}
+    </script>
+
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
 
     <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
                    script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src https://fonts.gstatic.com;
                    img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
+                   connect-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
@@ -65,35 +129,35 @@
                 <div class="logo-track">
                     <!-- Repeated set of 11-14 to create seamless loop -->
                     <!-- Set 1 -->
-                    <div class="logo-slide"><img src="assets/images/11.png" alt="Builder 11"></div>
-                    <div class="logo-slide"><img src="assets/images/12.png" alt="Builder 12"></div>
-                    <div class="logo-slide"><img src="assets/images/13.png" alt="Builder 13"></div>
-                    <div class="logo-slide"><img src="assets/images/14.png" alt="Builder 14"></div>
-                    <div class="logo-slide"><img src="assets/images/15.png" alt="Builder 15"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="329" height="153" src="assets/images/11.png" alt="Builder 11"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="500" height="500" src="assets/images/12.webp" alt="Builder 12"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="203" height="203" src="assets/images/13.webp" alt="Builder 13"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="721" height="352" src="assets/images/14.png" alt="Builder 14"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="487" height="166" src="assets/images/15.webp" alt="Builder 15"></div>
                     <!-- Set 2 -->
-                    <div class="logo-slide"><img src="assets/images/11.png" alt="Builder 11"></div>
-                    <div class="logo-slide"><img src="assets/images/12.png" alt="Builder 12"></div>
-                    <div class="logo-slide"><img src="assets/images/13.png" alt="Builder 13"></div>
-                    <div class="logo-slide"><img src="assets/images/14.png" alt="Builder 14"></div>
-                    <div class="logo-slide"><img src="assets/images/15.png" alt="Builder 15"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="329" height="153" src="assets/images/11.png" alt="Builder 11"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="500" height="500" src="assets/images/12.webp" alt="Builder 12"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="203" height="203" src="assets/images/13.webp" alt="Builder 13"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="721" height="352" src="assets/images/14.png" alt="Builder 14"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="487" height="166" src="assets/images/15.webp" alt="Builder 15"></div>
                     <!-- Set 3 -->
-                    <div class="logo-slide"><img src="assets/images/11.png" alt="Builder 11"></div>
-                    <div class="logo-slide"><img src="assets/images/12.png" alt="Builder 12"></div>
-                    <div class="logo-slide"><img src="assets/images/13.png" alt="Builder 13"></div>
-                    <div class="logo-slide"><img src="assets/images/14.png" alt="Builder 14"></div>
-                    <div class="logo-slide"><img src="assets/images/15.png" alt="Builder 15"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="329" height="153" src="assets/images/11.png" alt="Builder 11"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="500" height="500" src="assets/images/12.webp" alt="Builder 12"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="203" height="203" src="assets/images/13.webp" alt="Builder 13"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="721" height="352" src="assets/images/14.png" alt="Builder 14"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="487" height="166" src="assets/images/15.webp" alt="Builder 15"></div>
                     <!-- Set 4 -->
-                    <div class="logo-slide"><img src="assets/images/11.png" alt="Builder 11"></div>
-                    <div class="logo-slide"><img src="assets/images/12.png" alt="Builder 12"></div>
-                    <div class="logo-slide"><img src="assets/images/13.png" alt="Builder 13"></div>
-                    <div class="logo-slide"><img src="assets/images/14.png" alt="Builder 14"></div>
-                    <div class="logo-slide"><img src="assets/images/15.png" alt="Builder 15"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="329" height="153" src="assets/images/11.png" alt="Builder 11"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="500" height="500" src="assets/images/12.webp" alt="Builder 12"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="203" height="203" src="assets/images/13.webp" alt="Builder 13"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="721" height="352" src="assets/images/14.png" alt="Builder 14"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="487" height="166" src="assets/images/15.webp" alt="Builder 15"></div>
                     <!-- Set 5 -->
-                    <div class="logo-slide"><img src="assets/images/11.png" alt="Builder 11"></div>
-                    <div class="logo-slide"><img src="assets/images/12.png" alt="Builder 12"></div>
-                    <div class="logo-slide"><img src="assets/images/13.png" alt="Builder 13"></div>
-                    <div class="logo-slide"><img src="assets/images/14.png" alt="Builder 14"></div>
-                    <div class="logo-slide"><img src="assets/images/15.png" alt="Builder 15"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="329" height="153" src="assets/images/11.png" alt="Builder 11"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="500" height="500" src="assets/images/12.webp" alt="Builder 12"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="203" height="203" src="assets/images/13.webp" alt="Builder 13"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="721" height="352" src="assets/images/14.png" alt="Builder 14"></div>
+                    <div class="logo-slide"><img loading="lazy" decoding="async" width="487" height="166" src="assets/images/15.webp" alt="Builder 15"></div>
                 </div>
             </div>
         </section>
@@ -106,7 +170,7 @@
         <div class="benefit-card glass-card" data-step="01">
             <div class="card-content">
                 <div class="icon-box">
-                    <i class="fa-solid fa-hard-hat"></i>
+                    <svg class="cfn-icon" viewBox="0 0 576 512" fill="currentColor" aria-hidden="true"><path d="M256 32c-17.7 0-32 14.3-32 32v2.3 99.6c0 5.6-4.5 10.1-10.1 10.1c-3.6 0-7-1.9-8.8-5.1L157.1 87C83 123.5 32 199.8 32 288v64H544l0-66.4c-.9-87.2-51.7-162.4-125.1-198.6l-48 83.9c-1.8 3.2-5.2 5.1-8.8 5.1c-5.6 0-10.1-4.5-10.1-10.1V66.3 64c0-17.7-14.3-32-32-32H256zM16.6 384C7.4 384 0 391.4 0 400.6c0 4.7 2 9.2 5.8 11.9C27.5 428.4 111.8 480 288 480s260.5-51.6 282.2-67.5c3.8-2.8 5.8-7.2 5.8-11.9c0-9.2-7.4-16.6-16.6-16.6H16.6z"/></svg>
                 </div>
                 <h3>Build as Utility</h3>
                 <p>We treat fiber like power or water. We install conduit and infrastructure during the initial trenching phase, minimizing disruption.</p>
@@ -117,7 +181,7 @@
         <div class="benefit-card glass-card" data-step="02">
             <div class="card-content">
                 <div class="icon-box">
-                    <i class="fa-solid fa-file-contract"></i>
+                    <svg class="cfn-icon" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM80 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm54.2 253.8c-6.1 20.3-24.8 34.2-46 34.2H80c-8.8 0-16-7.2-16-16s7.2-16 16-16h8.2c7.1 0 13.3-4.6 15.3-11.4l14.9-49.5c3.4-11.3 13.8-19.1 25.6-19.1s22.2 7.7 25.6 19.1l11.6 38.6c7.4-6.2 16.8-9.7 26.8-9.7c15.9 0 30.4 9 37.5 23.2l4.4 8.8H304c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-6.1 0-11.6-3.4-14.3-8.8l-8.8-17.7c-1.7-3.4-5.1-5.5-8.8-5.5s-7.2 2.1-8.8 5.5l-8.8 17.7c-2.9 5.9-9.2 9.4-15.7 8.8s-12.1-5.1-13.9-11.3L144 349l-9.8 32.8z"/></svg>
                 </div>
                 <h3>Exclusivity & Revenue</h3>
                 <p>Gain competitive advantages with exclusive service agreements and attractive revenue sharing opportunities for qualifying sites.</p>
@@ -128,7 +192,7 @@
         <div class="benefit-card glass-card" data-step="03">
             <div class="card-content">
                 <div class="icon-box">
-                    <i class="fa-solid fa-house-signal"></i>
+                    <svg class="cfn-icon" viewBox="0 0 576 512" fill="currentColor" aria-hidden="true"><path d="M357.7 8.5c-12.3-11.3-31.2-11.3-43.4 0l-208 192c-9.4 8.6-12.7 22-8.5 34c87.1 25.3 155.6 94.2 180.3 181.6H464c26.5 0 48-21.5 48-48V256h32c13.2 0 25-8.1 29.8-20.3s1.6-26.2-8.1-35.2l-208-192zM288 208c0-8.8 7.2-16 16-16h64c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H304c-8.8 0-16-7.2-16-16V208zM24 256c-13.3 0-24 10.7-24 24s10.7 24 24 24c101.6 0 184 82.4 184 184c0 13.3 10.7 24 24 24s24-10.7 24-24c0-128.1-103.9-232-232-232zm8 256a32 32 0 1 0 0-64 32 32 0 1 0 0 64zM0 376c0 13.3 10.7 24 24 24c48.6 0 88 39.4 88 88c0 13.3 10.7 24 24 24s24-10.7 24-24c0-75.1-60.9-136-136-136c-13.3 0-24 10.7-24 24z"/></svg>
                 </div>
                 <h3>Day 1 Connectivity</h3>
                 <p>Don't make residents wait. Our pre-installed ONTs ensure homeowners have active, gigabit internet the moment they move in.</p>
@@ -155,7 +219,13 @@
                             <div class="visual-hidden">
                                 <label for="website-check">Website</label>
                                 <input type="text" id="website-check" name="website_check" tabindex="-1" autocomplete="off">
+                                <label for="company-url-check">Company URL</label>
+                                <input type="text" id="company-url-check" name="company_url" tabindex="-1" autocomplete="off">
+                                <label for="referral-source-check">Referral Source</label>
+                                <input type="text" id="referral-source-check" name="referral_source" tabindex="-1" autocomplete="off">
                             </div>
+                            <input type="hidden" name="form_started_at" value="">
+                            <input type="hidden" name="form_interaction_count" value="0">
 
                             <div class="form-group">
                                 <label for="company-name">Company / Developer Name</label>
@@ -200,7 +270,7 @@
 
                         <!-- Success Message -->
                         <div id="success-message" class="hidden success-box">
-                            <div class="icon-check"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="icon-check"><svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg></div>
                             <h3>Inquiry Received</h3>
                             <p>Our development team will review your project details and contact you within 2 business days.</p>
                         </div>
@@ -213,10 +283,10 @@
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-links">
-                <a href="footer/privacy-policy.html">Privacy Policy</a>
-                <a href="footer/terms-of-service.html">Terms of Service</a>
-                <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
-                <a href="footer/open-internet-policy.html">Open Internet Policy</a>
+                <a href="footer/privacy-policy">Privacy Policy</a>
+                <a href="footer/terms-of-service">Terms of Service</a>
+                <a href="footer/acceptable-user-policy">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy">Open Internet Policy</a>
             </div>
             <address class="footer-address">
                 <strong>NPTech</strong>

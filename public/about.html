@@ -3,40 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js');
+    /* Until communityfiber.net cuts over from WordPress to this build, the
+       Firebase preview hosts are live and indexable while their canonicals
+       point at URLs that still 404. Keep the preview hosts out of the index.
+       Strictly allowlisted: only *.web.app / *.firebaseapp.com are affected,
+       so this stops applying by itself once the custom domain is attached. */
+    var h = location.hostname;
+    if (h.endsWith('.web.app') || h.endsWith('.firebaseapp.com')) {
+      var r = document.createElement('meta');
+      r.name = 'robots'; r.content = 'noindex, nofollow';
+      document.head.appendChild(r);
+    }</script>
     <title>About Us | Community Fiber</title>
     <meta name="description" content="Learn about Community Fiber, a locally-owned fiber internet provider with over 125 years of service history. Meet our team and discover our mission.">
     <meta name="keywords" content="about community fiber, local internet provider, fiber company history, team">
     <meta property="og:title" content="About Us | Community Fiber">
     <meta property="og:description" content="Locally-owned fiber internet provider with over 125 years of service history.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://communityfiber.net/about.html">
+    <meta property="og:url" content="https://communityfiber.net/about">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="About Us | Community Fiber">
     <meta name="twitter:description" content="Learn about Community Fiber's history, mission, and team.">
-    <link rel="canonical" href="https://communityfiber.net/about.html">
+    <link rel="canonical" href="https://communityfiber.net/about">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://communityfiber.net/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About Us",
+          "item": "https://communityfiber.net/about"
+        }
+      ]
+    },
+    {
+      "@type": "AboutPage",
+      "@id": "https://communityfiber.net/about#about",
+      "name": "About Community Fiber",
+      "url": "https://communityfiber.net/about",
+      "description": "Community Fiber is a locally owned fiber internet provider serving Elkhart and Kosciusko counties, Indiana, operated by New Paris Telephone since 1901.",
+      "mainEntity": {
+        "@type": "InternetServiceProvider",
+        "@id": "https://communityfiber.net/#organization",
+        "name": "Community Fiber",
+        "alternateName": "Community Fiber Network",
+        "url": "https://communityfiber.net/",
+        "logo": "https://communityfiber.net/assets/images/community-fiber-logo.png",
+        "telephone": "+1-574-831-2176",
+        "email": "info@communityfiber.net",
+        "foundingDate": "1901",
+        "parentOrganization": {
+          "@type": "Organization",
+          "name": "New Paris Telephone (NPTech)"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "19066 Market Street",
+          "addressLocality": "New Paris",
+          "addressRegion": "IN",
+          "postalCode": "46553",
+          "addressCountry": "US"
+        },
+        "areaServed": [
+          "Elkhart County, Indiana",
+          "Kosciusko County, Indiana",
+          "Goshen, Indiana",
+          "Bristol, Indiana",
+          "Middlebury, Indiana",
+          "New Paris, Indiana",
+          "Syracuse, Indiana",
+          "Nappanee, Indiana",
+          "Wakarusa, Indiana",
+          "Milford, Indiana"
+        ],
+        "sameAs": [
+          "https://www.facebook.com/profile.php?id=100070795525884"
+        ]
+      }
+    }
+  ]
+}
+    </script>
+
     <link rel="icon" type="image/png" href="assets/images/favicon.png">
 
     <!-- UPDATED CSP -->
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
-                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
-                   font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com;
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.clarity.ms https://c.bing.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src https://fonts.gstatic.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com https://*.clarity.ms https://c.bing.com;
                    frame-src https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
-                   connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com;">
+                   connect-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com https://*.clarity.ms https://c.bing.com;">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preload" as="image" href="assets/images/employees.webp" type="image/webp" fetchpriority="high">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/about.css">
+    <!-- Microsoft Clarity: heatmaps + session replay. Async, does not block render. -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "xync1c67sj");
+    </script>
 </head>
 <body>
 
@@ -81,7 +171,7 @@
                     </div>
                     </div>
                     <div class="mission-photo-wrap">
-                        <img src="assets/images/employees.png" alt="Community Fiber and NPTech team members" class="mission-photo">
+                        <img fetchpriority="high" decoding="async" width="1200" height="900" src="assets/images/employees.webp" alt="Community Fiber and NPTech team members" class="mission-photo">
                     </div>
                 </div>
             </section>
@@ -100,7 +190,7 @@
                         <div class="history-col-top">
                             <div class="col-logo">
                                 <a href="https://www.np-tech.com" target="_blank" title="Visit NPTech Website">
-                                    <img src="assets/images/NPtech_logo.png" alt="NPTech Logo">
+                                    <img loading="lazy" decoding="async" width="2033" height="422" src="assets/images/NPtech_logo.png" alt="NPTech Logo">
                                 </a>
                             </div>
                             <span class="era-badge">Since 1901</span>
@@ -110,22 +200,22 @@
                             <p><strong>New Paris Telephone</strong> was formed in 1901 with a simple mission: to bring telephone service to our rural community. For over a century, we have adapted to the ever-changing landscape of technology.</p>
                             <p>In 2022, we rebranded as <strong>NPTech</strong> to better reflect our evolution. While we honor our roots in traditional telephony, we are now a full-service technology provider offering:</p>
                             <ul class="feature-list">
-                                <li><i class="fa-solid fa-check"></i> Computer Repair & IT Support</li>
-                                <li><i class="fa-solid fa-check"></i> IP Telephone Systems</li>
-                                <li><i class="fa-solid fa-check"></i> Enterprise Cabling (Cat6)</li>
-                                <li><i class="fa-solid fa-check"></i> Cable TV Services</li>
+                                <li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg> Computer Repair & IT Support</li>
+                                <li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg> IP Telephone Systems</li>
+                                <li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg> Enterprise Cabling (Cat6)</li>
+                                <li><svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg> Cable TV Services</li>
                             </ul>
                         </div>
                     </div>
 
                     <!-- Connector: past -> future -->
-                    <div class="history-connector" aria-hidden="true"><i class="fa-solid fa-arrow-right-long"></i></div>
+                    <div class="history-connector" aria-hidden="true"><svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></div>
 
                     <!-- Right: Community Fiber Future -->
                     <div class="history-col is-future" data-animate="fade-left">
                         <div class="history-col-top">
                             <div class="col-logo">
-                                <img src="assets/images/community-fiber-logo.svg" alt="Community Fiber Logo">
+                                <img loading="lazy" decoding="async" width="1080" height="204" src="assets/images/community-fiber-logo.svg" alt="Community Fiber Logo">
                             </div>
                             <span class="era-badge era-badge-green">Today &amp; Beyond</span>
                         </div>
@@ -161,49 +251,49 @@
                     <!-- Slide 1 -->
                     <div class="mySlides fade">
                         <div class="numbertext">1 / 7</div>
-                        <img src="assets/images/NPTWW1.JPG" alt="New Paris Telephone WWI Era">
+                        <img loading="lazy" decoding="async" width="1200" height="747" src="assets/images/NPTWW1.webp" alt="New Paris Telephone WWI Era">
                         <div class="caption-text">New Paris WWI Deployment</div>
                     </div>
 
                     <!-- Slide 2 -->
                     <div class="mySlides fade">
                         <div class="numbertext">2 / 7</div>
-                        <img src="assets/images/NP2.JPG" alt="Downtown New Paris Historical View">
+                        <img loading="lazy" decoding="async" width="1200" height="832" src="assets/images/NP2.webp" alt="Downtown New Paris Historical View">
                         <div class="caption-text">W. Market St.</div>
                     </div>
 
                     <!-- Slide 3 -->
                     <div class="mySlides fade">
                         <div class="numbertext">3 / 7</div>
-                        <img src="assets/images/NP3.JPG" alt="New Paris Street View 1900s">
+                        <img loading="lazy" decoding="async" width="1200" height="926" src="assets/images/NP3.webp" alt="New Paris Street View 1900s">
                         <div class="caption-text">US Mail Carrier Preparing His Route</div>
                     </div>
 
                     <!-- Slide 4 -->
                     <div class="mySlides fade">
                         <div class="numbertext">4 / 7</div>
-                        <img src="assets/images/NP4.JPG" alt="Historical Town Center">
+                        <img loading="lazy" decoding="async" width="1200" height="762" src="assets/images/NP4.webp" alt="Historical Town Center">
                         <div class="caption-text">New Paris' 4 way stop</div>
                     </div>
 
                     <!-- Slide 5 -->
                     <div class="mySlides fade">
                         <div class="numbertext">5 / 7</div>
-                        <img src="assets/images/NP5.JPG" alt="New Paris Main Street">
+                        <img loading="lazy" decoding="async" width="1200" height="727" src="assets/images/NP5.webp" alt="New Paris Main Street">
                         <div class="caption-text">Downtown New Paris</div>
                     </div>
 
                     <!-- Slide 6 -->
                     <div class="mySlides fade">
                         <div class="numbertext">6 / 7</div>
-                        <img src="assets/images/NP6.JPG" alt="Early 20th Century Infrastructure">
+                        <img loading="lazy" decoding="async" width="1200" height="794" src="assets/images/NP6.webp" alt="Early 20th Century Infrastructure">
                         <div class="caption-text">Wabash Train Depot</div>
                     </div>
 
                     <!-- Slide 7 -->
                     <div class="mySlides fade">
                         <div class="numbertext">7 / 7</div>
-                        <img src="assets/images/NPCream.JPG" alt="New Paris Creamery & Telephone Lines">
+                        <img loading="lazy" decoding="async" width="1200" height="802" src="assets/images/NPCream.webp" alt="New Paris Creamery & Telephone Lines">
                         <div class="caption-text">New Paris Creamery</div>
                     </div>
 
@@ -255,8 +345,8 @@
                 <h2>Join Our Network</h2>
                 <p>Experience the difference of a locally owned, century-old provider.</p>
                 <div class="cta-buttons">
-                    <a href="residential.html" class="btn btn-primary">View Plans</a>
-                    <a href="business.html" class="btn btn-outline">Business Solutions</a>
+                    <a href="residential" class="btn btn-primary">View Plans</a>
+                    <a href="business" class="btn btn-outline">Business Solutions</a>
                 </div>
             </section>
 
@@ -266,10 +356,10 @@
     <footer>
         <div class="footer-content">
             <div class="footer-links">
-                <a href="footer/privacy-policy.html">Privacy Policy</a>
-                <a href="footer/terms-of-service.html">Terms of Service</a>
-                <a href="footer/acceptable-user-policy.html">Acceptable Use Policy</a>
-                <a href="footer/open-internet-policy.html">Open Internet Policy</a>
+                <a href="footer/privacy-policy">Privacy Policy</a>
+                <a href="footer/terms-of-service">Terms of Service</a>
+                <a href="footer/acceptable-user-policy">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy">Open Internet Policy</a>
             </div>
             <address class="footer-address">
                 <strong>NPTech</strong>

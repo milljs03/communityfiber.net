@@ -236,7 +236,7 @@
 
 .era-badge {
     flex-shrink: 0;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -298,7 +298,7 @@
     font-weight: 600;
 }
 
-.feature-list li i {
+.feature-list li .cfn-icon {
     color: var(--cfn-green);
 }
 
@@ -349,7 +349,7 @@
 
 .team-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
     gap: 30px;
     /* Hidden by default via JS, but good to have a transition state */
     transition: opacity 0.3s ease;
@@ -502,11 +502,11 @@
     box-shadow: 0 10px 15px rgba(0,0,0,0.1);
 }
 
-.team-toggle-btn i {
+.team-toggle-btn .cfn-icon {
     transition: transform 0.3s ease;
 }
 
-.team-toggle-btn:hover i {
+.team-toggle-btn:hover .cfn-icon {
     transform: translateY(2px);
 }
 
@@ -703,10 +703,99 @@
 /* Slideshow Responsive */
 @media (max-width: 768px) {
     .mySlides {
-        height: 350px;
+        height: 320px;
     }
     .prev, .next {
         padding: 12px;
         font-size: 16px;
+    }
+}
+
+@media (max-width: 700px) {
+    .about-hero {
+        clip-path: none;
+        padding: 56px 16px 48px;
+    }
+
+    .about-hero h1 {
+        font-size: clamp(2rem, 10vw, 2.65rem);
+    }
+
+    .mission-section,
+    .history-section,
+    .heritage-gallery-section,
+    .team-section,
+    .cta-section {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .mission-section {
+        margin-top: 38px;
+        margin-bottom: 46px;
+    }
+
+    .mission-layout,
+    .history-grid {
+        gap: 24px;
+    }
+
+    .mission-photo-wrap {
+        order: -1;
+    }
+
+    .mission-copy h2,
+    .history-header h2,
+    .gallery-intro h2 {
+        font-size: clamp(1.65rem, 8vw, 2.15rem);
+    }
+
+    .mission-stats {
+        gap: 14px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .mission-stat {
+        padding: 16px 10px;
+    }
+
+    .history-col,
+    .employee-card,
+    .mirror-card {
+        border-radius: 12px;
+        padding: 22px;
+    }
+
+    .heritage-gallery-section {
+        border-radius: 12px;
+        margin-top: 38px !important;
+        margin-bottom: 42px !important;
+        padding-top: 38px;
+        padding-bottom: 38px;
+    }
+
+    .mySlides {
+        height: 260px;
+    }
+
+    .caption-text {
+        font-size: 0.85rem;
+        padding: 10px;
+    }
+
+    .team-grid {
+        gap: 18px;
+    }
+}
+
+@media (max-width: 420px) {
+    .mission-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .mySlides {
+        height: 220px;
     }
 }

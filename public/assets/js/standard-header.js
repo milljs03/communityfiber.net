@@ -27,7 +27,9 @@ function ensureAnnouncementModule() {
 const headerStyles = `
 <style>
     /* --- Standard Header CSS Override based on CFN Brand Guide --- */
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600&display=swap');
+    /* Fonts are loaded via <link rel="stylesheet"> in each page's <head>.
+       An @import here would re-request them from inside an injected style
+       block, serialising a second round trip after the header renders. */
 
     :root {
         --cfn-green: #03A63C;
@@ -233,12 +235,22 @@ const headerStyles = `
         border: none;
         color: var(--npt-black);
         z-index: 10002; /* Ensure button is above everything */
+        /* The glyph alone measured 26x38, well under the 44px touch minimum,
+           on the one control every mobile visitor has to hit. Shown as
+           inline-flex in the media query below so the icon stays centred. */
+        min-width: 44px;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        line-height: 1;
+        -webkit-tap-highlight-color: transparent;
     }
 
     /* --- Cookie Consent Styles --- */
     .cookie-consent-banner {
         position: fixed;
-        bottom: -100px; /* Start hidden below screen */
+        bottom: 20px;
         left: 20px;
         right: 20px;
         max-width: 500px;
@@ -251,11 +263,15 @@ const headerStyles = `
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        transition: bottom 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        /* Slide in with a composited transform. Animating the bottom offset
+           relayouts the page each frame and is scored as layout shift. */
+        transform: translateY(calc(100% + 40px));
+        transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        will-change: transform;
         border-left: 5px solid var(--cfn-green);
     }
     .cookie-consent-banner.show {
-        bottom: 20px;
+        transform: translateY(0);
     }
     .cookie-content p {
         margin: 0;
@@ -272,7 +288,9 @@ const headerStyles = `
         justify-content: flex-end;
     }
     .cookie-btn-accept {
-        background-color: var(--cfn-green);
+        /* White on --cfn-green is only 3.2:1. This darker shade of the same
+           hue reaches 5.5:1, clearing the 4.5:1 AA minimum for body text. */
+        background-color: #0A7A31;
         color: white;
         border: none;
         padding: 0.6rem 1.5rem;
@@ -287,18 +305,31 @@ const headerStyles = `
     }
 
     @media (max-width: 1150px) {
-        .mobile-toggle { display: block; }
+        .main-header {
+            height: 76px;
+        }
+
+        .nav-container {
+            padding: 0 1rem;
+        }
+
+        .nav-logo img {
+            height: 44px;
+            max-width: min(220px, 62vw);
+        }
+
+        .mobile-toggle { display: inline-flex; }
         .nav-menu {
             position: fixed;
             top: 0;
             left: -100%; /* Hidden off-screen left */
-            width: 80%; /* Takes up most of screen */
+            width: min(86vw, 360px); /* Takes up most of screen */
             height: 100vh;
             background-color: var(--npt-white);
             flex-direction: column;
             align-items: flex-start;
-            padding: 100px 2rem 2rem; /* Top padding for header height */
-            gap: 1.5rem;
+            padding: 92px 1.25rem 2rem; /* Top padding for header height */
+            gap: 1rem;
             box-shadow: 5px 0 15px rgba(0,0,0,0.1);
             transition: left 0.3s ease-in-out;
             z-index: 10000;
@@ -318,6 +349,7 @@ const headerStyles = `
 
         .nav-link {
             width: 100%;
+            min-height: 44px;
             padding: 0;
             font-size: 1.1rem;
             justify-content: flex-start;
@@ -361,18 +393,19 @@ ${headerStyles}
 <header class="main-header">
     <div class="nav-container">
         <!-- Logo -->
-        <a href="/index.html" class="nav-logo">
+        <a href="/" class="nav-logo">
             <img src="/assets/images/CFN_Stripped_Logo.svg" alt="Community Fiber">
         </a>
 
         <!-- Top Level Nav -->
         <ul class="nav-menu">
-            <li class="nav-item"><a href="/index.html" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="/residential.html" class="nav-link">Residential</a></li>
-            <li class="nav-item"><a href="/business.html" class="nav-link">Business</a></li>
-            <li class="nav-item"><a href="/builders.html" class="nav-link">Builders</a></li>
-            <li class="nav-item"><a href="/support.html" class="nav-link">Support</a></li>
-            <li class="nav-item"><a href="/about.html" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="/residential" class="nav-link">Residential</a></li>
+            <li class="nav-item"><a href="/business" class="nav-link">Business</a></li>
+                <li class="nav-item"><a href="/mobile" class="nav-link">Mobile</a></li>
+            <li class="nav-item"><a href="/builders" class="nav-link">Builders</a></li>
+            <li class="nav-item"><a href="/support" class="nav-link">Support</a></li>
+            <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
             <li class="nav-item"><a href="https://nptel.smarthub.coop/Login.html" target="_blank" class="nav-link bill-pay-btn">Bill Pay</a></li>
         </ul>
 
@@ -385,71 +418,74 @@ ${headerStyles}
 
                 <!-- Residential Column -->
                 <div class="nav-column">
-                    <h3><a href="/residential.html">Residential</a></h3>
+                    <h3><a href="/residential">Residential</a></h3>
                     <ul>
-                        <li><a href="/residential.html#plans-pricing" class="section-link">Plans & Pricing</a></li>
-                        <li><a href="/residential.html#installation-process" class="section-link">The Installation Process</a></li>
-                        <li><a href="/residential.html#customer-reviews" class="section-link">Customer Reviews</a></li>
-                        <li><a href="/residential.html#availability-check" class="section-link">Check Availability</a></li>
+                        <li><a href="/residential#plans-pricing" class="section-link">Plans & Pricing</a></li>
+                        <li><a href="/residential#installation-process" class="section-link">The Installation Process</a></li>
+                        <li><a href="/residential#customer-reviews" class="section-link">Customer Reviews</a></li>
+                        <li><a href="/residential#availability-check" class="section-link">Check Availability</a></li>
                     </ul>
                 </div>
 
                 <!-- Business Column -->
                 <div class="nav-column">
-                    <h3><a href="/business.html">Business</a></h3>
+                    <h3><a href="/business">Business</a></h3>
                     <ul>
-                        <li><a href="/business.html#enterprise-fiber" class="section-link">Enterprise Fiber</a></li>
-                        <li><a href="/business.html#trusted-partners" class="section-link">Trusted Partners</a></li>
-                        <li><a href="/business.html#service-territory" class="section-link">Service Territory Map</a></li>
-                        <li><a href="/business.html#business-quote" class="section-link">Request a Quote</a></li>
+                        <li><a href="/business#enterprise-fiber" class="section-link">Enterprise Fiber</a></li>
+                        <li><a href="/business#trusted-partners" class="section-link">Trusted Partners</a></li>
+                        <li><a href="/business#service-territory" class="section-link">Service Territory Map</a></li>
+                        <li><a href="/business#business-quote" class="section-link">Request a Quote</a></li>
                     </ul>
                 </div>
 
                 <!-- Builders Column -->
                 <div class="nav-column">
-                    <h3><a href="/builders.html">Builders</a></h3>
+                    <h3><a href="/builders">Builders</a></h3>
                     <ul>
-                        <li><a href="/builders.html#development-benefits" class="section-link">Development Benefits</a></li>
-                        <li><a href="/builders.html#builder-partners" class="section-link">Our Partners</a></li>
-                        <li><a href="/builders.html#builder-inquiry" class="section-link">Submit Inquiry</a></li>
+                        <li><a href="/builders#development-benefits" class="section-link">Development Benefits</a></li>
+                        <li><a href="/builders#builder-partners" class="section-link">Our Partners</a></li>
+                        <li><a href="/builders#builder-inquiry" class="section-link">Submit Inquiry</a></li>
                     </ul>
                 </div>
 
                 <!-- Support Column -->
                 <div class="nav-column">
-                    <h3><a href="/support.html">Support</a></h3>
+                    <h3><a href="/support">Support</a></h3>
                     <ul>
-                        <li><a href="/support.html#support-contact" class="section-link">Contact Us</a></li>
-                        <li><a href="/support.html#fiber-comparison" class="section-link">Why Move to Fiber?</a></li>
-                        <li><a href="/support.html#support-faq" class="section-link">FAQ</a></li>
+                        <li><a href="/support#support-contact" class="section-link">Contact Us</a></li>
+                        <li><a href="/support#fiber-comparison" class="section-link">Why Move to Fiber?</a></li>
+                        <li><a href="/support#support-faq" class="section-link">FAQ</a></li>
                         <li><a href="https://nptel.smarthub.coop/Login.html" target="_blank" class="section-link">SmartHub Login</a></li>
                     </ul>
                 </div>
 
                 <!-- About Column -->
                 <div class="nav-column">
-                    <h3><a href="/about.html">About Us</a></h3>
+                    <h3><a href="/about">About Us</a></h3>
                     <ul>
-                        <li><a href="/about.html#our-mission" class="section-link">Our Mission</a></li>
-                        <li><a href="/about.html#heritage-future" class="section-link">Heritage & Future</a></li>
-                        <li><a href="/about.html#heritage-gallery" class="section-link">Heritage Gallery</a></li>
-                        <li><a href="/about.html#team-section" class="section-link">Meet the Team</a></li>
-                        <li><a href="/blog.html" class="section-link">Latest News</a></li>
+                        <li><a href="/about#our-mission" class="section-link">Our Mission</a></li>
+                        <li><a href="/about#heritage-future" class="section-link">Heritage & Future</a></li>
+                        <li><a href="/about#heritage-gallery" class="section-link">Heritage Gallery</a></li>
+                        <!-- TEMPORARY: hidden until the team photos are uploaded.
+                             Restore alongside SHOW_TEAM_SECTION in assets/js/about.js.
+                        <li><a href="/about#team-section" class="section-link">Meet the Team</a></li>
+                        -->
+                        <li><a href="/blog" class="section-link">Latest News</a></li>
                     </ul>
                 </div>
 
                 <!-- Service Areas Column -->
                 <div class="nav-column">
-                    <h3><a href="/index.html#service-areas">Service Areas</a></h3>
+                    <h3><a href="/#service-areas">Service Areas</a></h3>
                     <ul>
-                        <li><a href="/goshen.html" class="section-link">Goshen</a></li>
-                        <li><a href="/bristol.html" class="section-link">Bristol</a></li>
-                        <li><a href="/middlebury.html" class="section-link">Middlebury</a></li>
-                        <li><a href="/new-paris.html" class="section-link">New Paris</a></li>
-                        <li><a href="/syracuse.html" class="section-link">Syracuse</a></li>
-                        <li><a href="/nappanee.html" class="section-link">Nappanee</a></li>
-                        <li><a href="/wakarusa.html" class="section-link">Wakarusa</a></li>
-                        <li><a href="/milford.html" class="section-link">Milford</a></li>
+                        <li><a href="/goshen" class="section-link">Goshen</a></li>
+                        <li><a href="/bristol" class="section-link">Bristol</a></li>
+                        <li><a href="/middlebury" class="section-link">Middlebury</a></li>
+                        <li><a href="/new-paris" class="section-link">New Paris</a></li>
+                        <li><a href="/syracuse" class="section-link">Syracuse</a></li>
+                        <li><a href="/nappanee" class="section-link">Nappanee</a></li>
+                        <li><a href="/wakarusa" class="section-link">Wakarusa</a></li>
+                        <li><a href="/milford" class="section-link">Milford</a></li>
                     </ul>
                 </div>
 
@@ -528,7 +564,7 @@ function initializeStandardHeader() {
         banner.className = 'cookie-consent-banner';
         banner.innerHTML = `
             <div class="cookie-content">
-                <p>We use cookies to ensure you get the best experience on our website. By continuing to use this site, you agree to our <a href="/footer/privacy-policy.html">Privacy Policy</a>.</p>
+                <p>We use cookies to ensure you get the best experience on our website. By continuing to use this site, you agree to our <a href="/footer/privacy-policy">Privacy Policy</a>.</p>
             </div>
             <div class="cookie-actions">
                 <button class="cookie-btn-accept">Got it</button>

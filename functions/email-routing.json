@@ -1,6 +1,14 @@
 {
-  "from": "Community Fiber Forms <forms@communityfiber.net>",
+  "_comment": "This address must live on a domain VERIFIED IN RESEND. Verify communityfiber.net — it is the canonical brand domain (communityfiber.com only 301-redirects to it), so receipts match the site people submitted the form on. Resend places its SPF record on the send. subdomain, so the apex SPF stays free for Google Workspace.",
+  "from": "Community Fiber <forms@communityfiber.net>",
   "defaultReplyTo": "jmiller@nptel.com",
+  "confirmation": {
+    "_comment": "Acknowledgement sent to whoever submitted the form. Reply-to is set automatically to the workgroup that owns the topic. Set enabled=false to turn receipts off.",
+    "enabled": true,
+    "subjectPrefix": "We received your request",
+    "nextSteps": "A member of our team will review it and get back to you shortly during business hours.",
+    "phone": "(574) 831-2176"
+  },
   "routes": {
     "support_ticket": {
       "label": "Support Request",
@@ -22,6 +30,13 @@
             "jmiller@nptel.com"
           ],
           "subjectPrefix": "New Technical Support Request"
+        },
+        "mobile": {
+          "label": "Mobile Service Request",
+          "to": [
+            "jmiller@nptel.com"
+          ],
+          "subjectPrefix": "New Mobile Service Request"
         },
         "outage": {
           "label": "Service Outage Report",

@@ -1,4 +1,4 @@
-import { postJson } from './security.js';
+import { bindFormSpamSignals, normalizeEmailInput, normalizePhoneInput, postJson } from './security.js';
 
 const pageLoadTime = Date.now(); // Track when the page loaded
 
@@ -26,6 +26,8 @@ const submitBtn = document.getElementById('submit-btn');
 const successMsg = document.getElementById('success-message');
 
 if(form) {
+    const spamSignals = bindFormSpamSignals(form);
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -53,11 +55,12 @@ if(form) {
             type: 'builder_inquiry',
             company: normalize(document.getElementById('company-name').value),
             contactName: normalize(document.getElementById('contact-name').value),
-            phone: normalize(document.getElementById('contact-phone').value),
-            email: normalize(document.getElementById('contact-email').value),
+            phone: normalizePhoneInput(document.getElementById('contact-phone').value),
+            email: normalizeEmailInput(document.getElementById('contact-email').value),
             projectType: normalize(document.getElementById('project-type').value),
             details: normalize(document.getElementById('project-details').value),
-            website_check: honeypot ? honeypot.value : ''
+            website_check: honeypot ? honeypot.value : '',
+            ...spamSignals.getPayloadFields()
         };
 
         try {
@@ -76,3 +79,4 @@ if(form) {
         }
     });
 }
+

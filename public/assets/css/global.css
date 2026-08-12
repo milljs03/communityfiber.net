@@ -161,10 +161,13 @@ h1, h2, h3, h4 {
 
 /* Arrow indicator for dropdown parent */
 .dropdown-toggle::after {
-    content: '\f078'; /* FontAwesome chevron-down */
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
-    font-size: 0.7em;
+    content: '';
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3E") center / contain no-repeat;
     margin-left: 6px;
     vertical-align: middle;
     transition: transform 0.2s;
@@ -209,14 +212,14 @@ h1, h2, h3, h4 {
     padding-left: 25px; /* Slight slide effect */
 }
 
-.dropdown-menu i {
+.dropdown-menu .cfn-icon {
     width: 20px;
     text-align: center;
     color: #94a3b8;
     transition: color 0.2s;
 }
 
-.dropdown-menu a:hover i {
+.dropdown-menu a:hover .cfn-icon {
     color: var(--cfn-green);
 }
 
@@ -285,7 +288,8 @@ footer {
 }
 
 /* --- Animations --- */
-.fade-in-section, .fade-in {
+html.animations-ready .fade-in-section,
+html.animations-ready .fade-in {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -378,6 +382,10 @@ footer {
 }
 
 @media (max-width: 600px) {
+    body {
+        line-height: 1.6;
+    }
+
     .container {
         padding-left: 1rem;
         padding-right: 1rem;
@@ -390,9 +398,367 @@ footer {
     h2 {
         font-size: clamp(1.55rem, 8vw, 2.2rem);
     }
+
+    p,
+    li {
+        overflow-wrap: anywhere;
+    }
+
+    .btn,
+    button,
+    input,
+    select,
+    textarea {
+        max-width: 100%;
+    }
 }
 
 @keyframes slideDown {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Layout stability -------------------------------------------------- */
+/* The navigation is injected by assets/js/standard-header.js after the HTML
+   has parsed. Without a reserved box the whole page jumps down by the header
+   height the moment it lands, which is the single largest source of CLS on
+   the site. Keep this in sync with .main-header's height in that file. */
+#master-header {
+    min-height: 90px;
+}
+
+/* Images declare intrinsic dimensions where possible; this stops any that
+   slip through from collapsing to zero height and reflowing on load. */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* --- Site footer ------------------------------------------------------- */
+/* Previously unstyled, so the links fell back to the UA default blue on the
+   off-white body: below the 4.5:1 contrast minimum, and the links sat too
+   close together to meet the 24px touch-target minimum. */
+.site-footer {
+    background-color: #0F1720;
+    color: #E2E8F0;
+    padding: 3rem 1.5rem 2rem;
+    margin-top: 4rem;
+}
+
+.site-footer .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+footer .footer-links,
+.site-footer .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+footer .footer-links a,
+.site-footer .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.25rem 0.5rem;
+    color: #E2E8F0;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.site-footer .footer-links a:hover,
+.site-footer .footer-links a:focus-visible {
+    color: var(--cfn-light-green);
+    text-decoration: underline;
+}
+
+.site-footer .footer-address {
+    font-style: normal;
+    color: #CBD5E1;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.site-footer .footer-address strong {
+    display: block;
+    color: #FFFFFF;
+    font-family: var(--font-heading);
+    margin-bottom: 0.25rem;
+}
+
+.site-footer p {
+    color: #CBD5E1;
+    font-size: 0.9rem;
+}
+
+/* --- Inline icons ------------------------------------------------------ */
+/* Replaces Font Awesome's webfont (147KB woff2 + 18KB CSS from a third-party
+   CDN) with inline SVG. Sized in em so icons track the surrounding text, and
+   filled with currentColor so they inherit link/button colours exactly as the
+   font-based icons did.
+   Icons: Font Awesome Free 6.4.0, CC BY 4.0 — https://fontawesome.com/license/free */
+.cfn-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+    #master-header {
+        min-height: 76px;
+    }
+
+    .site-footer,
+    footer {
+        padding: 2.25rem 1rem 1.75rem;
+        margin-top: 2.5rem;
+    }
+
+    footer .footer-links,
+    .site-footer .footer-links {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    footer .footer-links a,
+    .site-footer .footer-links a {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+/* --- Edge motifs -------------------------------------------------------- */
+/* Decorative fiber-bend graphics that bleed off the left/right margins of a
+   section, using the brand's corner artwork. Purely atmospheric: drawn as
+   pseudo-elements so assistive tech ignores them entirely, and never placed
+   where they can collide with the reading column.
+   Usage:  <section class="edge-motif edge-motif--left"> … </section>
+   Combine --left and --right for both sides.
+
+   Three rules keep this safe:
+     - overflow:hidden on the host, so a bleeding graphic can never create a
+       horizontal scrollbar;
+     - content is lifted to z-index 1, so the motif always sits behind text;
+     - the whole thing is switched off below 1100px, where the side margins
+       don't exist and the artwork would crowd the content. */
+.edge-motif {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Anything the author put inside stays above the artwork. */
+.edge-motif > * {
+    position: relative;
+    z-index: 1;
+}
+
+.edge-motif::before,
+.edge-motif::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 520px;
+    height: 520px;
+    opacity: 0.28;
+}
+
+/* The artwork sits centred inside a square canvas with wide padding, so the
+   bend is only about the middle third of the file. Bleed it off the top rather
+   than hard off the side — pushing it far enough left to clip the canvas also
+   clips the curve, leaving just the straight tails showing as loose stripes. */
+.edge-motif--left::before {
+    background-image: url('../images/corners.svg');
+    left: -170px;
+    top: -180px;
+    transform: scaleY(-1);
+}
+
+.edge-motif--right::after {
+    background-image: url('../images/corners3.svg');
+    right: -250px;
+    bottom: -90px;
+    transform: scaleX(-1);
+}
+
+/* Horizontal variant, for bands that want the run-in along the top edge. */
+.edge-motif--top-left::before {
+    background-image: url('../images/corners2.svg');
+    left: -230px;
+    top: -180px;
+}
+
+@media (max-width: 1100px) {
+    .edge-motif::before,
+    .edge-motif::after {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    /* Nothing animates here — declared so the intent is explicit if motion is
+       ever added to these graphics later. */
+}
+
+/* --- Brand accent system ------------------------------------------------ */
+/* The "since 1901" gradient, promoted from a one-off on the home page hero to
+   a token used across the site. Everything decorative pulls from this, so the
+   pages share a visual signature without depending on fixed-size artwork.
+   Learned from the print corner motifs: web decoration wants to be large and
+   soft, or thin and structural — never small and fussy. */
+:root {
+    --cfn-gradient: linear-gradient(45deg, var(--cfn-green), #73bf4b, #bdd63a);
+    --cfn-gradient-flat: linear-gradient(90deg, var(--cfn-green), #bdd63a);
+}
+
+/* 1. Accent rule under every section title.
+   The single highest-leverage cohesion move: every section on every page picks
+   up the same brand mark, at any width, with no asset to maintain. */
+.section-title {
+    position: relative;
+    padding-bottom: 22px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 68px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--cfn-gradient-flat);
+}
+
+/* Left-aligned headings keep the accent tucked under their first character. */
+.section-title.is-left::after {
+    left: 0;
+    transform: none;
+}
+
+/* 2. Hairline divider — a thread of fiber running between sections. Fades out
+   at both ends so it never terminates abruptly the way the print tails did. */
+.brand-rule {
+    border: 0;
+    height: 2px;
+    margin: 0;
+    background: var(--cfn-gradient-flat);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+
+/* 3. Ambient glow — the replacement for the corner motifs. Scales with the
+   viewport instead of being a fixed canvas, so it can never clip awkwardly,
+   and it sits far enough back to read as atmosphere rather than as a graphic
+   someone placed. */
+.brand-glow {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.brand-glow > * {
+    position: relative;
+    z-index: 1;
+}
+
+.brand-glow::before {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    width: min(52vw, 720px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(3, 166, 60, 0.13), rgba(189, 214, 58, 0.07) 45%, transparent 70%);
+    top: -28%;
+    right: -14%;
+}
+
+.brand-glow--left::before {
+    right: auto;
+    left: -14%;
+}
+
+/* 4. Gradient text, available anywhere rather than only in the home hero.
+   The original declared only the -webkit- prefixed function, which is
+   non-standard; the unprefixed value is listed second so it wins where
+   supported. */
+.highlight-text,
+.text-gradient {
+    background: -webkit-linear-gradient(45deg, var(--cfn-green), #73bf4b, #bdd63a);
+    background: var(--cfn-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--cfn-green);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .brand-glow::before { transition: none; }
+}
+
+/* --- Chevron affordance -------------------------------------------------- */
+/* Replaces the long-stem arrows that followed button and link labels. A
+   chevron reads as a quieter "continue" cue; the stemmed arrow competed with
+   the label for weight.
+   Sized off its own 320x512 viewBox — inheriting .cfn-icon's 1em square would
+   letterbox it and leave a visible gap after the text. */
+.cfn-icon--chevron {
+    width: 0.58em;
+    height: 0.9em;
+    vertical-align: -0.06em;
+    transition: transform 0.2s var(--transition-smooth);
+}
+
+/* Nudge on hover so the cue feels responsive rather than decorative.
+   .service-link is deliberately excluded — it already widens its own flex gap
+   on card hover, and doing both makes the chevron travel twice as far. */
+a:hover > .cfn-icon--chevron,
+button:hover > .cfn-icon--chevron {
+    transform: translateX(3px);
+}
+
+.service-link .cfn-icon--chevron {
+    transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cfn-icon--chevron { transition: none; }
+    a:hover > .cfn-icon--chevron,
+    button:hover > .cfn-icon--chevron,
+    .service-card:hover .cfn-icon--chevron,
+    .guide-card:hover .cfn-icon--chevron { transform: none; }
+}
+
+/* --- Scrollable table affordance ---------------------------------------- */
+/* The comparison tables are ~640px wide inside a ~334px column on a phone, so
+   they scroll horizontally. That works, but nothing signalled there was a
+   third column to reach — people simply did not know to swipe. A fade on the
+   right edge shows there is more, and it disappears once scrolled to the end.
+   Applies only where a horizontal scrollbar actually exists. */
+@media (max-width: 900px) {
+    .table-wrapper {
+        position: relative;
+        /* Two background layers pinned to the scroll container: the gradient
+           only becomes visible when the content is scrolled away from the end. */
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),
+                          linear-gradient(to left, #ffffff, rgba(255, 255, 255, 0));
+        background-position: left center, right center;
+        background-repeat: no-repeat;
+        background-size: 1px 100%, 34px 100%;
+        background-attachment: local, scroll;
+    }
 }

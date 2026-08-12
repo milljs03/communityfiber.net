@@ -156,7 +156,7 @@
 
 .news-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
     gap: 30px;
 }
 
@@ -493,7 +493,7 @@
 @media (max-width: 600px) {
     .blog-hero,
     .article-hero {
-        padding: 68px 16px 56px;
+        padding: 56px 16px 48px;
     }
 
     .blog-hero h1,
@@ -506,17 +506,26 @@
     .related-posts {
         padding-left: 16px;
         padding-right: 16px;
+        padding-top: 46px;
+        padding-bottom: 54px;
     }
 
     .guide-card,
+    .news-card,
     .article-cta,
     .related-card {
         padding: 20px;
+        border-radius: 10px;
     }
 
     .article-body {
         font-size: 1rem;
-        padding: 46px 16px;
+        padding: 38px 16px;
+    }
+
+    .article-cta a {
+        width: 100%;
+        text-align: center;
     }
 
     .article-meta,
@@ -525,4 +534,35 @@
         flex-direction: column;
         gap: 6px;
     }
+}
+
+/* --- Touch targets ------------------------------------------------------ */
+/* These are standalone card call-to-actions, not links inside a sentence, so
+   the inline-text exemption does not apply. They measured 23px tall on a
+   phone; padding brings them to the 44px minimum without moving the text. */
+.guide-link,
+.news-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@media (max-width: 900px) {
+    /* Breadcrumbs sit tight to the heading; give the links room to be tapped
+       without pushing the layout around. */
+    .article-breadcrumb a {
+        display: inline-block;
+        padding: 6px 0;
+    }
+}
+
+/* Card titles are the primary link into each article, so they need a real tap
+   box rather than the bare 25px the text line gives them. Padding rather than
+   min-height keeps the heading's position in the card unchanged. */
+.guide-card h3 a,
+.news-card h3 a,
+.post-card h3 a {
+    display: inline-block;
+    padding: 6px 0;
 }

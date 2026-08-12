@@ -2,8 +2,6 @@ const OUTAGE_FEED_URL = 'https://residential-fiber.web.app/api/public-outage-fee
 const REFRESH_INTERVAL_MS = 30000;
 const REQUEST_TIMEOUT_MS = 12000;
 
-export const OUTAGE_PAGE_PATH = '/outage.html';
-
 let snapshot = {
     status: 'idle',
     data: null,
