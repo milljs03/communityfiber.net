@@ -123,14 +123,24 @@ function ensureAddressSearchStyles() {
 }
 
 function initializeAddressSearch() {
-    const input = document.getElementById('cfn-address-input');
-    if (!input) return;
+    const inputs = document.querySelectorAll('.cfn-address-input');
+    if (!inputs.length) return;
 
     ensureAddressSearchStyles();
+    inputs.forEach((input, instance) => setupAddressField(input, instance));
+}
 
+/**
+ * Wires one address field. Each call keeps its own predictions, session token
+ * and debounce timer in closure, so two fields on the same page never share
+ * state - typing in one cannot clear or hijack the other's suggestions.
+ */
+function setupAddressField(input, instance) {
     const container = input.closest('.availability-search-container') || input.parentElement;
     const suggestions = document.createElement('div');
-    suggestions.id = 'cfn-address-suggestions';
+    // Unique per field: ids have to stay unique for aria-controls and
+    // aria-activedescendant to point at the right element.
+    suggestions.id = `cfn-address-suggestions-${instance}`;
     suggestions.className = 'cfn-address-suggestions';
     suggestions.setAttribute('role', 'listbox');
     suggestions.hidden = true;
@@ -176,7 +186,7 @@ function initializeAddressSearch() {
         }
 
         suggestions.innerHTML = currentPredictions.map((prediction, index) => `
-            <button type="button" id="cfn-address-suggestion-${index}" class="cfn-address-suggestion" role="option" data-index="${index}">
+            <button type="button" id="cfn-address-suggestion-${instance}-${index}" class="cfn-address-suggestion" role="option" data-index="${index}">
                 ${escapeHtml(prediction.description)}
             </button>
         `).join('');
@@ -255,6 +265,18 @@ function initializeAddressSearch() {
         }
     });
 
+    // The Check button runs the same path as pressing Enter: use the highlighted
+    // prediction if there is one, otherwise whatever has been typed. It is not
+    // decoration — without it the only way to submit was a key press, which is
+    // not discoverable on a phone where there is no visible Enter affordance.
+    const submit = container.querySelector('.search-submit');
+    if (submit) {
+        submit.addEventListener('click', () => {
+            const selected = currentPredictions[activeIndex];
+            redirectToApp(selected?.description || input.value);
+        });
+    }
+
     suggestions.addEventListener('mousedown', (event) => {
         event.preventDefault();
     });
@@ -279,10 +301,99 @@ function initializeAddressSearch() {
     });
 }
 
+/**
+ * The availability bar is fixed, so it sits over whatever is at the bottom of
+ * the page. The padding that compensates is added here rather than in CSS
+ * because it must only apply when the bar is actually present and un-dismissed
+ * — a permanent padding rule would leave a gap under the footer otherwise.
+ */
+function initializeAddressBar() {
+    const bar = document.getElementById('address-bar');
+    if (!bar) return;
+
+    const DISMISS_KEY = 'cfn-address-bar-dismissed';
+    let dismissed = false;
+    try {
+        dismissed = sessionStorage.getItem(DISMISS_KEY) === '1';
+    } catch {
+        // Private browsing can throw on sessionStorage; treat it as not dismissed.
+    }
+
+    if (dismissed) {
+        bar.hidden = true;
+        return;
+    }
+
+    document.body.classList.add('has-address-bar');
+
+    // Reserve exactly the bar's height rather than a CSS constant. The bar is
+    // not the same height on every page — different stylesheets give it
+    // different type metrics, and it grew from 89px on the homepage to 120px on
+    // residential, which a fixed 92px under-reserved and let it sit on the
+    // footer. Measuring also covers the copy wrapping to another line.
+    const reserveSpace = () => {
+        if (bar.hidden) return;
+        document.body.style.paddingBottom = `${Math.ceil(bar.getBoundingClientRect().height)}px`;
+    };
+    reserveSpace();
+
+    if (typeof ResizeObserver === 'function') {
+        new ResizeObserver(reserveSpace).observe(bar);
+    } else {
+        window.addEventListener('resize', reserveSpace);
+    }
+
+    document.getElementById('address-bar-close')?.addEventListener('click', () => {
+        bar.hidden = true;
+        document.body.style.paddingBottom = '';
+        document.body.classList.remove('has-address-bar');
+        try {
+            // Per-session, not permanent: someone who dismisses it today should
+            // still get it on their next visit.
+            sessionStorage.setItem(DISMISS_KEY, '1');
+        } catch { /* nothing to do */ }
+    });
+
+    // The hero button and the availability panel both hand off to the bar's
+    // field. Focusing it directly beats a plain #anchor, which on a fixed
+    // element scrolls nowhere and looks broken.
+    document.querySelectorAll('[data-focus-address]').forEach((trigger) => {
+        trigger.addEventListener('click', (event) => {
+            const input = document.getElementById('cfn-address-input');
+            if (!input) return;
+            event.preventDefault();
+
+            // If the bar was dismissed this session, bring it back: the visitor
+            // has just asked for it, and a control that silently does nothing is
+            // worse than no control.
+            if (bar.hidden) {
+                bar.hidden = false;
+                document.body.classList.add('has-address-bar');
+                try {
+                    sessionStorage.removeItem(DISMISS_KEY);
+                } catch { /* nothing to do */ }
+            }
+
+            input.focus({ preventScroll: true });
+        });
+    });
+}
+
 function redirectToApp(address, siteSource) {
   if (isRedirecting) return;
   if (!hasMinimumGoogleSearchInput(address)) return;
   isRedirecting = true;
+
+  // The latch stops a double submit firing two navigations. It only worked
+  // because the page was assumed to be going away — but the lookup opens in
+  // another tab, so this page survives, the flag stays true forever, and every
+  // later search is silently swallowed. Release it once the navigation has had
+  // time to start, and again if the browser restores this page from the back
+  // /forward cache, where module state comes back exactly as it was left.
+  window.setTimeout(() => { isRedirecting = false; }, 3000);
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) isRedirecting = false;
+  }, { once: true });
 
   const params = new URLSearchParams({
     auto: 'true',
@@ -299,6 +410,10 @@ function redirectToApp(address, siteSource) {
 
 // --- Standard Site Logic ---
 document.addEventListener('DOMContentLoaded', () => {
+    // Order matters: the bar may hide itself if it was dismissed this session,
+    // and initializeAddressSearch() reads the field's container to position the
+    // suggestion list.
+    initializeAddressBar();
     initializeAddressSearch();
 
     // --- Mobile Menu Toggle Logic ---

@@ -157,16 +157,6 @@
         "source": "/fiber-vs-cable",
         "destination": "/support#fiber-comparison",
         "type": 301
-      },
-      {
-        "source": "/outage.html",
-        "destination": "/support",
-        "type": 301
-      },
-      {
-        "source": "/outage",
-        "destination": "/support",
-        "type": 301
       }
     ],
     "rewrites": [

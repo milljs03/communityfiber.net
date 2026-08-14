@@ -1,0 +1,183 @@
+/* team.css
+ *
+ * The employee card grid. Split out of about.css because the same cards now
+ * render on business, residential and builders as well, and about.css is only
+ * loaded by the About page.
+ *
+ * Any page including this also needs assets/js/services/team-grid.js.
+ */
+
+/* --- Team Section --- */
+.team-section {
+    margin-bottom: 80px;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 30px;
+    /* Hidden by default via JS, but good to have a transition state */
+    transition: opacity 0.3s ease;
+}
+
+.employee-card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    border: 1px solid #f1f5f9;
+    transition: transform 0.3s ease;
+}
+
+.employee-card:hover {
+    transform: translateY(-5px);
+}
+
+.employee-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    overflow: hidden;
+    border: 4px solid white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.employee-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.employee-info h3 {
+    margin: 0;
+    color: var(--npt-black);
+    font-size: 1.2rem;
+}
+
+.employee-title {
+    color: var(--cfn-green);
+    font-weight: 600;
+    margin: 5px 0 15px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.employee-stats {
+    margin-bottom: 15px;
+}
+
+.years-badge {
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+}
+
+.employee-fact {
+    font-size: 0.95rem;
+    color: #64748b;
+    font-style: italic;
+    line-height: 1.5;
+}
+
+/* Mirror Effect for "You" Card */
+.mirror-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    position: relative;
+}
+
+.mirror-effect {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #f1f5f9 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* Simulate a shiny surface */
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 5px 15px rgba(0,0,0,0.1);
+    /* No transition on the main container itself needed for the shine pos */
+}
+
+/* Scroll-Linked Shine */
+.mirror-effect::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    /* Use the CSS variable set by JS, default to off-screen */
+    left: var(--shine-pos, -100%);
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(to right,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.8) 50%,
+        rgba(255,255,255,0) 100%
+    );
+    transform: skewX(-25deg);
+    pointer-events: none;
+    z-index: 1;
+    /* Important: No transition here, or it will lag behind the scroll */
+}
+
+.mirror-effect::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.4) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.4) 100%);
+    border-radius: 50%;
+}
+
+.mirror-text {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #94a3b8;
+    text-shadow: 1px 1px 0 white;
+    z-index: 2;
+}
+
+/* Section wrapper for the pages other than About, which already has its own
+   heading furniture. */
+.team-section--page {
+    padding: 78px 20px;
+    background: #f8fafc;
+}
+
+.team-section--page .team-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+.team-section--page .team-heading {
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: clamp(1.65rem, 4vw, 2.4rem);
+    color: var(--npt-black);
+    margin: 0 0 12px;
+}
+
+.team-section--page .team-sub {
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 44px;
+    color: #64748b;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+/* The grid is hidden until it has cards, so a page whose team list is empty
+   shows nothing at all rather than an empty band with a heading over it. */
+.team-section--page[hidden] {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    .team-section--page {
+        padding: 52px 16px;
+    }
+}

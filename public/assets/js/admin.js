@@ -8,6 +8,31 @@ const provider = new GoogleAuthProvider();
 const ADMIN_EMAIL = 'jmiller@nptel.com';
 const ALLOWED_DOMAIN = 'nptel.com';
 
+// Pages that can host a team grid. Keep in sync with the data-team-page values
+// in the markup and with team-grid.js.
+const TEAM_PAGES = [
+    { key: 'about', label: 'About' },
+    { key: 'business', label: 'Business' },
+    { key: 'residential', label: 'Residential' },
+    { key: 'builders', label: 'Builders' },
+];
+
+// Records created before page targeting existed have no `pages` field at all.
+// They are treated as About-only, which is where they already appeared — the
+// alternative defaults would either hide everyone or put everyone everywhere.
+/** "No order" sorts last, so it cannot be 0 — see the note in team-grid.js.
+    0 counts as unset because the form used to save a blank field as 0. */
+function employeeOrderRank(emp) {
+    const n = Number(emp?.order);
+    return Number.isFinite(n) && n > 0 ? n : Infinity;
+}
+
+function employeeShowsOn(data, key) {
+    const pages = Array.isArray(data?.pages) ? data.pages : null;
+    if (!pages) return key === 'about';
+    return pages.includes(key);
+}
+
 let currentUser = null;
 let isAdmin = false;
 let loadedLeads = [];
@@ -686,7 +711,15 @@ async function loadEmployees() {
         const snapshot = await getDocs(ref);
 
         container.innerHTML = '';
-        snapshot.forEach(doc => {
+        const rows = [];
+        snapshot.forEach(doc => rows.push(doc));
+        rows.sort((a, b) => {
+            const ra = employeeOrderRank(a.data());
+            const rb = employeeOrderRank(b.data());
+            if (ra !== rb) return ra - rb;
+            return String(a.data().name || '').localeCompare(String(b.data().name || ''));
+        });
+        rows.forEach(doc => {
             const emp = doc.data();
             const photoUrl = safeUrl(emp.photoUrl, '', { allowDataImage: true });
             const card = document.createElement('div');
@@ -703,7 +736,12 @@ async function loadEmployees() {
                 </div>
                 <div style="margin-top:15px; font-size:0.9rem; color:#475569;">
                     <p style="margin-bottom:5px;"><strong>${escapeHtml(emp.years || '')}</strong> years at CFN/NPT</p>
-                    <p style="font-style:italic;">"${escapeHtml(emp.fact || '')}"</p>
+                    <p class="page-tags">${
+                        TEAM_PAGES.filter((p) => employeeShowsOn(emp, p.key)).length
+                            ? TEAM_PAGES.filter((p) => employeeShowsOn(emp, p.key))
+                                .map((p) => `<span class="page-tag">${escapeHtml(p.label)}</span>`).join('')
+                            : '<span class="page-tag page-tag--none">Hidden everywhere</span>'
+                    }</p>
                 </div>
                 <div class="card-actions">
                     ${isAdmin ? `<button class="btn-sm btn-edit" data-id="${doc.id}" data-type="employee">Edit</button>` : ''}
@@ -1044,14 +1082,25 @@ function openEditModal(type, id, data = null) {
                 <input type="number" name="years" class="form-control" value="${field(data?.years)}" required>
             </div>
             <div>
-                <label class="form-label">Fun Fact</label>
-                <textarea name="fact" class="form-control" rows="2" required>${field(data?.fact)}</textarea>
-            </div>
-            <div>
                 <label class="form-label">Photo Upload</label>
                 <input type="file" id="photo-upload" class="form-control" accept="image/*">
                 <input type="hidden" name="photoUrl" id="photo-url-input" value="${field(data?.photoUrl)}">
                 <p id="upload-status" style="font-size:0.8rem; color:#64748b;">${data?.photoUrl ? 'Current photo loaded' : 'No photo selected'}</p>
+            </div>
+            <div>
+                <label class="form-label">Display Order</label>
+                <input type="number" name="order" class="form-control" value="${field(data?.order)}" placeholder="1 = first, 2 = second, ...">
+            </div>
+            <div>
+                <label class="form-label">Show this person on</label>
+                <div class="page-checks">
+                    ${TEAM_PAGES.map((p) => `
+                        <label class="page-check">
+                            <input type="checkbox" name="pages" value="${p.key}" ${employeeShowsOn(data, p.key) ? 'checked' : ''}>
+                            <span>${p.label}</span>
+                        </label>`).join('')}
+                </div>
+                <p class="help-text">Leave every box unticked and this person is hidden everywhere.</p>
             </div>
         `;
         setupFileUploadListener();
@@ -1270,6 +1319,16 @@ editForm.addEventListener('submit', async (e) => {
         // Promo: original (crossed-out) price + label. Blank original = no promo.
         data.originalPrice = data.originalPrice ? Number(data.originalPrice) : null;
         data.promoLabel = (data.promoLabel || '').trim();
+    }
+
+    if (type === 'employee') {
+        // FormData keeps only the last value for a repeated name, so the ticked
+        // boxes have to be read from the DOM rather than from the form entries.
+        data.pages = [...editForm.querySelectorAll('[name="pages"]:checked')].map((el) => el.value);
+        // null, not 0: a blank order means "unranked, show last", and 0 would
+        // sort to the front instead.
+        const rawOrder = String(data.order ?? '').trim();
+        data.order = rawOrder === '' ? null : Number(rawOrder);
     }
 
     if (type === 'mobile_plan') {

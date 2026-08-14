@@ -17,22 +17,45 @@
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: 1200px;
+    /* Was a flat 1200px, which capped the whole hero: on a 2560px monitor the
+       collage could never exceed 48% of 1200. The rail now opens up on large
+       displays so the photographs have somewhere to grow into. */
+    max-width: min(1560px, 92vw);
     margin: 0 auto;
     display: flex;
     align-items: center;
-    gap: 60px;
+    gap: clamp(40px, 4vw, 80px);
 }
 
 .hero-content {
     flex: 1;
     text-align: left;
+    /* Makes the column itself the reference for the cqi type scale on
+       .hero-title, so the headline sizes against the space it actually has
+       rather than against the viewport.
+
+       width:100% is load-bearing, not decoration. container-type also applies
+       inline-size containment, which stops the contents from contributing to
+       the element's own intrinsic width. In the row layout `flex: 1` still
+       grows it, but once .hero-inner stacks to a column below 900px there is
+       nothing left to size it and it collapsed to 0 — which pinned the
+       headline to the bottom of its clamp on every phone. flex-basis from
+       `flex: 1` still wins on the main axis, so this only affects the stacked
+       case. */
+    width: 100%;
+    /* Now that the rail widens on large displays, the copy would otherwise
+       stretch to a line length nobody can track across. */
+    max-width: 660px;
+    container-type: inline-size;
 }
 
-/* Square, rounded hero image (drops in at assets/images/hero-home.png) */
+/* The install collage. Fluid rather than a fixed 560px so it grows with the
+   display: ~576px at 1440, ~768px at 1920, and up to 820px beyond that. The
+   48% ceiling keeps it from crowding the copy on mid-size screens, where that
+   share of the rail is the tighter of the two limits. */
 .hero-image {
     flex: 0 0 auto;
-    width: 560px;
+    width: clamp(320px, 40vw, 820px);
     max-width: 48%;
 }
 
@@ -49,11 +72,24 @@
 
 .hero-title {
     font-family: var(--font-heading, 'Montserrat', sans-serif);
-    font-size: 3.5rem;
+    /* The headline must always break as exactly two lines:
+           Fiber internet built for
+           the towns we live in.
+       Measured in Montserrat 800, the longer half renders at 11.9x the font
+       size, so it fits a column of width W whenever the font size is at most
+       W / 11.9, i.e. 8.4cqi. 8cqi leaves headroom for the fallback face while
+       the webfont loads. The 2.85rem cap is the largest size that still fits
+       the 580px column of the two-up desktop layout. */
+    font-size: clamp(1.35rem, 8cqi, 2.85rem);
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
     letter-spacing: -1px;
+}
+
+.hero-line {
+    display: block;
+    white-space: nowrap;
 }
 
 .highlight-text {
@@ -64,63 +100,25 @@
     -webkit-text-fill-color: transparent;
 }
 
+/* The font URL only requests Open Sans 400, 500 and 600. Asking for 800 here
+   left the browser to synthesise it, which thickens the strokes unevenly and is
+   what made the price look off next to the rest of the line. 600 is a real
+   loaded weight and still separates cleanly from 400 body copy. */
+.hero-subtitle strong {
+    color: var(--npt-black);
+    font-weight: 600;
+}
+
 .hero-subtitle {
     font-family: var(--font-body, 'Open Sans', sans-serif);
     font-size: 1.25rem;
     color: #475569;
     margin-bottom: 2.5rem;
     line-height: 1.6;
-    font-weight: 600;
-}
-
-/* --- Search Container --- */
-.availability-search-container {
-    max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 10;
-}
-
-.search-input-wrapper {
-    position: relative;
-    background: white;
-    border-radius: 50px;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.search-input-wrapper:focus-within {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-}
-
-.search-icon {
-    width: 24px;
-    height: 24px;
-    color: #94a3b8;
-    margin-left: 15px;
-    flex-shrink: 0;
-}
-
-#cfn-address-input {
-    width: 100%;
-    border: none;
-    outline: none;
-    padding: 15px 20px 15px 10px;
-    font-size: 1.1rem;
-    border-radius: 50px;
-    color: var(--npt-black);
-    background: transparent;
-}
-
-#redirect-message {
-    margin-top: 15px;
-    font-size: 0.9rem;
-    color: var(--cfn-green);
-    font-weight: 600;
+    /* Was 600. Semibold is an emphasis weight; a whole sentence set in it reads
+       dense and slightly cramped, especially at 20px. Regular lets the bolded
+       price actually stand out. */
+    font-weight: 400;
 }
 
 /* --- Availability Search Section (its own premium panel) --- */
@@ -133,7 +131,10 @@
     max-width: 1800px;
     margin: 0 auto;
     position: relative;
-    overflow: hidden;
+    /* Not overflow:hidden. It was here to keep the dot texture inside the
+       rounded corners, but it also cropped the address suggestions the moment
+       the list grew taller than the card. The texture clips itself instead
+       (see ::before below), so nothing needs clipping at this level. */
     border-radius: 32px;
     padding: 64px 40px;
     text-align: center;
@@ -148,6 +149,7 @@
     content: "";
     position: absolute;
     inset: 0;
+    border-radius: inherit;
     background-image: radial-gradient(rgba(255, 255, 255, 0.10) 1px, transparent 1px);
     background-size: 26px 26px;
     pointer-events: none;
@@ -170,6 +172,28 @@
     font-size: clamp(1.2rem, 1.6vw, 1.4rem);
     color: rgba(255, 255, 255, 0.9);
     margin-bottom: 34px;
+}
+
+/* The panel's own search. Sized and centred inside the green card, with the
+   same pill treatment the bar uses so the two read as one component. */
+.availability-inner .availability-search-container {
+    position: relative;
+    /* Above the fixed availability bar (9000). This selector is more specific
+       than the base rule in address-bar.css, so the value has to be repeated
+       here or the panel's suggestion list drops back under the bar. */
+    z-index: 9500;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.availability-inner .search-input-wrapper {
+    padding: 6px 6px 6px 4px;
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.2);
+}
+
+.availability-inner .search-input-wrapper:focus-within {
+    transform: none;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.28), 0 0 0 3px rgba(255, 255, 255, 0.55);
 }
 
 
@@ -267,17 +291,6 @@
     transform: translateX(4px);
 }
 
-.hero::after {
-    content: "";
-    position: absolute;
-    bottom: -1px; /* Pull down slightly to cover any sub-pixel background bleed */
-    left: 0;
-    width: 100%;
-    height: 41px; /* Increased slightly to maintain shape with negative bottom */
-    background: white;
-    clip-path: polygon(0 100%, 100% 100%, 100% 0); /* Angled cut at bottom */
-    z-index: 1;
-}
 
 
 /* --- Other Services Section --- */
@@ -508,10 +521,6 @@
         min-height: auto;
     }
 
-    .hero-title {
-        font-size: 2.5rem;
-    }
-
     .hero-inner {
         flex-direction: column;
         text-align: center;
@@ -522,10 +531,18 @@
         text-align: center;
     }
 
+    /* The collage no longer leads on a phone. `order: -1` made sense when this
+       was one hero photo, but the orbit is a tall square: at 440px it pushed the
+       headline, the price and the CTA entirely below the fold. The message goes
+       first and the photographs support it. */
     .hero-image {
-        order: -1;
         width: 100%;
-        max-width: 440px;
+        /* Fluid rather than a flat 340px, which made the collage jump smaller
+           at the exact point the layout stacked — narrower at 900px than it had
+           been at 980px. The 440px ceiling keeps it from swallowing a tablet
+           screen, and 300px keeps the CTA above the fold on a phone. */
+        max-width: clamp(300px, 45vw, 440px);
+        margin: 0 auto;
     }
 
     .availability-inner {
@@ -558,7 +575,6 @@
     }
 
     .hero-title {
-        font-size: clamp(2rem, 11vw, 2.65rem);
         letter-spacing: -0.03em;
     }
 
@@ -594,7 +610,7 @@
         padding: 6px 8px;
     }
 
-    #cfn-address-input {
+    .cfn-address-input {
         font-size: 1rem;
         min-width: 0;
     }
@@ -803,5 +819,154 @@
 
     .service-areas-links {
         grid-template-columns: 1fr;
+    }
+}
+
+/* --- Hero install collage ------------------------------------------------- */
+/* Six square tiles orbit a centre mark. Every selector here is scoped through
+   .hero-image because `.hero-image img` above is (0,1,1) and sets its own
+   aspect-ratio, radius, shadow and green placeholder background — a bare
+   `.install-tile img` ties on specificity and would lose on source order. */
+.install-orbit {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* Establishes the sizing context for the cqw units below. Without this,
+       percentages inside translate() would resolve against each TILE's own
+       width rather than the collage, and the ring would collapse inward. */
+    container-type: size;
+}
+
+.install-orbit-ring {
+    position: absolute;
+    inset: 0;
+    animation: install-orbit-spin 48s linear infinite;
+    will-change: transform;
+}
+
+/* rotate to the tile's angle, push out along the radius, then undo the rotation
+   so the tile itself sits square rather than tipped. */
+.hero-image .install-tile {
+    /* ===== The two knobs for this collage =====================================
+       Both are in cqw: 1cqw = 1% of the collage's width, so the numbers read
+       directly as proportions of the square.
+         --radius : how far each photo sits from the centre. Bigger = spread out.
+         --size   : how big each photo is.
+       Keep (--radius + --size / 2) at or under 50, or tiles clip the edge.
+       Adjacent tiles touch when --size exceeds 2 x --radius x sin(180/n); with
+       five tiles that is 1.18 x --radius. ======================================= */
+    --radius: 31cqw;
+    --size: 38cqw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--size);
+    aspect-ratio: 1 / 1;
+    transform:
+        translate(-50%, -50%)
+        rotate(var(--a))
+        translate(var(--radius))
+        rotate(calc(-1 * var(--a)));
+}
+
+/* The counter-rotation lives on the image, not the tile, because the rounded
+   corners have to turn with the photo. Identical duration and timing function
+   to the ring, so the two stay locked however long the page is open. */
+.hero-image .install-tile img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 18px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.07);
+    animation: install-orbit-spin 48s linear infinite reverse;
+    will-change: transform;
+    object-fit: cover;
+    /* Brand-tinted ground so a tile that has not decoded yet still looks like
+       part of the composition rather than a hole in it. */
+    background: linear-gradient(135deg, #0B8C38, #03A63C);
+}
+
+@keyframes install-orbit-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .install-orbit-ring,
+    .hero-image .install-tile img {
+        animation: none;
+    }
+}
+
+
+
+
+@media (max-width: 560px) {
+    /* Side by side below this width the placeholder is clipped to a couple of
+       characters, so the pill becomes a stack. */
+    .availability-inner .search-input-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        border-radius: 18px;
+        padding: 8px;
+    }
+
+    .availability-inner .search-icon {
+        display: none;
+    }
+
+    .availability-inner .cfn-address-input {
+        padding: 12px 14px;
+    }
+
+    .availability-inner .search-submit {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+/* --- Collage overlapping the availability panel ---------------------------
+   Desktop only, and deliberately so. Below 901px .hero-inner stacks and the
+   collage sits under the copy, ~35-49px off the bottom of the hero — pulling
+   the panel up there would drop tiles straight onto its heading.
+
+   Three things have to change together or the overlap simply will not paint:
+     1. .hero is overflow:hidden, so tiles cannot leave it at all.
+     2. .hero::after is a white angled shape at z-index 1 across the hero's
+        bottom edge; it would cover anything hanging below.
+     3. .hero-image needs to be positioned with a z-index so it paints above
+        the panel, which is a static block later in the document.
+   The z-index goes on .hero-image and NOT on .hero: raising the whole hero
+   would bring its white background with it and mask the top of the green card. */
+@media (min-width: 901px) {
+    /* Not overflow:visible — that also released the horizontal axis and added
+       ~24px of sideways scroll. overflow-x:hidden is not an option either,
+       because a hidden value on one axis forces the other to auto, which would
+       clip the tiles we want hanging below. clip is the one value that can pair
+       with visible on the other axis. */
+    .hero {
+        overflow-x: clip;
+        overflow-y: visible;
+        /* .hero is itself a centring flex container with min-height:80vh. Where
+           the content is shorter than that (around 1100px it was 440 vs 720),
+           the leftover space split above and below, floating the collage away
+           from the bottom edge. Anchoring the row to the bottom makes the
+           distance to the panel the same at every width. */
+        align-items: flex-end;
+    }
+
+    .hero-image {
+        position: relative;
+        z-index: 3;
+        align-self: flex-end;
+    }
+
+    /* -120 pull against 46px of top padding puts the card's top edge 74px above
+       the hero's bottom, which the lowest tile clears by 17-33px from 1280 to
+       1920. Because the ring is turning, the overlap breathes rather than
+       sitting still - which is the point. */
+    .availability-section {
+        margin-top: -120px;
+        padding-top: 46px;
     }
 }

@@ -762,3 +762,18 @@ button:hover > .cfn-icon--chevron {
         background-attachment: local, scroll;
     }
 }
+
+/* Visible to screen readers only. Lives here rather than in a page stylesheet
+   because the address bar uses it on every page it appears on — scoped to one
+   page's sheet, the label simply renders as stray text everywhere else. */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

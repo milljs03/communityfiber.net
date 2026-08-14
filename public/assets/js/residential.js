@@ -267,17 +267,36 @@ async function injectAddonsSection(targetElement) {
     if (!SHOW_EERO_SERVICE_FEATURE) return;
     if (document.querySelector('.addons-wrapper')) return;
 
+    // Built from the page's own section components so it reads as part of the
+    // site rather than a widget dropped on top of it. The earlier version reused
+    // .faq-cta-section, which made it a visual duplicate of the "Questions
+    // Before You Choose?" card, and its green pill was a <span> that looked
+    // clickable but wasn't.
+    const check = '<svg class="cfn-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>';
+    const points = [
+        'Fiber service ready for mesh networking',
+        'Optimized for streaming, gaming, and connected devices',
+        'Local support for your Community Fiber service'
+    ];
+
     const addonsHTML = `
-    <section id="mesh-wifi" class="addons-wrapper faq-cta-section fade-in-section">
-        <div class="container faq-cta-card">
-            <div class="faq-cta-copy">
-                <h2>Mesh-ready home Wi-Fi support</h2>
-                <p>Community Fiber is designed to work cleanly with modern mesh networking, including eero equipment when it is part of your service setup.</p>
+    <section id="mesh-wifi" class="mesh-section addons-wrapper" data-animate="fade-up">
+        <div class="container mesh-inner">
+            <h2 class="section-title">Built for Modern Mesh Wi-Fi</h2>
+            <div class="mesh-grid">
+                <figure class="mesh-visual">
+                    <img src="assets/images/eerohome.webp" width="1400" height="788"
+                         loading="lazy" decoding="async"
+                         alt="Cutaway view of a home with overlapping eero mesh Wi-Fi coverage reaching every room">
+                </figure>
+                <div class="mesh-copy">
+                    <p class="mesh-lede">Community Fiber service is designed to pair cleanly with modern eero mesh networking, helping your fiber connection perform well across the devices in your home.</p>
+                    <ul class="mesh-points">
+                        ${points.map((p) => `<li>${check}<span>${escapeHtml(p)}</span></li>`).join('')}
+                    </ul>
+                    <p class="mesh-attrib">Powered by <span class="eero-wordmark">eero</span></p>
+                </div>
             </div>
-            <a href="support.html#support-faq" class="faq-cta-button">
-                <svg class="cfn-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M256 48C141.1 48 48 141.1 48 256s93.1 208 208 208s208-93.1 208-208S370.9 48 256 48zM0 256C0 114.6 114.6 0 256 0s256 114.6 256 256s-114.6 256-256 256S0 397.4 0 256zm256-80a80 80 0 1 0 0 160 80 80 0 1 0 0-160z"/></svg>
-                Equipment FAQs
-            </a>
         </div>
     </section>
     `;

@@ -1,0 +1,259 @@
+/* address-bar.css
+ *
+ * The fixed availability bar and the address-search primitives it shares with
+ * the panel on the homepage. Split out of home.css because the bar now appears
+ * on more than one page, and home.css is only loaded by the homepage.
+ *
+ * Any page that includes this sheet also needs assets/js/main.js, which is what
+ * wires the autocomplete and the bar's dismiss behaviour.
+ */
+
+/* --- Search Container --- */
+.availability-search-container {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    /* Above the fixed availability bar, which sits at 9000. This element is
+       positioned with a z-index, so it forms a stacking context and its
+       suggestion list can never paint higher than this value — at the old 10
+       the bar covered any dropdown that reached the bottom of the viewport. */
+    z-index: 9500;
+}
+
+.search-input-wrapper {
+    position: relative;
+    background: white;
+    border-radius: 50px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.search-input-wrapper:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+.search-icon {
+    width: 24px;
+    height: 24px;
+    color: #94a3b8;
+    margin-left: 15px;
+    flex-shrink: 0;
+}
+
+/* Class, not id: there are two address fields on this page and both need
+   these resets. Scoped by id, the second one renders as a raw <input>. */
+.cfn-address-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 15px 20px 15px 10px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    color: var(--npt-black);
+    background: transparent;
+}
+
+#redirect-message {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: var(--cfn-green);
+    font-weight: 600;
+}
+
+/* --- Availability bar ----------------------------------------------------
+   Fixed to the bottom of the viewport rather than placed as a section at the
+   end of the document. A section at the end is only reachable after scrolling
+   the whole page; fixed keeps the site's highest-intent action one glance away
+   at any scroll position, while taking up no space in the layout. */
+.address-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9000;
+    background: linear-gradient(45deg, var(--cfn-green), #a8e063);
+    box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.18);
+    padding: 14px 20px;
+    transition: transform 0.3s ease;
+}
+
+/* Dot texture, matching the treatment used elsewhere on the site. */
+.address-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+    background-size: 26px 26px;
+    pointer-events: none;
+}
+
+.address-bar[hidden] {
+    display: none;
+}
+
+.address-bar-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 3vw, 40px);
+}
+
+.address-bar-copy {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: #ffffff;
+    line-height: 1.35;
+}
+
+.address-bar-copy strong {
+    display: block;
+    font-family: var(--font-heading, 'Montserrat', sans-serif);
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+.address-bar-copy span {
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* The field is the point of the bar, so it gets the fixed share of the width
+   and the copy absorbs whatever is left. */
+.address-bar .availability-search-container {
+    flex: 0 1 560px;
+    margin: 0;
+    max-width: none;
+}
+
+.address-bar .search-input-wrapper {
+    padding: 5px 5px 5px 4px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+}
+
+.address-bar .search-input-wrapper:focus-within {
+    transform: none;
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.28), 0 0 0 3px rgba(255, 255, 255, 0.55);
+}
+
+/* The suggestion list is appended into the container by main.js and positioned
+   below the field by default, which would drop it off the bottom of the screen
+   from a bar that is already at the bottom. */
+.address-bar .cfn-address-suggestions {
+    top: auto;
+    bottom: calc(100% + 8px);
+}
+
+.address-bar #redirect-message {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 10px);
+    margin: 0;
+    color: #ffffff;
+}
+
+.address-bar-close {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.address-bar-close:hover {
+    background: rgba(255, 255, 255, 0.34);
+}
+
+.address-bar-close svg {
+    width: 13px;
+    height: 13px;
+}
+
+.search-submit {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 50px;
+    background: var(--npt-black);
+    color: #ffffff;
+    font-family: var(--font-heading, 'Montserrat', sans-serif);
+    font-weight: 700;
+    font-size: 0.98rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-submit:hover {
+    background: var(--cfn-dark-green);
+}
+
+.search-submit .cfn-icon {
+    width: 0.8em;
+    height: 0.8em;
+    transition: transform 0.2s;
+}
+
+.search-submit:hover .cfn-icon {
+    transform: translateX(3px);
+}
+
+/* Room for the bar is reserved by main.js, which measures the rendered height
+   — it differs per page — and writes it to body's padding-bottom. This class is
+   left as a styling hook only; do not put a padding value back here or it will
+   compete with the measured one. */
+
+@media (max-width: 860px) {
+    .address-bar {
+        padding: 12px 14px;
+    }
+
+    /* The strapline is the first thing to go: on a phone the bar has to stay
+       shallow or it eats the content behind it. */
+    .address-bar-copy {
+        display: none;
+    }
+
+    .address-bar .availability-search-container {
+        flex: 1 1 auto;
+    }
+
+}
+
+@media (max-width: 430px) {
+    .address-bar .search-icon {
+        display: none;
+    }
+
+    .address-bar .cfn-address-input {
+        padding: 12px 8px 12px 14px;
+        font-size: 1rem;
+    }
+
+    .search-submit {
+        padding: 0 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .address-bar {
+        transition: none;
+    }
+}

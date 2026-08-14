@@ -103,6 +103,7 @@
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/builders.css">
+    <link rel="stylesheet" href="assets/css/team.css">
 </head>
 <body>
 
@@ -278,6 +279,18 @@
                 </div>
             </section>
         </div>
+
+        <!-- Team. Cards come from the shared team-grid module, so this shows the
+             same profiles as the About page — only the people ticked for this
+             page in the admin panel. The section hides itself when none match,
+             rather than leaving a heading over an empty grid. -->
+        <section class="team-section team-section--page" data-team-page="builders" data-animate="fade-up">
+            <div class="team-inner">
+                <h2 class="team-heading">Who you will be working with</h2>
+                <p class="team-sub">The team that coordinates builds and keeps projects moving.</p>
+                <div class="team-grid"></div>
+            </div>
+        </section>
     </main>
 
     <footer class="site-footer">
@@ -303,5 +316,9 @@
     <script type="module" src="assets/js/builders.js"></script>
     <script type="module" src="assets/js/traffic-logger.js"></script>
 
+    <script type="module">
+        import { initPageTeamSection } from './assets/js/services/team-grid.js';
+        initPageTeamSection();
+    </script>
 </body>
 </html>

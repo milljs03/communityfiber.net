@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js');
+    /* Until communityfiber.net cuts over from WordPress to this build, the
+       Firebase preview hosts are live and indexable while their canonicals
+       point at URLs that still 404. Keep the preview hosts out of the index.
+       Strictly allowlisted: only *.web.app / *.firebaseapp.com are affected,
+       so this stops applying by itself once the custom domain is attached. */
+    var h = location.hostname;
+    if (h.endsWith('.web.app') || h.endsWith('.firebaseapp.com')) {
+      var r = document.createElement('meta');
+      r.name = 'robots'; r.content = 'noindex, nofollow';
+      document.head.appendChild(r);
+    }</script>
+    <title>Outage Map | Community Fiber</title>
+    <meta name="description" content="Live outage map for Community Fiber. See current service interruptions across Elkhart and Kosciusko counties, Indiana.">
+    <meta property="og:title" content="Outage Map | Community Fiber">
+    <meta property="og:description" content="Live outage map showing current Community Fiber service interruptions.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://communityfiber.net/outage">
+    <meta property="og:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Outage Map | Community Fiber">
+    <meta name="twitter:description" content="Live outage map showing current Community Fiber service interruptions.">
+    <meta name="twitter:image" content="https://communityfiber.net/assets/images/community-fiber-logo.png">
+    <link rel="canonical" href="https://communityfiber.net/outage">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
+    <!-- frame-src carries monitor.centraloffice-services.com, which no other page
+         needs. Without it the map is blocked outright and the page renders an
+         empty box — the CSP is the whole reason this embed works. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://apis.google.com https://www.googletagmanager.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.clarity.ms https://c.bing.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src https://fonts.gstatic.com;
+                   img-src 'self' data: https://maps.gstatic.com https://lh3.googleusercontent.com https://*.clarity.ms https://c.bing.com;
+                   frame-src https://monitor.centraloffice-services.com https://accounts.google.com/ https://content-firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.recaptcha.net/recaptcha/;
+                   connect-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://residential-fiber.web.app https://www.google-analytics.com https://firebaseappcheck.googleapis.com https://content-firebaseappcheck.googleapis.com https://*.clarity.ms https://c.bing.com;">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/outage.css">
+    <!-- Microsoft Clarity: heatmaps + session replay. Async, does not block render. -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "xync1c67sj");
+    </script>
+</head>
+<body>
+
+    <div id="master-header"></div>
+
+    <main>
+        <header class="outage-hero">
+            <div class="outage-hero-inner">
+                <h1>Outage map</h1>
+                <p>Current service interruptions across our network. The map is maintained by our monitoring system and updates on its own.</p>
+            </div>
+        </header>
+
+        <section class="outage-map-section">
+            <div class="outage-map-inner">
+                <!-- Supplied embed, made responsive. The original carried fixed
+                     width=1024 height=768 attributes, which overflow every phone
+                     screen; the size is handled in CSS instead and the attributes
+                     are kept only as the intrinsic ratio hint. -->
+                <div class="outage-map-frame">
+                    <iframe
+                        src="https://monitor.centraloffice-services.com/public/mapshow.htm?id=13156&amp;mapid=FCB9931B-3F51-4FAA-B1A1-DC91B3E70002"
+                        title="Community Fiber outage map"
+                        width="1024" height="768"
+                        loading="eager"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+                <!-- The embed is a third-party service on another domain. If it is
+                     down or blocked, the visitor is left staring at a blank box, so
+                     the way to reach a human is stated on the page rather than
+                     inside the frame. -->
+                <div class="outage-fallback">
+                    <p><strong>Map not loading?</strong> It is hosted by our monitoring provider and can be blocked by some ad blockers or company networks. You can <a href="https://monitor.centraloffice-services.com/public/mapshow.htm?id=13156&amp;mapid=FCB9931B-3F51-4FAA-B1A1-DC91B3E70002" target="_blank" rel="noopener">open the map in a new tab</a> instead.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="outage-help">
+            <div class="outage-help-inner">
+                <h2>Not seeing your outage on the map?</h2>
+                <p>The map shows interruptions our monitoring has already picked up. A fault affecting a single home will not always appear there, so if your service is down and the map looks clear, please get in touch &mdash; you may be the first to tell us.</p>
+                <div class="outage-actions">
+                    <a class="outage-btn outage-btn--primary" href="tel:5748312176">Call (574) 831-2176</a>
+                    <a class="outage-btn outage-btn--ghost" href="/support?topic=outage#support-contact">Report an outage</a>
+                </div>
+                <p class="outage-hours">Support is reachable Monday to Friday, 8 AM to 5 PM.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="footer/privacy-policy">Privacy Policy</a>
+                <a href="footer/terms-of-service">Terms of Service</a>
+                <a href="footer/acceptable-user-policy">Acceptable Use Policy</a>
+                <a href="footer/open-internet-policy">Open Internet Policy</a>
+            </div>
+            <address class="footer-address">
+                <strong>NPTech</strong>
+                Physical: 19066 Market ST, New Paris, IN 46553<br>
+                Mailing: PO Box 47, New Paris, IN 46553
+            </address>
+            <p>&copy; 2026 Community Fiber. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="assets/js/main.js"></script>
+    <script src="assets/js/standard-header.js"></script>
+    <script type="module" src="assets/js/traffic-logger.js"></script>
+</body>
+</html>

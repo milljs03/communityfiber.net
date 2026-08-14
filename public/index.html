@@ -109,13 +109,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="preload" as="image" href="assets/images/family.webp" type="image/webp" fetchpriority="high">
+    <!-- Only the first collage tile is preloaded. The other four are lazy: they
+         orbit into view over the following seconds and are not LCP candidates. -->
+    <link rel="preload" as="image" href="assets/images/install/01-site-survey.webp" type="image/webp" fetchpriority="high">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/home.css">
+    <link rel="stylesheet" href="assets/css/address-bar.css">
 
     <!-- Google Analytics -->
     <script defer src="assets/js/analytics.js"></script>
@@ -137,37 +140,69 @@
     <main>
 
     <!-- Hero Section -->
-    <header class="hero">
+    <header class="hero" id="availability">
         <div class="hero-inner">
             <div class="hero-content">
-                <h1 class="hero-title">Connecting communities <br><span class="highlight-text">since 1901.</span></h1>
-                <p class="hero-subtitle">Gig speed <span class="text-accent" style="color:var(--cfn-green)">fiber internet</span> built for the towns we live in.</p>
-                <a href="https://search.communityfiber.net/community-fiber-site-hero" class="btn-primary-action">Check Availability <svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></a>
-            </div>
+                <!-- Each half is its own block so the break is structural rather
+                     than a <br>, and nowrap keeps either half from splitting
+                     further. The type scale below is what guarantees they fit. -->
+                <h1 class="hero-title"><span class="hero-line">Fiber internet built for</span> <span class="hero-line">the towns <span class="highlight-text">we live in</span>.</span></h1>
+                <p class="hero-subtitle">Upload as fast as you download, from <strong>$35 a month</strong>. No contracts, no data caps. Locally owned since 1901.</p>
+                <a href="#cfn-address-input" class="btn-primary-action" data-focus-address>Check Availability <svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></a>           </div>
+            <!-- Install-phase collage. Six square tiles orbit a centre mark.
+                 The ring rotates and each tile counter-rotates at the identical
+                 duration and timing function, so the photos stay upright instead
+                 of tumbling. Paused on hover and under prefers-reduced-motion. -->
             <div class="hero-image">
-                <img fetchpriority="high" decoding="async" width="900" height="900" src="assets/images/family.webp" alt="A family enjoying fast, reliable fiber internet together at home">
+                <div class="install-orbit" role="img"
+                     aria-label="Photos from a Community Fiber install: the site survey, utility locates, trenching, a service van, and the equipment being fitted at a home">
+                    <div class="install-orbit-ring">
+                        <div class="install-tile" style="--a: 0deg">
+                            <img src="assets/images/install/01-site-survey.webp" width="480" height="480"
+                                 alt="Site survey: a technician planning the drop at the house" fetchpriority="high" decoding="async">
+                        </div>
+                        <div class="install-tile" style="--a: 72deg">
+                            <img src="assets/images/install/02-locates.webp" width="480" height="480"
+                                 alt="Utility locate flag marking buried lines before digging" loading="lazy" decoding="async">
+                        </div>
+                        <div class="install-tile" style="--a: 144deg">
+                            <img src="assets/images/install/03-construction.webp" width="480" height="480"
+                                 alt="A crew digging a fiber trench in a front yard with a mini excavator" loading="lazy" decoding="async">
+                        </div>
+                        <div class="install-tile" style="--a: 216deg">
+                            <img src="assets/images/install/04-splicing.webp" width="480" height="480"
+                                 alt="A Community Fiber service van" loading="lazy" decoding="async">
+                        </div>
+                        <div class="install-tile" style="--a: 288deg">
+                            <img src="assets/images/install/05-install.webp" width="480" height="480"
+                                 alt="A technician mounting the fiber equipment at a home" loading="lazy" decoding="async">
+                        </div>
+                    </div>
             </div>
         </div>
     </header>
 
     <!-- Availability Search Section -->
-    <section class="availability-section" id="availability" data-animate="fade-up">
+    <section class="availability-section" id="availability-check" data-animate="fade-up">
         <div class="availability-inner">
             <h2>Is fiber available at your home?</h2>
             <p>Enter your address to see if Community Fiber is live in your area.</p>
-
-            <!-- Address Autocomplete Search Widget -->
+            <!-- A second, independent search. It carries no id of its own beyond
+                 the field, because the initialiser now selects every
+                 .cfn-address-input and gives each its own state. -->
             <div class="availability-search-container">
                 <div class="search-input-wrapper">
                     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
-
-                    <input type="text" id="cfn-address-input" placeholder="Start entering your address..." autocomplete="off">
+                    <label class="sr-only" for="cfn-address-input-panel">Your service address</label>
+                    <input type="text" id="cfn-address-input-panel" class="cfn-address-input" placeholder="Start entering your address..." autocomplete="off">
+                    <button type="button" class="search-submit">
+                        Check
+                        <svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg>
+                    </button>
                 </div>
             </div>
-
-            <p id="redirect-message" class="hidden">Redirecting to service check...</p>
         </div>
     </section>
 
@@ -285,6 +320,36 @@
     </section>
     </main>
 
+
+
+    <!-- Availability bar. Fixed to the bottom of the viewport, full bleed, and
+         outside <main> because it is page furniture rather than page content.
+         It owns the only #cfn-address-input on the page — main.js binds that id
+         directly, so it must not be duplicated in the hero. -->
+    <aside class="address-bar" id="address-bar" aria-label="Check fiber availability">
+        <div class="address-bar-inner">
+            <div class="address-bar-copy">
+                <strong>Is fiber available at your home?</strong>
+                <span>Enter your address and we&rsquo;ll tell you in seconds.</span>
+            </div>
+            <div class="availability-search-container">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                    <input type="text" id="cfn-address-input" class="cfn-address-input" placeholder="Start entering your address..." autocomplete="off">
+                    <button type="button" id="cfn-address-submit" class="search-submit">
+                        Check
+                        <svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg>
+                    </button>
+                </div>
+            </div>
+            <p id="redirect-message" class="hidden">Redirecting to service check...</p>
+            <button type="button" class="address-bar-close" id="address-bar-close" aria-label="Hide the availability bar">
+                <svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+            </button>
+        </div>
+    </aside>
 
     <footer class="site-footer">
         <div class="footer-content">

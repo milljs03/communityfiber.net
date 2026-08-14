@@ -453,6 +453,7 @@ ${headerStyles}
                     <h3><a href="/support">Support</a></h3>
                     <ul>
                         <li><a href="/support#support-contact" class="section-link">Contact Us</a></li>
+                        <li><a href="/outage" class="section-link">Outage Map</a></li>
                         <li><a href="/support#fiber-comparison" class="section-link">Why Move to Fiber?</a></li>
                         <li><a href="/support#support-faq" class="section-link">FAQ</a></li>
                         <li><a href="https://nptel.smarthub.coop/Login.html" target="_blank" class="section-link">SmartHub Login</a></li>
@@ -466,10 +467,7 @@ ${headerStyles}
                         <li><a href="/about#our-mission" class="section-link">Our Mission</a></li>
                         <li><a href="/about#heritage-future" class="section-link">Heritage & Future</a></li>
                         <li><a href="/about#heritage-gallery" class="section-link">Heritage Gallery</a></li>
-                        <!-- TEMPORARY: hidden until the team photos are uploaded.
-                             Restore alongside SHOW_TEAM_SECTION in assets/js/about.js.
                         <li><a href="/about#team-section" class="section-link">Meet the Team</a></li>
-                        -->
                         <li><a href="/blog" class="section-link">Latest News</a></li>
                     </ul>
                 </div>

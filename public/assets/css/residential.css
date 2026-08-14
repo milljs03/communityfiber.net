@@ -1218,3 +1218,119 @@
         padding-bottom: 74px;
     }
 }
+
+/* --- Mesh Wi-Fi section ------------------------------------------------- */
+/* Built from the page's own pieces — .section-title and the green check from
+   the plan cards — so it reads as another section of the site rather than a
+   widget bolted on. Two-column image/copy split mirrors the Installation
+   Process card, which is the page's existing pattern for this shape. */
+.mesh-section {
+    padding: var(--section-pad-y) 20px;
+    background: #ffffff;
+    border-top: 1px solid #f1f5f9;
+}
+
+.mesh-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.mesh-section .section-title {
+    margin-bottom: 44px;
+}
+
+.mesh-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    align-items: center;
+    gap: 56px;
+}
+
+/* The source render sits on a near-white backdrop, so it needs no card or
+   border to sit correctly on the white section. */
+.mesh-visual {
+    margin: 0;
+}
+
+.mesh-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+}
+
+.mesh-lede {
+    margin: 0 0 26px;
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.65;
+}
+
+.mesh-points {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 14px;
+}
+
+.mesh-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    color: #475569;
+    font-size: 1rem;
+    line-height: 1.55;
+}
+
+.mesh-points .cfn-icon {
+    color: var(--cfn-green);
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.3em;
+}
+
+.mesh-attrib {
+    margin: 30px 0 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    color: #94a3b8;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* eero's mark is always set lowercase, so this stays untransformed even though
+   the surrounding label is uppercased. */
+.eero-wordmark {
+    text-transform: lowercase;
+    letter-spacing: -0.02em;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #64748b;
+    line-height: 1;
+}
+
+@media (max-width: 900px) {
+    .mesh-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    .mesh-section .section-title {
+        margin-bottom: 32px;
+    }
+
+    .mesh-attrib {
+        justify-content: center;
+    }
+
+    .mesh-copy {
+        text-align: left;
+    }
+}

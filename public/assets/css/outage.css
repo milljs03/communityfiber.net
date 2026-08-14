@@ -1,0 +1,178 @@
+/* outage.css — the live outage map page. */
+
+.outage-hero {
+    background: linear-gradient(135deg, #0B8C38 0%, var(--cfn-green) 60%, #4fb84f 100%);
+    color: #ffffff;
+    padding: 64px 20px 56px;
+    text-align: center;
+}
+
+.outage-hero-inner {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.outage-hero h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5.5vw, 3rem);
+    line-height: 1.15;
+    margin: 0 0 14px;
+    color: #ffffff;
+}
+
+.outage-hero p {
+    margin: 0;
+    font-size: 1.08rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+/* --- The embed ------------------------------------------------------------
+   The supplied iframe was width=1024 height=768. Fixed pixels overflow every
+   phone screen, so the size is set here instead.
+
+   Height is not an aspect ratio: at 4:3 the map would be ~260px tall on a
+   360px phone, which is unusable for reading street-level detail. It gets a
+   viewport-relative height with a floor instead, so it stays tall enough to
+   pan around on a small screen. */
+.outage-map-section {
+    padding: 44px 20px 56px;
+    background: #f8fafc;
+}
+
+.outage-map-inner {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+.outage-map-frame {
+    background: #ffffff;
+    border: 1px solid #dbe3ea;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+    line-height: 0;
+}
+
+.outage-map-frame iframe {
+    display: block;
+    width: 100%;
+    height: clamp(460px, 72vh, 768px);
+    border: 0;
+}
+
+.outage-fallback {
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.outage-fallback p {
+    margin: 0;
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.outage-fallback a {
+    color: var(--cfn-dark-green);
+    font-weight: 600;
+}
+
+/* --- Reporting ------------------------------------------------------------ */
+.outage-help {
+    padding: 70px 20px 84px;
+    background: #ffffff;
+}
+
+.outage-help-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.outage-help h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.55rem, 4vw, 2.1rem);
+    color: var(--npt-black);
+    margin: 0 0 16px;
+    line-height: 1.25;
+}
+
+.outage-help p {
+    color: #475569;
+    font-size: 1.04rem;
+    line-height: 1.7;
+    margin: 0 0 26px;
+}
+
+.outage-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+}
+
+.outage-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* 48px clears the touch-target minimum, which matters more here than on
+       most pages: people reach this one on a phone, often in bad weather. */
+    min-height: 48px;
+    padding: 13px 28px;
+    border-radius: 999px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+}
+
+.outage-btn--primary {
+    background: var(--cfn-green);
+    color: #ffffff;
+}
+
+.outage-btn--primary:hover {
+    background: var(--cfn-dark-green);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(3, 166, 60, 0.28);
+}
+
+.outage-btn--ghost {
+    border: 2px solid #cbd5e1;
+    color: var(--npt-black);
+}
+
+.outage-btn--ghost:hover {
+    border-color: var(--cfn-green);
+    color: var(--cfn-dark-green);
+}
+
+.outage-hours {
+    margin: 22px 0 0;
+    color: #64748b;
+    font-size: 0.92rem;
+}
+
+@media (max-width: 640px) {
+    .outage-hero {
+        padding: 48px 16px 42px;
+    }
+
+    .outage-map-section {
+        padding: 30px 14px 40px;
+    }
+
+    .outage-help {
+        padding: 52px 16px 64px;
+    }
+
+    .outage-actions .outage-btn {
+        width: 100%;
+        max-width: 320px;
+    }
+}
