@@ -7,48 +7,11 @@ const pageLoadTime = Date.now(); // Track when the page loaded
 
 const normalize = (str) => typeof str === 'string' ? str.trim() : '';
 
-// Load business logos into carousel
-async function loadBusinessLogos() {
-    const track = document.getElementById('logo-track');
-    if (!track) return;
-
-    try {
-        const ref = collection(db, 'artifacts', '162296779236', 'public', 'data', 'business_logos');
-        const q = query(ref, orderBy('name', 'asc'));
-        const snapshot = await getDocs(q);
-
-        if (snapshot.empty) {
-            return; // No new logos, do nothing.
-        }
-
-        // Get HTML of hardcoded logos from the first set
-        const originalSlides = Array.from(track.querySelectorAll('.logo-slide'));
-        const halfwayPoint = originalSlides.length / 2;
-        const hardcodedLogosHtml = originalSlides.slice(0, halfwayPoint).map(slide => slide.outerHTML).join('');
-
-        const dynamicLogosHtml = snapshot.docs.map(doc => {
-            const logo = doc.data();
-            return `<div class="logo-slide"><img src="${safeUrl(logo.logoUrl, 'assets/images/community-fiber-logo.png', { allowDataImage: true })}" alt="${escapeHtml(logo.name)}"></div>`;
-        }).join('');
-
-        // Combine and rebuild
-        const combinedSetHtml = hardcodedLogosHtml + dynamicLogosHtml;
-        track.innerHTML = combinedSetHtml + combinedSetHtml;
-
-        // Recalculate animation
-        const singleSetCount = halfwayPoint + snapshot.size;
-        const totalSlides = singleSetCount * 2;
-
-        track.style.width = `${totalSlides * 200}px`;
-
-        const styleElement = document.createElement('style');
-        styleElement.innerHTML = `@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-${singleSetCount * 200}px); } }`;
-        document.head.appendChild(styleElement);
-
-    } catch (err) {
-        console.error("Error loading dynamic business logos:", err);
-    }
-}
+/* loadBusinessLogos() removed with the customer logo ribbon: using a
+ * customer mark implies their endorsement and needs written permission we do
+ * not have. The business_logos collection and its admin tab are untouched, so
+ * this can come back once permissions are on file.
+ */
 
 // Animation Logic
 document.addEventListener('DOMContentLoaded', () => {
@@ -61,10 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.fade-in-section').forEach(el => observer.observe(el));
-
-    // business_logos stores partner logos as base64 data URIs (~541KB). The
-    // carousel is below the fold, so defer the read off the critical path.
-    loadWhenVisible('#trusted-partners', loadBusinessLogos);
 });
 
 // Form Logic

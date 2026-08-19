@@ -545,6 +545,12 @@
         margin: 0 auto;
     }
 
+    /* Keep the stacked card aligned with the extended reel while retaining a
+       small visual handoff between them. */
+    .availability-section {
+        margin-top: -18px;
+    }
+
     .availability-inner {
         max-width: 760px;
     }
@@ -588,6 +594,8 @@
     }
 
     .availability-section {
+        /* Positive here because the compact paddings total only 90px. */
+        margin-top: 26px;
         padding: 42px 14px 58px;
     }
 
@@ -605,12 +613,12 @@
         margin-bottom: 22px;
     }
 
-    .search-input-wrapper {
+    .availability-inner .search-input-wrapper {
         border-radius: 18px;
         padding: 6px 8px;
     }
 
-    .cfn-address-input {
+    .availability-inner .cfn-address-input {
         font-size: 1rem;
         min-width: 0;
     }
@@ -822,151 +830,115 @@
     }
 }
 
-/* --- Hero install collage ------------------------------------------------- */
-/* Six square tiles orbit a centre mark. Every selector here is scoped through
-   .hero-image because `.hero-image img` above is (0,1,1) and sets its own
-   aspect-ratio, radius, shadow and green placeholder background — a bare
-   `.install-tile img` ties on specificity and would lose on source order. */
-.install-orbit {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    /* Establishes the sizing context for the cqw units below. Without this,
-       percentages inside translate() would resolve against each TILE's own
-       width rather than the collage, and the ring would collapse inward. */
-    container-type: size;
-}
-
-.install-orbit-ring {
-    position: absolute;
-    inset: 0;
-    animation: install-orbit-spin 48s linear infinite;
-    will-change: transform;
-}
-
-/* rotate to the tile's angle, push out along the radius, then undo the rotation
-   so the tile itself sits square rather than tipped. */
-.hero-image .install-tile {
-    /* ===== The two knobs for this collage =====================================
-       Both are in cqw: 1cqw = 1% of the collage's width, so the numbers read
-       directly as proportions of the square.
-         --radius : how far each photo sits from the centre. Bigger = spread out.
-         --size   : how big each photo is.
-       Keep (--radius + --size / 2) at or under 50, or tiles clip the edge.
-       Adjacent tiles touch when --size exceeds 2 x --radius x sin(180/n); with
-       five tiles that is 1.18 x --radius. ======================================= */
-    --radius: 31cqw;
-    --size: 38cqw;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: var(--size);
-    aspect-ratio: 1 / 1;
-    transform:
-        translate(-50%, -50%)
-        rotate(var(--a))
-        translate(var(--radius))
-        rotate(calc(-1 * var(--a)));
-}
-
-/* The counter-rotation lives on the image, not the tile, because the rounded
-   corners have to turn with the photo. Identical duration and timing function
-   to the ring, so the two stay locked however long the page is open. */
-.hero-image .install-tile img {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 18px;
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.07);
-    animation: install-orbit-spin 48s linear infinite reverse;
-    will-change: transform;
-    object-fit: cover;
-    /* Brand-tinted ground so a tile that has not decoded yet still looks like
-       part of the composition rather than a hole in it. */
-    background: linear-gradient(135deg, #0B8C38, #03A63C);
-}
-
-@keyframes install-orbit-spin {
-    to { transform: rotate(360deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .install-orbit-ring,
-    .hero-image .install-tile img {
-        animation: none;
-    }
-}
-
-
-
-
-@media (max-width: 560px) {
-    /* Side by side below this width the placeholder is clipped to a couple of
-       characters, so the pill becomes a stack. */
-    .availability-inner .search-input-wrapper {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-        border-radius: 18px;
-        padding: 8px;
-    }
-
-    .availability-inner .search-icon {
-        display: none;
-    }
-
-    .availability-inner .cfn-address-input {
-        padding: 12px 14px;
-    }
-
-    .availability-inner .search-submit {
-        justify-content: center;
-        width: 100%;
-    }
-}
-
-/* --- Collage overlapping the availability panel ---------------------------
-   Desktop only, and deliberately so. Below 901px .hero-inner stacks and the
-   collage sits under the copy, ~35-49px off the bottom of the hero — pulling
-   the panel up there would drop tiles straight onto its heading.
-
-   Three things have to change together or the overlap simply will not paint:
-     1. .hero is overflow:hidden, so tiles cannot leave it at all.
-     2. .hero::after is a white angled shape at z-index 1 across the hero's
-        bottom edge; it would cover anything hanging below.
-     3. .hero-image needs to be positioned with a z-index so it paints above
-        the panel, which is a static block later in the document.
-   The z-index goes on .hero-image and NOT on .hero: raising the whole hero
-   would bring its white background with it and mask the top of the green card. */
+/* --- Hero photo reel overlapping the availability panel ------------------
+   Desktop only. Below 901px the hero stacks and the reel sits under the copy,
+   where pulling the panel up would drop photos onto its heading. */
 @media (min-width: 901px) {
-    /* Not overflow:visible — that also released the horizontal axis and added
-       ~24px of sideways scroll. overflow-x:hidden is not an option either,
-       because a hidden value on one axis forces the other to auto, which would
-       clip the tiles we want hanging below. clip is the one value that can pair
-       with visible on the other axis. */
+    /* overflow-x:clip, not hidden: hidden on one axis forces the other to auto
+       and would clip the reel's own mask, and hidden would also cut off the
+       rise below. */
     .hero {
         overflow-x: clip;
         overflow-y: visible;
-        /* .hero is itself a centring flex container with min-height:80vh. Where
-           the content is shorter than that (around 1100px it was 440 vs 720),
-           the leftover space split above and below, floating the collage away
-           from the bottom edge. Anchoring the row to the bottom makes the
-           distance to the panel the same at every width. */
-        align-items: flex-end;
+    }
+
+    /* Run the reel up behind the header so the photos disappear under it rather
+       than starting at a hard edge below it.
+
+       The negative margin fixes the reel's top behind the header. Its height is
+       defined in the base rule below, where an equal negative bottom margin
+       keeps the surrounding layout stable while only the lower edge grows. */
+    .photo-reel {
+        --reel-rise: 340px;
+        margin-top: calc(-1 * var(--reel-rise));
     }
 
     .hero-image {
         position: relative;
         z-index: 3;
-        align-self: flex-end;
     }
 
-    /* -120 pull against 46px of top padding puts the card's top edge 74px above
-       the hero's bottom, which the lowest tile clears by 17-33px from 1280 to
-       1920. Because the ring is turning, the overlap breathes rather than
-       sitting still - which is the point. */
     .availability-section {
-        margin-top: -120px;
-        padding-top: 46px;
+        /* Pull the card itself into the hero's empty lower field. Moving the
+           mask could not close this gap because the whitespace belongs to the
+           surrounding sections, not to the reel. */
+        margin-top: -82px;
+        padding-top: 58px;
+    }
+}
+
+/* --- Hero photo reel -----------------------------------------------------
+   Two columns of install photos drifting in opposite directions. Replaces the
+   orbiting tile ring, which had to shrink every photo small enough to fit
+   inside a circle — at 1440 the tiles were ~190px, so the work in them was
+   barely legible. Here each photo gets roughly half the width of the block.
+
+   The seam: each column repeats its own list once and travels exactly -50%, so
+   the second copy arrives precisely where the first started and the loop has no
+   visible jump. Transform-only, so it runs on the compositor. */
+.photo-reel {
+    --reel-tail-extension: 88px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(12px, 1.4vw, 20px);
+    height: calc(clamp(460px, 46vw, 660px) + var(--reel-tail-extension));
+    margin-bottom: calc(-1 * var(--reel-tail-extension));
+    overflow: hidden;
+    /* Only the bottom fades. At the top the reel runs up behind the sticky
+       header, which is opaque, so the photos simply travel out of sight under
+       it — a fade there as well would end the column twice. */
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 56px), transparent);
+    mask-image: linear-gradient(180deg, #000 calc(100% - 56px), transparent);
+}
+
+.photo-reel-col {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 1.4vw, 20px);
+    will-change: transform;
+}
+
+
+.photo-reel-col--up {
+    animation: photo-reel-up 42s linear infinite;
+}
+
+/* Offset so the two columns never line up rung-for-rung, which would read as a
+   grid sliding rather than two independent reels. */
+.photo-reel-col--down {
+    animation: photo-reel-down 48s linear infinite;
+}
+
+.hero-image .photo-reel-col img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
+    background: linear-gradient(135deg, #0B8C38, #03A63C);
+}
+
+@keyframes photo-reel-up {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-50%); }
+}
+
+@keyframes photo-reel-down {
+    from { transform: translateY(-50%); }
+    to   { transform: translateY(0); }
+}
+
+/* Motion off: the reel becomes a still pair of columns, cropped by the same
+   mask. Nothing is lost but the drift. */
+@media (prefers-reduced-motion: reduce) {
+    .photo-reel-col--up,
+    .photo-reel-col--down {
+        animation: none;
+    }
+
+    .photo-reel-col--down {
+        transform: translateY(-50%);
     }
 }

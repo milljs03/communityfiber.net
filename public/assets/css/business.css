@@ -57,78 +57,7 @@
     border-bottom: 1px solid #e2e8f0;
 }
 
-.logo-ribbon {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    padding: 1rem 0;
-    white-space: nowrap;
-}
 
-/* Gradient Fade on Sides */
-.logo-ribbon::before,
-.logo-ribbon::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 150px;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
-}
-
-.logo-ribbon::before {
-    left: 0;
-    background: linear-gradient(to right, white, transparent);
-}
-
-.logo-ribbon::after {
-    right: 0;
-    background: linear-gradient(to left, white, transparent);
-}
-
-.logo-track {
-    display: flex;
-    /* (Slide Width + Gap) * Total Items */
-    /* Approx 200px per slide * 20 items (10 original + 10 dupe) */
-    width: calc(200px * 20);
-    animation: scroll 40s linear infinite;
-}
-
-.logo-slide {
-    width: 200px;
-    height: 80px; /* Fixed height container */
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 20px;
-}
-
-.logo-slide img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain;
-    filter: grayscale(100%);
-    opacity: 0.6;
-    transition: all 0.3s ease;
-}
-
-.logo-slide img:hover {
-    filter: grayscale(0%);
-    opacity: 1;
-    transform: scale(1.05);
-}
-
-@keyframes scroll {
-    0% { transform: translateX(0); }
-    /* Move left by width of Original 10 items (200px * 10) */
-    100% { transform: translateX(calc(-200px * 10)); }
-}
-
-.logo-track:hover {
-    animation-play-state: paused;
-}
 
 
 /* --- Map Section --- */
@@ -407,15 +336,6 @@ label {
         padding-right: 1rem;
     }
 
-    .logo-ribbon::before,
-    .logo-ribbon::after {
-        width: 28px;
-    }
-
-    .logo-track {
-        gap: 1rem;
-    }
-
     .map-wrapper-card,
     .form-card {
         border-radius: 12px;
@@ -436,5 +356,80 @@ label {
 
     .form-intro h2 {
         font-size: clamp(1.65rem, 8vw, 2.1rem);
+    }
+}
+
+/* --- Chamber memberships --------------------------------------------------
+   Replaces the customer logo ribbon. Logos vary wildly in shape — the set runs
+   from 480x124 to 480x480 — so each sits in a fixed box on white and is scaled
+   to fit rather than cropped, which keeps them optically even without
+   distorting anyone's mark. */
+.chambers {
+    padding: 72px 20px;
+    background: #ffffff;
+}
+
+.chambers .section-title {
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3.6vw, 2.1rem);
+    color: var(--npt-black);
+    margin: 0 0 10px;
+    line-height: 1.25;
+}
+
+.chambers-sub {
+    text-align: center;
+    color: #64748b;
+    font-size: 1.02rem;
+    margin: 0 auto 44px;
+    max-width: 560px;
+}
+
+.chambers-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+    gap: 28px;
+    max-width: 1100px;
+    margin-inline: auto;
+}
+
+.chamber {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+}
+
+.chamber img {
+    width: 100%;
+    max-width: 160px;
+    height: 90px;
+    object-fit: contain;
+    display: block;
+}
+
+.chamber span {
+    color: #475569;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    font-weight: 600;
+}
+
+@media (max-width: 640px) {
+    .chambers {
+        padding: 52px 16px;
+    }
+
+    .chambers-grid {
+        gap: 22px;
+    }
+
+    .chamber img {
+        height: 72px;
     }
 }

@@ -319,13 +319,6 @@ function initializeAddressBar() {
         // Private browsing can throw on sessionStorage; treat it as not dismissed.
     }
 
-    if (dismissed) {
-        bar.hidden = true;
-        return;
-    }
-
-    document.body.classList.add('has-address-bar');
-
     // Reserve exactly the bar's height rather than a CSS constant. The bar is
     // not the same height on every page — different stylesheets give it
     // different type metrics, and it grew from 89px on the homepage to 120px on
@@ -335,7 +328,19 @@ function initializeAddressBar() {
         if (bar.hidden) return;
         document.body.style.paddingBottom = `${Math.ceil(bar.getBoundingClientRect().height)}px`;
     };
-    reserveSpace();
+
+    // The page already contains a full availability search. When that field is
+    // approaching the viewport, hide the fixed duplicate instead of allowing
+    // the two controls to stack on top of one another.
+    let inPageSearchVisible = false;
+    const syncAddressBar = () => {
+        const shouldHide = dismissed || inPageSearchVisible;
+        bar.hidden = shouldHide;
+        document.body.classList.toggle('has-address-bar', !shouldHide);
+        document.body.style.paddingBottom = shouldHide ? '' : `${Math.ceil(bar.getBoundingClientRect().height)}px`;
+    };
+
+    syncAddressBar();
 
     if (typeof ResizeObserver === 'function') {
         new ResizeObserver(reserveSpace).observe(bar);
@@ -343,10 +348,21 @@ function initializeAddressBar() {
         window.addEventListener('resize', reserveSpace);
     }
 
+    const inPageSearch = document.querySelector('#availability-check .availability-search-container');
+    if (inPageSearch && typeof IntersectionObserver === 'function') {
+        const barClearance = Math.ceil(bar.getBoundingClientRect().height) || 96;
+        new IntersectionObserver(([entry]) => {
+            inPageSearchVisible = entry.isIntersecting;
+            syncAddressBar();
+        }, {
+            rootMargin: `0px 0px ${barClearance}px 0px`,
+            threshold: 0
+        }).observe(inPageSearch);
+    }
+
     document.getElementById('address-bar-close')?.addEventListener('click', () => {
-        bar.hidden = true;
-        document.body.style.paddingBottom = '';
-        document.body.classList.remove('has-address-bar');
+        dismissed = true;
+        syncAddressBar();
         try {
             // Per-session, not permanent: someone who dismisses it today should
             // still get it on their next visit.
@@ -354,24 +370,26 @@ function initializeAddressBar() {
         } catch { /* nothing to do */ }
     });
 
-    // The hero button and the availability panel both hand off to the bar's
-    // field. Focusing it directly beats a plain #anchor, which on a fixed
+    // The hero button hands off to whichever address field is currently being
+    // presented. Focusing it directly beats a plain #anchor, which on a fixed
     // element scrolls nowhere and looks broken.
     document.querySelectorAll('[data-focus-address]').forEach((trigger) => {
         trigger.addEventListener('click', (event) => {
-            const input = document.getElementById('cfn-address-input');
+            const input = inPageSearchVisible
+                ? document.getElementById('cfn-address-input-panel')
+                : document.getElementById('cfn-address-input');
             if (!input) return;
             event.preventDefault();
 
             // If the bar was dismissed this session, bring it back: the visitor
             // has just asked for it, and a control that silently does nothing is
             // worse than no control.
-            if (bar.hidden) {
-                bar.hidden = false;
-                document.body.classList.add('has-address-bar');
+            if (!inPageSearchVisible && dismissed) {
+                dismissed = false;
                 try {
                     sessionStorage.removeItem(DISMISS_KEY);
                 } catch { /* nothing to do */ }
+                syncAddressBar();
             }
 
             input.focus({ preventScroll: true });

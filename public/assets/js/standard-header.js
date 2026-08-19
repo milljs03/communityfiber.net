@@ -133,50 +133,77 @@ const headerStyles = `
     }
 
     /* --- Mega Menu Styles --- */
+    /* Anchored under the nav item that opened it. --menu-x is written by the
+       header script from that item's position, so the panel hangs beneath the
+       word rather than spanning the window. */
     .mega-menu-wrapper {
         position: absolute;
         top: 90px; /* Matches header height */
-        left: 0;
-        width: 100%;
+        left: var(--menu-x, 0px);
+        width: max-content;
+        min-width: 290px;
+        max-width: min(380px, calc(100vw - 32px));
         background-color: var(--npt-white);
-        border-top: 4px solid var(--cfn-green);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        /* The brand gradient, same one the section-title accents use, rather
+           than a flat green edge. */
+        border-top: 4px solid transparent;
+        border-image: linear-gradient(90deg, var(--cfn-green), #a8e063) 1;
+        border-radius: 0 0 14px 14px;
+        box-shadow: 0 22px 48px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.04);
         opacity: 0;
         visibility: hidden;
-        transform: translateY(10px);
-        transition: all 0.25s ease-in-out;
-        padding: 3rem 0;
+        transform: translateY(6px);
+        transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+        padding: 10px 0 12px;
         pointer-events: none;
     }
 
-    /* Reveal Mega Menu on Hover */
-    .nav-container:hover .mega-menu-wrapper,
-    .mega-menu-wrapper:hover {
+    /* Open only when a top-level item that owns a panel is armed. Driven by an
+       attribute rather than :hover, because moving the pointer down off the nav
+       item and into the panel would drop the hover and close it mid-reach. */
+    .mega-menu-wrapper[data-active] {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
         pointer-events: auto;
     }
 
+    /* One panel at a time: hide them all, then reveal the armed one. */
+    .nav-column {
+        display: none;
+    }
+
+    .mega-menu-wrapper[data-active="residential"]   .nav-column[data-panel="residential"],
+    .mega-menu-wrapper[data-active="business"]      .nav-column[data-panel="business"],
+    .mega-menu-wrapper[data-active="mobile"]        .nav-column[data-panel="mobile"],
+    .mega-menu-wrapper[data-active="builders"]      .nav-column[data-panel="builders"],
+    .mega-menu-wrapper[data-active="support"]       .nav-column[data-panel="support"],
+    .mega-menu-wrapper[data-active="about"]         .nav-column[data-panel="about"],
+    .mega-menu-wrapper[data-active="service-areas"] .nav-column[data-panel="service-areas"] {
+        display: block;
+    }
+
     .mega-menu-content {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 2rem;
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        gap: 2rem;
+        padding: 0;
+    }
+
+    .nav-column[data-panel] ul {
+        display: flex;
+        flex-direction: column;
     }
 
     .nav-column h3 {
         font-family: var(--font-heading);
-        font-size: 1rem;
-        font-weight: 700;
+        font-size: 1.02rem;
+        font-weight: 800;
+        color: var(--npt-black);
+        margin: 0 0 8px;
+        padding: 10px 22px 12px;
+        border-bottom: 1px solid #eef2f6;
+    }
+
+    .nav-column h3 a:hover {
         color: var(--cfn-green);
-        text-transform: none; /* CHANGED: Removed uppercase */
-        margin-bottom: 1.25rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid #f0f0f0;
-        display: inline-block;
     }
 
     .nav-column h3 a {
@@ -191,22 +218,47 @@ const headerStyles = `
     }
 
     .nav-column li {
-        margin-bottom: 0.75rem;
+        margin: 0;
     }
 
+    /* Full-width rows: the whole strip is the target, not just the words. */
+    /* Full-width rows: the whole strip is the target, not just the words. The
+       chevron is always in the layout and only slides, so a row never reflows
+       on hover. */
     .nav-column a.section-link {
         text-decoration: none;
-        color: #444;
+        color: #334155;
         font-family: var(--font-body);
-        font-size: 0.95rem;
-        font-weight: 500;
-        transition: all 0.2s;
-        display: block;
+        font-size: 1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 13px 22px;
+        transition: background-color 0.15s, color 0.15s, padding-left 0.15s;
+    }
+
+    .nav-column a.section-link::after {
+        content: '';
+        width: 7px;
+        height: 7px;
+        border-right: 2px solid currentColor;
+        border-top: 2px solid currentColor;
+        transform: rotate(45deg) translateX(-2px);
+        opacity: 0;
+        transition: opacity 0.15s, transform 0.15s;
     }
 
     .nav-column a.section-link:hover {
-        color: var(--cfn-green);
-        transform: translateX(4px);
+        color: var(--cfn-dark-green);
+        background: linear-gradient(90deg, #f0fdf4, rgba(240, 253, 244, 0));
+        padding-left: 26px;
+    }
+
+    .nav-column a.section-link:hover::after {
+        opacity: 1;
+        transform: rotate(45deg) translateX(0);
     }
 
     /* Bill Pay Dropdown (Simple) */
@@ -399,13 +451,14 @@ ${headerStyles}
 
         <!-- Top Level Nav -->
         <ul class="nav-menu">
-            <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="/residential" class="nav-link">Residential</a></li>
-            <li class="nav-item"><a href="/business" class="nav-link">Business</a></li>
-                <li class="nav-item"><a href="/mobile" class="nav-link">Mobile</a></li>
-            <li class="nav-item"><a href="/builders" class="nav-link">Builders</a></li>
-            <li class="nav-item"><a href="/support" class="nav-link">Support</a></li>
-            <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+            <li class="nav-item" data-menu="service-areas"><a href="/" class="nav-link">Home</a></li>
+            <li class="nav-item" data-menu="residential"><a href="/residential" class="nav-link">Residential</a></li>
+            <li class="nav-item" data-menu="business"><a href="/business" class="nav-link">Business</a></li>
+            <!-- Mobile page temporarily hidden from public navigation. Keep the
+                 route intact so this can be restored without rebuilding it. -->
+            <li class="nav-item" data-menu="builders"><a href="/builders" class="nav-link">Builders</a></li>
+            <li class="nav-item" data-menu="support"><a href="/support" class="nav-link">Support</a></li>
+            <li class="nav-item" data-menu="about"><a href="/about" class="nav-link">About</a></li>
             <li class="nav-item"><a href="https://nptel.smarthub.coop/Login.html" target="_blank" class="nav-link bill-pay-btn">Bill Pay</a></li>
         </ul>
 
@@ -417,7 +470,7 @@ ${headerStyles}
             <div class="mega-menu-content">
 
                 <!-- Residential Column -->
-                <div class="nav-column">
+                <div class="nav-column" data-panel="residential">
                     <h3><a href="/residential">Residential</a></h3>
                     <ul>
                         <li><a href="/residential#plans-pricing" class="section-link">Plans & Pricing</a></li>
@@ -428,7 +481,7 @@ ${headerStyles}
                 </div>
 
                 <!-- Business Column -->
-                <div class="nav-column">
+                <div class="nav-column" data-panel="business">
                     <h3><a href="/business">Business</a></h3>
                     <ul>
                         <li><a href="/business#enterprise-fiber" class="section-link">Enterprise Fiber</a></li>
@@ -438,8 +491,10 @@ ${headerStyles}
                     </ul>
                 </div>
 
+                <!-- Mobile mega-menu panel temporarily hidden with its nav item. -->
+
                 <!-- Builders Column -->
-                <div class="nav-column">
+                <div class="nav-column" data-panel="builders">
                     <h3><a href="/builders">Builders</a></h3>
                     <ul>
                         <li><a href="/builders#development-benefits" class="section-link">Development Benefits</a></li>
@@ -449,7 +504,7 @@ ${headerStyles}
                 </div>
 
                 <!-- Support Column -->
-                <div class="nav-column">
+                <div class="nav-column" data-panel="support">
                     <h3><a href="/support">Support</a></h3>
                     <ul>
                         <li><a href="/support#support-contact" class="section-link">Contact Us</a></li>
@@ -461,7 +516,7 @@ ${headerStyles}
                 </div>
 
                 <!-- About Column -->
-                <div class="nav-column">
+                <div class="nav-column" data-panel="about">
                     <h3><a href="/about">About Us</a></h3>
                     <ul>
                         <li><a href="/about#our-mission" class="section-link">Our Mission</a></li>
@@ -473,7 +528,7 @@ ${headerStyles}
                 </div>
 
                 <!-- Service Areas Column -->
-                <div class="nav-column">
+                <div class="nav-column" data-panel="service-areas">
                     <h3><a href="/#service-areas">Service Areas</a></h3>
                     <ul>
                         <li><a href="/goshen" class="section-link">Goshen</a></li>
@@ -515,6 +570,60 @@ function initializeStandardHeader() {
         faviconLink.href = '/assets/images/favicon.png';
         faviconLink.type = 'image/png';
         document.head.appendChild(faviconLink);
+    }
+
+    // 3. Mega menu: arm one panel at a time.
+    //
+    // Attribute-driven rather than a CSS :hover chain. The panel sits below the
+    // nav item that opens it, so travelling to it takes the pointer off that
+    // item; a pure :hover rule would close the menu halfway through the reach.
+    // Arming on the container and disarming only when the pointer leaves the
+    // whole header keeps it open across that gap.
+    const megaWrapper = document.querySelector('.mega-menu-wrapper');
+    const navContainer = document.querySelector('.nav-container');
+
+    if (megaWrapper && navContainer) {
+        const arm = (key, item) => {
+            if (!key) return;
+            megaWrapper.dataset.active = key;
+            if (item) {
+                // .mega-menu-wrapper is positioned against the full-width
+                // header, so use viewport coordinates for both the trigger and
+                // the clamp. The previous calculation mixed item.offsetLeft
+                // with navContainer.clientWidth; on the right side that shifted
+                // About's panel left until it appeared beneath Support.
+                const gutter = 16;
+                const itemLeft = item.getBoundingClientRect().left;
+                const menuWidth = megaWrapper.getBoundingClientRect().width;
+                const maxLeft = window.innerWidth - menuWidth - gutter;
+                const left = Math.max(gutter, Math.min(itemLeft, maxLeft));
+                megaWrapper.style.setProperty('--menu-x', `${left}px`);
+            }
+        };
+        const disarm = () => { delete megaWrapper.dataset.active; };
+
+        navContainer.querySelectorAll('.nav-item[data-menu]').forEach((item) => {
+            item.addEventListener('mouseenter', () => arm(item.dataset.menu, item));
+            // Keyboard users get the same panel when they tab onto the link.
+            item.addEventListener('focusin', () => arm(item.dataset.menu, item));
+        });
+
+        // Items without a panel (currently Bill Pay) close whatever is open
+        // rather than leaving a stale panel hanging under an unrelated link.
+        navContainer.querySelectorAll('.nav-item:not([data-menu])').forEach((item) => {
+            item.addEventListener('mouseenter', disarm);
+        });
+
+        navContainer.addEventListener('mouseleave', disarm);
+
+        // Tabbing out of the header entirely should close it too.
+        navContainer.addEventListener('focusout', (event) => {
+            if (!navContainer.contains(event.relatedTarget)) disarm();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') disarm();
+        });
     }
 
     // 3. Initialize Mobile Menu Logic

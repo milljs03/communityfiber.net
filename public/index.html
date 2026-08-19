@@ -109,9 +109,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Only the first collage tile is preloaded. The other four are lazy: they
-         orbit into view over the following seconds and are not LCP candidates. -->
-    <link rel="preload" as="image" href="assets/images/install/01-site-survey.webp" type="image/webp" fetchpriority="high">
+    <!-- Only the first reel photo is preloaded. The rest are lazy: they scroll
+         into view over the following seconds and are not LCP candidates. -->
+    <link rel="preload" as="image" href="assets/images/marquee/dsc5649.webp" type="image/webp" fetchpriority="high">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/global.css">
@@ -149,35 +149,52 @@
                 <h1 class="hero-title"><span class="hero-line">Fiber internet built for</span> <span class="hero-line">the towns <span class="highlight-text">we live in</span>.</span></h1>
                 <p class="hero-subtitle">Upload as fast as you download, from <strong>$35 a month</strong>. No contracts, no data caps. Locally owned since 1901.</p>
                 <a href="#cfn-address-input" class="btn-primary-action" data-focus-address>Check Availability <svg class="cfn-icon cfn-icon--chevron" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg></a>           </div>
-            <!-- Install-phase collage. Six square tiles orbit a centre mark.
-                 The ring rotates and each tile counter-rotates at the identical
-                 duration and timing function, so the photos stay upright instead
-                 of tumbling. Paused on hover and under prefers-reduced-motion. -->
+            <!-- Install-phase photo marquee. Two columns drifting in opposite
+                 directions, masked to fade at both ends so the motion reads as a
+                 continuous reel rather than a loop that restarts. Replaces the
+                 orbiting tile ring, which had to keep every photo small enough
+                 to fit a circle. Pauses entirely under prefers-reduced-motion. -->
             <div class="hero-image">
-                <div class="install-orbit" role="img"
-                     aria-label="Photos from a Community Fiber install: the site survey, utility locates, trenching, a service van, and the equipment being fitted at a home">
-                    <div class="install-orbit-ring">
-                        <div class="install-tile" style="--a: 0deg">
-                            <img src="assets/images/install/01-site-survey.webp" width="480" height="480"
-                                 alt="Site survey: a technician planning the drop at the house" fetchpriority="high" decoding="async">
-                        </div>
-                        <div class="install-tile" style="--a: 72deg">
-                            <img src="assets/images/install/02-locates.webp" width="480" height="480"
-                                 alt="Utility locate flag marking buried lines before digging" loading="lazy" decoding="async">
-                        </div>
-                        <div class="install-tile" style="--a: 144deg">
-                            <img src="assets/images/install/03-construction.webp" width="480" height="480"
-                                 alt="A crew digging a fiber trench in a front yard with a mini excavator" loading="lazy" decoding="async">
-                        </div>
-                        <div class="install-tile" style="--a: 216deg">
-                            <img src="assets/images/install/04-splicing.webp" width="480" height="480"
-                                 alt="A Community Fiber service van" loading="lazy" decoding="async">
-                        </div>
-                        <div class="install-tile" style="--a: 288deg">
-                            <img src="assets/images/install/05-install.webp" width="480" height="480"
-                                 alt="A technician mounting the fiber equipment at a home" loading="lazy" decoding="async">
-                        </div>
+                <div class="photo-reel" role="img"
+                     aria-label="Photos from Community Fiber installs across Elkhart and Kosciusko counties">
+                    <div class="photo-reel-col photo-reel-col--up">
+                        <img src="assets/images/marquee/dsc5649.webp" width="480" height="600"
+                             alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+                        <img src="assets/images/marquee/02-locates.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/04-splicing.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/image-from-ios.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/dsc5649.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/02-locates.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/04-splicing.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/image-from-ios.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
                     </div>
+                    <div class="photo-reel-col photo-reel-col--down">
+                        <img src="assets/images/marquee/01-site-survey.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/03-construction.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/05-install.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/img-1705.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/01-site-survey.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/03-construction.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/05-install.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        <img src="assets/images/marquee/img-1705.webp" width="480" height="600"
+                             alt="" aria-hidden="true" loading="lazy" decoding="async">
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
     </header>
@@ -370,6 +387,7 @@
 
     <!-- Scripts -->
     <script type="module" src="assets/js/main.js"></script>
+
     <script type="module" src="assets/js/announcement.js"></script>
     <script src="assets/js/standard-header.js"></script>
 
