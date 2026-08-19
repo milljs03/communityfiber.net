@@ -451,6 +451,110 @@ img {
     text-align: center;
 }
 
+/* --- NPTech family -----------------------------------------------------
+   Each source logo uses the same square artboard but a different palette. A
+   light tile preserves the intended brand colours against the dark footer and
+   gives all five marks equal visual weight without editing the source SVGs. */
+footer .footer-family {
+    position: relative;
+    max-width: 1120px;
+    margin: 0 auto 2rem;
+    padding: 1.75rem 1.25rem 2rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 12% 0%, rgba(3, 166, 60, 0.16), transparent 34%),
+        radial-gradient(circle at 88% 100%, rgba(168, 224, 99, 0.1), transparent 30%),
+        rgba(255, 255, 255, 0.035);
+}
+
+footer .footer-family-title,
+.site-footer .footer-family-title {
+    margin: 0;
+    color: #ffffff;
+    font-family: var(--font-heading, 'Montserrat', sans-serif);
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+footer .footer-family-copy,
+.site-footer .footer-family-copy {
+    margin: 0.35rem 0 1.35rem;
+    color: #CBD5E1;
+    font-size: 0.92rem;
+}
+
+footer .footer-brand-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+footer .footer-brand-item {
+    flex: 0 0 clamp(142px, 16vw, 190px);
+}
+
+footer .footer-brand-link {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1.6 / 1;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+footer .footer-brand-link::after {
+    content: "\2197";
+    position: absolute;
+    top: 8px;
+    right: 9px;
+    display: grid;
+    width: 22px;
+    height: 22px;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(15, 23, 32, 0.08);
+    color: #334155;
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1;
+    opacity: 0;
+    transform: translate(-3px, 3px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+footer .footer-brand-link:hover,
+footer .footer-brand-link:focus-visible {
+    border-color: rgba(139, 217, 173, 0.95);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28), 0 0 0 3px rgba(3, 166, 60, 0.18);
+    outline: none;
+    transform: translateY(-4px);
+}
+
+footer .footer-brand-link:hover::after,
+footer .footer-brand-link:focus-visible::after {
+    opacity: 1;
+    transform: none;
+}
+
+footer .footer-brand-link img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0.7rem;
+    object-fit: contain;
+}
+
 footer .footer-links,
 .site-footer .footer-links {
     display: flex;
@@ -532,6 +636,32 @@ footer .footer-links a,
     .site-footer .footer-links a {
         justify-content: center;
         width: 100%;
+    }
+
+    footer .footer-family {
+        margin-bottom: 1.5rem;
+        padding: 1.4rem 0.75rem 1.5rem;
+        border-radius: 20px;
+    }
+
+    footer .footer-family-copy {
+        margin-bottom: 1.1rem;
+        font-size: 0.86rem;
+    }
+
+    footer .footer-brand-list {
+        gap: 0.65rem;
+    }
+
+    footer .footer-brand-item {
+        flex-basis: clamp(132px, 41vw, 164px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    footer .footer-brand-link,
+    footer .footer-brand-link::after {
+        transition: none;
     }
 }
 
